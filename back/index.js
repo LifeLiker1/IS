@@ -5,6 +5,8 @@ const Employee = require("./Modules/Employee");
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+
 const PORT = 3001;
 const uri =
   "mongodb+srv://dbUser:HuaweiGT3@cluster0.qi0blxm.mongodb.net/AllEmployers";
