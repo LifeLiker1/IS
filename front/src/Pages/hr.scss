@@ -1,0 +1,12 @@
+.employee_block {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 150px;
+  }
+  
+  .employee_block .ant-card {
+    width: calc(25% - 16px); // Учитывает отступы между карточками
+    margin-bottom: 16px; // Отступ между рядами
+  }
+  

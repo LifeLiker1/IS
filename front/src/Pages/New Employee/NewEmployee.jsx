@@ -1,8 +1,28 @@
 import React, { useState } from "react";
 import { AddEmployee } from "../../Functions/addEmployee";
-import "./NewEmployee.css";
+import { PlusOutlined } from "@ant-design/icons";
+import "./NewEmployee.scss";
+import InputMask from "react-input-mask"; // Импортируйте InputMask из библиотеки
 
-function MyComponent() {
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  // Radio,
+  TreeSelect,
+  Upload,
+} from "antd";
+
+// const { RangePicker } = DatePicker;
+const normFile = (e) => {
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e?.fileList;
+};
+
+function MyComponent({ citiesData, districtsData }) {
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
@@ -10,11 +30,31 @@ function MyComponent() {
     adress: "",
     mobilePhone: "",
     departament: "",
+    city: "", // Добавляем состояние для выбранного города
+    district: "", // Добавляем состояние для выбранного района
   });
 
   const handleSubmit = async () => {
-    const { name, surname, sex, adress, mobilePhone, departament } = formData;
-    await AddEmployee(name, surname, sex, adress, mobilePhone, departament);
+    const {
+      name,
+      surname,
+      sex,
+      adress,
+      mobilePhone,
+      departament,
+      city,
+      district, // Добавляем район в отправляемые данные
+    } = formData;
+    await AddEmployee(
+      name,
+      surname,
+      sex,
+      adress,
+      mobilePhone,
+      departament,
+      city,
+      district
+    );
   };
 
   const handleChange = (e) => {
@@ -26,74 +66,148 @@ function MyComponent() {
   };
 
   return (
-    <div className="main_form">
-      <div className="head">
-        <h2>Добавление сотрудника</h2>
-      </div>
-      <div className="left_column">
-        <div className="field_inp">
-          <input
+    <>
+      <Form
+        className="main_form"
+        labelCol={{
+          span: 4,
+        }}
+        wrapperCol={{
+          span: 14,
+        }}
+        layout="horizontal"
+        style={{
+          maxWidth: 600,
+        }}
+      >
+        <Form.Item label="Имя">
+          <Input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
-            placeholder="Имя"
           />
-        </div>
-        <div className="field_inp">
-          <input
+        </Form.Item>
+        <Form.Item label="Фамилия">
+          <Input
             type="text"
             name="surname"
             value={formData.surname}
             onChange={handleChange}
-            placeholder="Фамилия"
           />
-        </div>
-        <div className="field_inp">
-          <input
-            type="text"
-            name="sex"
+        </Form.Item>
+        <Form.Item label="Пол">
+          <TreeSelect
+            treeData={[
+              {
+                title: "Мужской",
+                value: "male",
+              },
+              {
+                title: "Женский",
+                value: "female",
+              },
+            ]}
             value={formData.sex}
-            onChange={handleChange}
-            placeholder="Пол"
+          >
+            onChange=
+            {(value) => {
+              setFormData({
+                ...formData,
+                sex: value,
+              });
+            }}
+          </TreeSelect>
+        </Form.Item>
+        <Form.Item label="Адрес">
+          <TreeSelect
+            treeData={[
+              {
+                title: "Алматы",
+                value: "Almaty",
+              },
+              {
+                title: "Астана",
+                value: "Astana",
+              },
+              {
+                title: "Шымкент",
+                value: "Shymkent",
+              },
+            ]}
+            value={formData.adress} // Устанавливаем значение для TreeSelect
+            onChange={(value) => {
+              setFormData({
+                ...formData,
+                adress: value,
+              });
+            }}
           />
-        </div>
-        <div className="field_inp">
-          <input
-            type="text"
-            name="adress"
-            value={formData.adress}
-            onChange={handleChange}
-            placeholder="Адрес"
-          />
-        </div>
-        <div className="field_inp">
-          <input
-            type="text"
+        </Form.Item>
+        <Form.Item label="DatePicker">
+          <DatePicker />
+        </Form.Item>
+        <Form.Item label="Мобильный телефон">
+          <InputMask
+            mask="+7 (999) 999-99-99"
+            maskChar="*"
             name="mobilePhone"
             value={formData.mobilePhone}
             onChange={handleChange}
-            placeholder="Телефон"
+          >
+            {(inputProps) => <Input {...inputProps} />}
+          </InputMask>
+        </Form.Item>
+        <Form.Item label="Отдел">
+          <TreeSelect
+            treeData={[
+              {
+                title: "IT",
+                value: "IT",
+              },
+              {
+                title: "Технический отдел",
+                value: "Tech_Department",
+              },
+              {
+                title: "Юридический",
+                value: "HR",
+              },
+            ]}
+            value={formData.departament} // Устанавливаем значение для TreeSelect
+            onChange={(value) => {
+              setFormData({
+                ...formData,
+                departament: value,
+              });
+            }}
           />
-        </div>
-        <div className="field_inp">
-          <input
-            type="text"
-            name="departament"
-            value={formData.departament}
-            onChange={handleChange}
-            placeholder="Департамент"
-          />
-        </div>
-      </div>
-      <div className="right_column">
-        <img src="#" alt="img" />
-      </div>
+        </Form.Item>
 
-      <button type="button" onClick={handleSubmit}>
+        <Form.Item
+          label="Upload"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
+          <Upload action="/upload.do" listType="picture-card">
+            <div>
+              <PlusOutlined />
+              <div
+                style={{
+                  marginTop: 8,
+                }}
+              >
+                Upload
+              </div>
+            </div>
+          </Upload>
+        </Form.Item>
+      </Form>
+      <Button className="Add_employee" onClick={handleSubmit}>
         Добавить сотрудника
-      </button>
-    </div>
+      </Button>
+      <Button className="Diss_employee">Отмена</Button>
+    </>
   );
 }
 

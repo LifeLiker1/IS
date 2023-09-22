@@ -1,37 +1,26 @@
-import React from "react";
-import "./header.css";
-import {Link} from "react-router-dom"
+import React, { useState } from "react";
+import "./header.scss";
+import { Button } from "antd";
+import themeSwitcher from "./themeSwitcher";
 
 function Header() {
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const toggleTheme = () => {
+    setIsDarkTheme(!isDarkTheme);
+  };
   return (
-    <nav>
-      <div className="nav-wrapper teal">
-        <a href="#!" className="brand-logo">
-          Заголовок
-        </a>
-        <ul className="right">
-          <li>
-            <a href="#!">Главная</a>
-          </li>
-          <li>
-            <a href="#!">Профиль</a>
-          </li>
-          <li>
-            <Link to="/newEmployee">
-              <button>Добавить сотрудника</button>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <button>На главную</button>
-            </Link>
-          </li>
-          <li>
-            <a href="#!">Выход</a>
-          </li>
-        </ul>
+    <header>
+      <div className={isDarkTheme ? "dark-theme" : "light-theme"}>
+      <h1>Мое веб-приложение</h1>
+      <themeSwitcher isDarkTheme={isDarkTheme} toggleTheme={toggleTheme} />
+      <button onClick={toggleTheme}>Переключить тему</button>
       </div>
-    </nav>
+      <nav>
+        <Button href="/">На главную</Button>
+        <Button href="/newEmployee">Добавить сотрудника</Button>
+        <Button href="/login">Выход</Button>
+      </nav>
+    </header>
   );
 }
 

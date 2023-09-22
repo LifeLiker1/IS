@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import "./hr.css"
+import "./hr.scss";
+import { Card } from "antd";
 
 const HR = () => {
   const [employees, setEmployees] = useState([]);
+  const { Meta } = Card;
 
   useEffect(() => {
     // Функция для выполнения запроса на сервер
@@ -25,9 +27,22 @@ const HR = () => {
   return (
     <div className="employee_block">
       {employees.map((employee) => (
-        <div className="employee_block1" key={employee.id}>
-         <p> {employee.adress} {employee.Surname} {employee.Name}</p>
-        </div>
+        <Card
+          hoverable
+          style={{
+            width: 240,
+          }}
+          cover={
+            <img
+              alt="example"
+              src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+            />
+          }
+        >
+          <Meta
+            title={`${employee.Surname} ${employee.Name}`}
+          />
+        </Card>
       ))}
     </div>
   );

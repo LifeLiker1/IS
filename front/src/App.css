@@ -1,0 +1,10 @@
+.light-theme {
+    background-color: #ffffff;
+    color: #333333;
+  }
+  
+  /* Стили для темной темы */
+  .dark-theme {
+    background-color: #333333;
+    color: #ffffff;
+  }
