@@ -1,12 +1,20 @@
 .employee_block {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 150px;
-  }
-  
-  .employee_block .ant-card {
-    width: calc(25% - 16px); // Учитывает отступы между карточками
-    margin-bottom: 16px; // Отступ между рядами
-  }
-  
+  margin-top: 100px;
+  margin-left: 75px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); // Создаем 4 столбца
+  gap: 20px; // Расстояние между карточками
+}
+
+/* Стили для каждой карточки */
+.ant-card {
+  // width: 100%;
+  background-color: red;
+}
+
+/* Стили для изображения внутри карточки */
+.ant-card-cover > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

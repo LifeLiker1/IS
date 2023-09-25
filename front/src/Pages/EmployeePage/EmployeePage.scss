@@ -1,0 +1,64 @@
+/* EmployeePage.scss */
+
+.case_body {
+  margin-top: 100px !important;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
+
+.head {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.head h1 {
+  font-size: 24px;
+}
+
+.text {
+  display: flex;
+  justify-content: space-between;
+}
+
+.personal_inf {
+  display: flex;
+  flex-direction: row;
+}
+.left_column {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.right_column {
+  flex: 1;
+}
+
+.text p {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+/* Стили для кнопки "Отмена" */
+.cancel-button {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.cancel-button a {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #ccc;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #999;
+  }
+}

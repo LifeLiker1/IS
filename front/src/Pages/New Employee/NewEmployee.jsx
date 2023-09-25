@@ -13,6 +13,7 @@ import {
   TreeSelect,
   Upload,
 } from "antd";
+import { redirect } from "react-router-dom";
 
 // const { RangePicker } = DatePicker;
 const normFile = (e) => {
@@ -45,6 +46,7 @@ function MyComponent({ citiesData, districtsData }) {
       city,
       district, // Добавляем район в отправляемые данные
     } = formData;
+
     await AddEmployee(
       name,
       surname,
@@ -206,9 +208,20 @@ function MyComponent({ citiesData, districtsData }) {
       <Button className="Add_employee" onClick={handleSubmit}>
         Добавить сотрудника
       </Button>
-      <Button className="Diss_employee">Отмена</Button>
+      <Button className="Diss_employee" href="/">
+        Отмена
+      </Button>
     </>
   );
 }
 
+export const AddEmployeeButton = () => (
+  <Button className="Add_employee">Добавить сотрудника</Button>
+);
+
+export const CancelButton = () => (
+  <Button className="Diss_employee" href="/">
+    Отмена
+  </Button>
+);
 export default MyComponent;
