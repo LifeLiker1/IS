@@ -5,7 +5,7 @@ import App from './App';
 import Header from "./header/header.jsx"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import NewEmployee from './Pages/New Employee/NewEmployee';
-import EmployeePage from './Pages/EmployeePage/EmployeePage';
+import EmployeePage from './Pages/EmployeePage/EmployeePage.jsx';
 import Auth from './Auth/auth.jsx';
 
 
@@ -17,7 +17,7 @@ root.render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/newEmployee" element={<NewEmployee/>} />
-        <Route path='/employeePage' element={EmployeePage}/>
+        <Route path='/employees/:employeeId' element={<EmployeePage/>}/>
         <Route path='/login' element={<Auth/>}/>
       </Routes>
     </Router>

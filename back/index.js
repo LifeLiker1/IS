@@ -28,6 +28,18 @@ mongoose.connection.on("connected", () => {
     }
   });
 
+  app.get("/api/employees/:id", async (req,res) => {
+    try {
+      const employee = await Employee.findById(req.params.id)
+      if (!employee) {
+        return res.status(404).json("Сотрудник не найден");
+      }
+      res.json(employee)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
 
 
   app.post("/api/employees", async (req, res) => {
