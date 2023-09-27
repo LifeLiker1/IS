@@ -67,6 +67,19 @@ mongoose.connection.on("connected", () => {
     }
   });
 
+  app.delete("/api/employees", async(req, res) => {
+    try {
+        const employee = await Employee.find()
+        if (!employee){
+            return res.status(404).json("Сотрудник не найден")
+        }
+        await Employee.deleteMany()
+        res.status(200).json("Сотрудник уволен");
+    } catch (error) {
+        console.log(error);
+    }
+  });
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
