@@ -29,7 +29,6 @@ const HR = () => {
 
   return (
     <div className="employee_block">
-      
       {employees.map((employee) => (
         // Используйте компонент Link для создания ссылок на страницу деталей сотрудника
         <Link key={employee._id} to={`/employees/${employee._id}`}>
