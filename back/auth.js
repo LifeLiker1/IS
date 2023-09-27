@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
       res.status(400).json({ message: "Password is not valid!" });
     }
 
-    const token = jwt.sign({ userId: userExists._id }, "test", {
+    const token = jwt.sign({ userId: userExists.id }, "test", {
       expiresIn: "1h",
     });
 

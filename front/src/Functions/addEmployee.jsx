@@ -2,10 +2,15 @@ export async function AddEmployee(
   name,
   surname,
   sex,
-  adress,
+  city,
+  district,
+  street,
   mobilePhone,
-  departament
-  // images
+  departament,
+  position,
+  about,
+  hobbies,
+  image
 ) {
   try {
     const data = await fetch("http://localhost:3001/api/employees", {
@@ -17,9 +22,16 @@ export async function AddEmployee(
         name: name,
         surname: surname,
         sex: sex,
-        adress: adress,
+        adress: {
+          city: city,
+          district: district,
+          street: street,
+        },
         mobilePhone: mobilePhone,
         departament: departament,
+        position: position,
+        about: about,
+        hobbies: hobbies,
       }),
     });
 

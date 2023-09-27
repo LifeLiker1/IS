@@ -29,7 +29,6 @@ const HR = () => {
 
   return (
     <div className="employee_block">
-      
       {employees.map((employee) => (
         // Используйте компонент Link для создания ссылок на страницу деталей сотрудника
         <Link key={employee._id} to={`/employees/${employee._id}`}>
@@ -41,12 +40,12 @@ const HR = () => {
             cover={
               <img
                 alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                src={employee.image}
               />
             }
           >
             <Meta
-              title={`${employee.Surname} ${employee.Name}`}
+              title={`${employee.surname} ${employee.name}`}
             />
           </Card>
         </Link>

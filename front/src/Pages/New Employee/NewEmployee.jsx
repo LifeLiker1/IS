@@ -1,21 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AddEmployee } from "../../Functions/addEmployee";
-import { PlusOutlined } from "@ant-design/icons";
 import "./NewEmployee.scss";
-import InputMask from "react-input-mask"; // Импортируйте InputMask из библиотеки
+import InputMask from "react-input-mask";
+import ImageUpload from "../../Functions/ImageUpload";
 
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  // Radio,
-  TreeSelect,
-  Upload,
-} from "antd";
-import { redirect } from "react-router-dom";
+import { Button, Form, Input, TreeSelect } from "antd";
 
-// const { RangePicker } = DatePicker;
 const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
@@ -23,40 +14,60 @@ const normFile = (e) => {
   return e?.fileList;
 };
 
-function MyComponent({ citiesData, districtsData }) {
+function MyComponent() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
     sex: "",
-    adress: "",
+    address: { city: "", district: "", street: "" },
     mobilePhone: "",
     departament: "",
-    city: "", // Добавляем состояние для выбранного города
-    district: "", // Добавляем состояние для выбранного района
+    position: "",
+    about: "",
+    hobbies: "",
+    image: "",
   });
+
+  const handleImageUpload = (imageFile) => {
+    setFormData({
+      ...formData,
+      image: imageFile,
+    });
+  };
+
+  const [districts, setDistricts] = useState([]);
 
   const handleSubmit = async () => {
     const {
       name,
       surname,
       sex,
-      adress,
+      address: { city, district, street },
       mobilePhone,
       departament,
-      city,
-      district, // Добавляем район в отправляемые данные
+      position,
+      about,
+      hobbies,
+      image,
     } = formData;
 
     await AddEmployee(
       name,
       surname,
       sex,
-      adress,
+      city,
+      district,
+      street,
       mobilePhone,
       departament,
-      city,
-      district
+      position,
+      about,
+      hobbies,
+      image
     );
+    navigate("/");
   };
 
   const handleChange = (e) => {
@@ -64,6 +75,52 @@ function MyComponent({ citiesData, districtsData }) {
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const handleCityChange = (value) => {
+    setFormData({
+      ...formData,
+      address: {
+        ...formData.address,
+        city: value,
+      },
+      district: "", // Сбрасываем выбранный район при изменении города
+    });
+
+    const districtData = {
+      Алматы: [
+        { title: "Алатауский", value: "Алатауский" },
+        { title: "Алмалинский", value: "Алмалинский" },
+        { title: "Ауэзовский", value: "Ауэзовский" },
+        { title: "Бостандыкский", value: "Бостандыкский" },
+        { title: "Жетысуский", value: "Жетысуский" },
+        { title: "Медеуский", value: "Медеуский" },
+        { title: "Наурызбайский", value: "Наурызбайский" },
+        { title: "Турксибский", value: "Турксибский" },
+      ],
+      Астана: [
+        { title: "Район 1", value: "Район 1" },
+        { title: "Район 2", value: "Район 2" },
+        { title: "Район 3", value: "Район 3" },
+      ],
+      Шымкент: [
+        { title: "Район A", value: "Район A" },
+        { title: "Район B", value: "Район B" },
+        { title: "Район C", value: "Район C" },
+      ],
+    };
+
+    setDistricts(districtData[value] || []);
+  };
+
+  const handleDistrictChange = (value) => {
+    setFormData({
+      ...formData,
+      address: {
+        ...formData.address,
+        district: value,
+      },
     });
   };
 
@@ -103,51 +160,55 @@ function MyComponent({ citiesData, districtsData }) {
             treeData={[
               {
                 title: "Мужской",
-                value: "male",
+                value: "Мужской",
               },
               {
                 title: "Женский",
-                value: "female",
+                value: "Женский",
               },
             ]}
             value={formData.sex}
-          >
-            onChange=
-            {(value) => {
+            onChange={(value) => {
               setFormData({
                 ...formData,
                 sex: value,
               });
             }}
-          </TreeSelect>
+          />
         </Form.Item>
-        <Form.Item label="Адрес">
+        <Form.Item label="Город">
           <TreeSelect
             treeData={[
               {
                 title: "Алматы",
-                value: "Almaty",
+                value: "Алматы",
               },
               {
                 title: "Астана",
-                value: "Astana",
+                value: "Астана",
               },
               {
                 title: "Шымкент",
-                value: "Shymkent",
+                value: "Шымкент",
               },
             ]}
-            value={formData.adress} // Устанавливаем значение для TreeSelect
-            onChange={(value) => {
-              setFormData({
-                ...formData,
-                adress: value,
-              });
-            }}
+            value={formData.address.city}
+            onChange={handleCityChange}
           />
         </Form.Item>
-        <Form.Item label="DatePicker">
-          <DatePicker />
+        <Form.Item label="Район">
+          <TreeSelect
+            treeData={districts}
+            value={formData.address.district}
+            onChange={handleDistrictChange}
+          />
+        </Form.Item>
+        <Form.Item label="Улица">
+          <Input
+            name="street"
+            value={formData.address.street}
+            onChange={handleChange}
+          />
         </Form.Item>
         <Form.Item label="Мобильный телефон">
           <InputMask
@@ -176,7 +237,7 @@ function MyComponent({ citiesData, districtsData }) {
                 value: "HR",
               },
             ]}
-            value={formData.departament} // Устанавливаем значение для TreeSelect
+            value={formData.departament}
             onChange={(value) => {
               setFormData({
                 ...formData,
@@ -185,24 +246,29 @@ function MyComponent({ citiesData, districtsData }) {
             }}
           />
         </Form.Item>
-
-        <Form.Item
-          label="Upload"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-        >
-          <Upload action="/upload.do" listType="picture-card">
-            <div>
-              <PlusOutlined />
-              <div
-                style={{
-                  marginTop: 8,
-                }}
-              >
-                Upload
-              </div>
-            </div>
-          </Upload>
+        <Form.Item label="Должность">
+          <TreeSelect
+            treeData={[
+              {
+                title: "Начальник отдела",
+                value: "Начальник отдела",
+              },
+              {
+                title: "Заместитель начальника отдела",
+                value: "Заместитель начальника отдела",
+              },
+            ]}
+            value={formData.position}
+            onChange={(value) => {
+              setFormData({
+                ...formData,
+                position: value,
+              });
+            }}
+          />
+        </Form.Item>
+        <Form.Item label="Изображение">
+          <ImageUpload onChange={handleImageUpload} />
         </Form.Item>
       </Form>
       <Button className="Add_employee" onClick={handleSubmit}>
@@ -214,7 +280,6 @@ function MyComponent({ citiesData, districtsData }) {
     </>
   );
 }
-
 export const AddEmployeeButton = () => (
   <Button className="Add_employee">Добавить сотрудника</Button>
 );
