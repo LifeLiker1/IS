@@ -5,20 +5,7 @@ import "./NewEmployee.scss";
 import InputMask from "react-input-mask";
 import ImageUpload from "../../Functions/ImageUpload";
 
-<<<<<<< HEAD
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  // Radio,
-  TreeSelect,
-  Upload,
-} from "antd";
-import { redirect } from "react-router-dom";
-=======
 import { Button, Form, Input, TreeSelect } from "antd";
->>>>>>> back
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -297,13 +284,6 @@ export const AddEmployeeButton = () => (
   <Button className="Add_employee">Добавить сотрудника</Button>
 );
 
-<<<<<<< HEAD
-export const AddEmployeeButton = () => (
-  <Button className="Add_employee">Добавить сотрудника</Button>
-);
-
-=======
->>>>>>> back
 export const CancelButton = () => (
   <Button className="Diss_employee" href="/">
     Отмена
