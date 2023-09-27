@@ -41,12 +41,12 @@ const HR = () => {
             cover={
               <img
                 alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                src={employee.image}
               />
             }
           >
             <Meta
-              title={`${employee.Surname} ${employee.Name}`}
+              title={`${employee.surname} ${employee.name}`}
             />
           </Card>
         </Link>
