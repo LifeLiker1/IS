@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./hr.scss";
 import { Card, Form, TreeSelect, notification } from "antd";
 import { Link } from "react-router-dom";
+import { Card, Form, TreeSelect, notification } from "antd";
 
 const HR = () => {
   const [employees, setEmployees] = useState([]);
