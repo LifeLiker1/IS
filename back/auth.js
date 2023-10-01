@@ -1,36 +1,9 @@
 const { Router } = require("express");
-
 const UserModel = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const authMiddleware = require("../middleware/auth"); // Создайте middleware для проверки JWT токена
 const router = Router();
-
-router.post("/register", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-
-    const userExists = await UserModel.findOne({ email });
-
-    if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const savedUser = new UserModel({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
-    await savedUser.save();
-    res.status(201).json({ message: "User created!" });
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 router.post("/login", async (req, res) => {
   try {
@@ -45,26 +18,29 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, userExists.password);
 
     if (!isMatch) {
-      res.status(400).json({ message: "Password is not valid!" });
+      return res.status(400).json({ message: "Password is not valid!" });
     }
 
     const token = jwt.sign({ userId: userExists.id }, "test", {
-      expiresIn: "1h",
+      expiresIn: "15min",
     });
 
-    res
-      .cookie("access_token", token, { httpOnly: true })
-      .status(200)
-      .json({
-        token,
-        user: {
-          ...userExists._doc,
-          password: null,
-        },
-      });
+    res.status(200).json({
+      token,
+      user: {
+        ...userExists._doc,
+        password: null,
+      },
+    });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
+});
+
+// Пример защищенного маршрута, который требует JWT токена
+router.get("/protected", authMiddleware, (req, res) => {
+  res.status(200).json({ message: "You have access!" });
 });
 
 module.exports = router;

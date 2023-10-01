@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./hr.scss";
 import { Card, Form, TreeSelect, notification } from "antd";
+import { Link } from "react-router-dom";
 
 const HR = () => {
   const [employees, setEmployees] = useState([]);
@@ -71,8 +72,9 @@ const HR = () => {
         <div>
           <div className="department-employees">
             {filteredEmployees.map((employee) => (
+              <Link key={employee._id} to={`/employees/${employee._id}`}>
               <Card
-                key={employee._id}
+                
                 hoverable
                 style={{
                   width: 240,
@@ -81,6 +83,7 @@ const HR = () => {
               >
                 <Meta title={`${employee.surname} ${employee.name}`} />
               </Card>
+              </Link>
             ))}
           </div>
         </div>

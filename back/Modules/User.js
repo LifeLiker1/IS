@@ -8,15 +8,15 @@ const UserSchema = new mongoose.Schema(
       unique: true,
     },
     password: {
-      type: Number,
+      type: String, // Изменим тип на String
       required: true,
     },
-    // name: {
-    //   type: String,
-    //   required: true,
-    // },
+    name: {
+      type: String, // Добавим поле для имени пользователя
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model("User", UserSchema); // Изменим имя модели на "User" с заглавной буквы
