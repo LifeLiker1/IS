@@ -26,4 +26,18 @@ router.get("/api/employees/:id", async (req, res) => {
   }
 });
 
+router.get('/api/employees', async (req, res) => {
+  try {
+    const { department } = req.query; // Получаем значение отдела из запроса
+
+    // Выполняем запрос к базе данных, фильтруя сотрудников по выбранному отделу
+    const employees = await Employee.find({ department });
+
+    res.json(employees); // Отправляем список сотрудников в формате JSON
+  } catch (error) {
+    console.error('Ошибка при запросе сотрудников:', error);
+    res.status(500).json({ message: 'Ошибка запроса' });
+  }
+});
+
 module.exports = router;
