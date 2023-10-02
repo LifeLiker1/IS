@@ -11,10 +11,10 @@ const UserSchema = new mongoose.Schema(
       type: String, // Изменим тип на String
       required: true,
     },
-    name: {
-      type: String, // Добавим поле для имени пользователя
-      required: true,
-    },
+    // name: {
+    //   type: String, // Добавим поле для имени пользователя
+    //   required: true,
+    // },
   },
   { timestamps: true }
 );

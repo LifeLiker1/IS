@@ -1,43 +1,53 @@
 const { Router } = require("express");
-const Employee = require("../Modules/Employee"); // Импорт модели сотрудника из БД
+const Employee = require("../Modules/Employee"); 
+const authMiddleware = require ("../Functions/authMiddle.js");
 
 const router = Router();
 
-router.post("/api/employees", async (req, res) => {
+
+//запрос на всех сотрудников
+router.get("/api/employees", authMiddleware, async (req, res) => {
   try {
-    const employee = new Employee(req.body); // Создаем экземпляр сотрудника на основе данных из тела запроса
-    await employee.save(); // Сохраняем сотрудника в базе данных
-    res.status(201).json(employee); // Отправляем успешный ответ с созданным сотрудником
+    const employee = new Employee(req.body); 
+    await employee.save(); 
+    res.status(201).json(employee); 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Ошибка сервера" }); // Отправляем ошибку сервера в случае исключения
+    res.status(500).json({ message: "Ошибка сервера" }); 
   }
 });
 
-router.get("/api/employees/:id", async (req, res) => {
+// запрос на данные конкретного сотрудника
+router.get("/api/employees/:id", authMiddleware, async (req, res) => {
   try {
-    const employee = await Employee.findById(req.params._id)
-    if (!employee){
-        return res.status(400).json({message: "сотрудник не найден"})
+    const employee = await Employee.findById(req.params.id);
+    if (!employee) {
+      return res.status(400).json({ message: "Сотрудник не найден" });
     }
+    res.json(employee); // Отправляем данные сотрудника в формате JSON
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Ошибка сервера" }); // Отправляем ошибку сервера в случае исключения
+    res.status(500).json({ message: "Ошибка сервера" });
   }
 });
 
-router.get('/api/employees', async (req, res) => {
+// фильтр сотрудников по отделам
+router.get('/api/employees', authMiddleware, async (req, res) => {
   try {
-    const { department } = req.query; // Получаем значение отдела из запроса
+    const { department } = req.query;
 
-    // Выполняем запрос к базе данных, фильтруя сотрудников по выбранному отделу
+    if (!department) {
+      return res.status(400).json({ message: 'Отдел не указан' });
+    }
+
     const employees = await Employee.find({ department });
 
-    res.json(employees); // Отправляем список сотрудников в формате JSON
+    res.json(employees);
   } catch (error) {
     console.error('Ошибка при запросе сотрудников:', error);
     res.status(500).json({ message: 'Ошибка запроса' });
   }
 });
+
 
 module.exports = router;

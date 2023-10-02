@@ -1,27 +1,14 @@
 import React, { useState } from "react";
-import { ToastContainer } from "react-toastify"
 import "./auth.scss";
-import {notification} from "antd"
+import { notification } from "antd";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  <ToastContainer 
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const response = await fetch(`http://localhost:3001/api/login`, {
         method: "POST",
@@ -34,19 +21,20 @@ const Auth = () => {
         }),
       });
       if (response.ok) {
+        const data = await response.json();
+        const { token } = data;
+        localStorage.setItem("token", token);
         notification.open({
-          message:'Авторизация успешна',
+          message: "Авторизация успешна",
           duration: 3,
-        })
-        // Обработайте успешный ответ от сервера, например, перенаправьте пользователя на другую страницу
-        window.location.href = "/"; // Пример перенаправления
+        });
+        window.location.href = "/employees";
       } else {
         notification.open({
-          message:'Ошибка авторизации',
+          message: "Ошибка авторизации",
           duration: 3,
-        }); // Изменил сообщение на сообщение об ошибке
+        });
 
-        // Обработайте ошибку авторизации, например, показав сообщение об ошибке
         console.error(response.error);
       }
     } catch (error) {

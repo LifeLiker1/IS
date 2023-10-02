@@ -50,18 +50,9 @@ const HR = () => {
             onChange={(value) => setSelectedDepartment(value)}
             treeData={[
               { title: "Все", value: 0 },
-              {
-                title: "IT",
-                value: "IT",
-              },
-              {
-                title: "Технический отдел",
-                value: "Tech_Department",
-              },
-              {
-                title: "Юридический",
-                value: "HR",
-              },
+              { title: "IT", value: "IT" },
+              { title: "Технический отдел", value: "Tech_Department" },
+              { title: "Юридический", value: "HR" },
             ]}
           />
         </Form.Item>
@@ -73,16 +64,15 @@ const HR = () => {
           <div className="department-employees">
             {filteredEmployees.map((employee) => (
               <Link key={employee._id} to={`/employees/${employee._id}`}>
-              <Card
-                
-                hoverable
-                style={{
-                  width: 240,
-                }}
-                cover={<img alt="example" src={employee.image} />}
-              >
-                <Meta title={`${employee.surname} ${employee.name}`} />
-              </Card>
+                <Card
+                  hoverable
+                  style={{
+                    width: 240,
+                  }}
+                  cover={<img alt="example" src={employee.image} />}
+                >
+                  <Meta title={`${employee.surname} ${employee.name}`} />
+                </Card>
               </Link>
             ))}
           </div>

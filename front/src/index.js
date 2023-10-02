@@ -6,7 +6,7 @@ import Header from "./header/header.jsx";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import NewEmployee from "./Pages/New Employee/NewEmployee";
 import EmployeePage from "./Pages/EmployeePage/EmployeePage.jsx";
-import Auth from "./Auth/auth.jsx";
+import Auth from "./Auth/Auth.jsx";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,10 +14,10 @@ root.render(
     <Router>
       <Header />
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<Auth />} /> {/* Стартовая страница */}
         <Route path="/newEmployee" element={<NewEmployee />} />
         <Route path="/employees/:employeeId" element={<EmployeePage />} />
-        <Route path="/login" element={<Auth />} />
+        <Route path="/employees" element={<App />} />
       </Routes>
     </Router>
   </React.StrictMode>

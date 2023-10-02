@@ -2,9 +2,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const Employee = require("./Modules/Employee");
+const User = require("./Modules/User.js")
+const userRoutes = require("./routes/users"); // Подключаем файл с маршрутами для авторизации
+const authRoutes = require('./auth')
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.use('/', userRoutes)
+app.use('/', authRoutes)
 
 
 const PORT = 3001;
@@ -79,6 +85,33 @@ mongoose.connection.on("connected", () => {
         console.log(error);
     }
   });
+
+
+  // app.get("/api/users", async (req, res) => {
+  //   try {
+  //     const users = await User.find();
+  //     if (!users || users.length === 0) {
+  //       return res.status(400).json({ message: "Сотрудники не найдены" });
+  //     }
+  //     res.json(users);
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ message: "Ошибка сервера" });
+  //   }
+  // });
+  
+  // app.get("/api/users/:id", async (req, res) => {
+  //   try {
+  //     const user = await User.findById(req.params.id);
+  //     if (!user) {
+  //       return res.status(400).json({ message: "Сотрудник не найден" });
+  //     }
+  //     res.json(user);
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ message: "Ошибка сервера" });
+  //   }
+  // });
 
 
 app.listen(PORT, () => {

@@ -1,30 +1,24 @@
 const { Router } = require("express");
-const UserModel = require("../models/user");
+const UserModel = require("./Modules/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const authMiddleware = require("../middleware/auth"); // Создайте middleware для проверки JWT токена
+const authMiddleware = require("./Functions/authMiddle");
 const router = Router();
 
-router.post("/login", async (req, res) => {
+router.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const userExists = await UserModel.findOne({ email });
-
     if (!userExists) {
       return res.status(400).json({ message: "User does not exist!" });
     }
-
     const isMatch = await bcrypt.compare(password, userExists.password);
-
     if (!isMatch) {
       return res.status(400).json({ message: "Password is not valid!" });
     }
-
     const token = jwt.sign({ userId: userExists.id }, "test", {
       expiresIn: "15min",
     });
-
     res.status(200).json({
       token,
       user: {
