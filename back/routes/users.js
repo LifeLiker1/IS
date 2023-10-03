@@ -3,6 +3,24 @@ const User = require("../Modules/User");
 const bcrypt = require("bcryptjs");
 const router = Router();
 
+/**
+ * @swagger
+ * /api/register:
+ *   get:
+ *     summary: Регистрация нового сотрудника
+ *     description: Регистрация нового сотрудника
+ *     tags:
+ *       - Пользователи
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *       201:
+ *         description: Пользователь успешно зарегистрирован
+ *       400:
+ *         description: Некорректный запрос
+ *       500:
+ *         description: Ошибка сервера
+ */
 router.post("/api/register", async (req, res) => {
   try {
     const { email, password } = req.body;

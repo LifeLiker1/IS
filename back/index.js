@@ -5,12 +5,14 @@ const Employee = require("./Modules/Employee");
 const User = require("./Modules/User.js")
 const userRoutes = require("./routes/users");
 const authRoutes = require('./Functions/auth')
+const { specs, swaggerUi } = require("./Functions/swagger");
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.use('/', userRoutes)
 app.use('/', authRoutes)
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 
 const PORT = 3001;
@@ -24,7 +26,22 @@ mongoose.connection.on("connected", () => {
   console.log("Connected to MongoDB Atlas");
 });
 
-
+/**
+ * @swagger
+ * /api/employees
+ * get:
+ *     summary: Получить всех сотрудников
+ *     description: Получить всех сотрудников
+ *     tags:
+ *       - Сотрудники
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *       400:
+ *         description: Некорректный запрос
+ *       500:
+ *         description: Ошибка сервера
+*/
   app.get("/api/employees", async (req, res) => {
     try {
       const employee = await Employee.find();

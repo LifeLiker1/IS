@@ -2,10 +2,26 @@ const { Router } = require("express");
 const Employee = require("../Modules/Employee"); 
 const authMiddleware = require ("../Functions/authMiddle.js");
 
+
 const router = Router();
 
-
 //запрос на всех сотрудников
+/**
+ * @swagger
+ * /api/employees:
+ *   get:
+ *     summary: Получить всех сотрудников
+ *     description: Получить список всех сотрудников.
+ *     tags:
+ *       - Сотрудники
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *       400:
+ *         description: Некорректный запрос
+ *       500:
+ *         description: Ошибка сервера
+ */
 router.get("/api/employees", authMiddleware, async (req, res) => {
   try {
     const employee = new Employee(req.body); 
@@ -18,6 +34,22 @@ router.get("/api/employees", authMiddleware, async (req, res) => {
 });
 
 // запрос на данные конкретного сотрудника
+/**
+ * @swagger
+ * /api/employees/:id:
+ *   get:
+ *     summary: Получить конкретного сотрудника
+ *     description: Получить конкретного сотрудника
+ *     tags:
+ *       - Сотрудники
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *       400:
+ *         description: Некорректный запрос
+ *       500:
+ *         description: Ошибка сервера
+ */
 router.get("/api/employees/:id", authMiddleware, async (req, res) => {
   try {
     const employee = await Employee.findById(req.params.id);
