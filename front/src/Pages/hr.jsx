@@ -10,9 +10,9 @@ const HR = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      document.title = "Страница отдела кадров"
       try {
         const response = await fetch("http://localhost:3001/api/employees");
-
         if (!response.ok) {
           throw new Error("Ошибка при получении данных");
         }

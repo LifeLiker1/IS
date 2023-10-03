@@ -1,8 +1,8 @@
 const { Router } = require("express");
-const UserModel = require("./Modules/User");
+const UserModel = require("../Modules/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const authMiddleware = require("./Functions/authMiddle");
+const authMiddleware = require("./authMiddle");
 const router = Router();
 
 router.post("/api/login", async (req, res) => {
@@ -19,7 +19,9 @@ router.post("/api/login", async (req, res) => {
     const token = jwt.sign({ userId: userExists.id }, "test", {
       expiresIn: "15min",
     });
-    res.status(200).json({
+
+    // Отправляем токен в заголовке ответа
+    res.header("Authorization", `Bearer ${token}`).status(200).json({
       token,
       user: {
         ...userExists._doc,

@@ -1,10 +1,9 @@
 const { Router } = require("express");
 const User = require("../Modules/User");
 const bcrypt = require("bcryptjs");
-const authMiddleware = require("../Functions/authMiddle.js");
 const router = Router();
 
-router.post("/api/register", authMiddleware, async (req, res) => {
+router.post("/api/register", async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email) {

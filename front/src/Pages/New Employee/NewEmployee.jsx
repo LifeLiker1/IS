@@ -16,6 +16,7 @@ const normFile = (e) => {
 
 function MyComponent() {
   const navigate = useNavigate();
+  document.title = "Добавление нового сотрудника"
 
   const [formData, setFormData] = useState({
     name: "",
@@ -285,7 +286,7 @@ export const AddEmployeeButton = () => (
 );
 
 export const CancelButton = () => (
-  <Button className="Diss_employee" href="/">
+  <Button className="Diss_employee" href="/employees">
     Отмена
   </Button>
 );

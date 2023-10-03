@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./auth.scss";
 import { notification } from "antd";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [authToken, setAuthToken] = useState(localStorage.getItem("token"))
+
+  useEffect(() => {
+    // При монтировании компонента проверяем, есть ли токен в localStorage
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setAuthToken(storedToken);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,6 +23,7 @@ const Auth = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`
         },
         body: JSON.stringify({
           email,

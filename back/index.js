@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const Employee = require("./Modules/Employee");
 const User = require("./Modules/User.js")
-const userRoutes = require("./routes/users"); // Подключаем файл с маршрутами для авторизации
-const authRoutes = require('./auth')
+const userRoutes = require("./routes/users");
+const authRoutes = require('./Functions/auth')
 const app = express();
 app.use(cors());
 app.use(express.json());
