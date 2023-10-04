@@ -1,42 +1,21 @@
-export async function AddEmployee(
-  name,
-  surname,
-  sex,
-  city,
-  district,
-  street,
-  mobilePhone,
-  departament,
-  position,
-  about,
-  hobbies,
-  image
-) {
+export async function AddEmployee(employeeData) {
   try {
-    const data = await fetch("http://localhost:3001/api/employees", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        surname: surname,
-        sex: sex,
-        adress: {
-          city: city,
-          district: district,
-          street: street,
-        },
-        mobilePhone: mobilePhone,
-        departament: departament,
-        position: position,
-        about: about,
-        hobbies: hobbies,
-      }),
+    const formData = new FormData();
+    Object.keys(employeeData).forEach((key) => {
+      formData.append(key, employeeData[key]);
     });
 
-    console.log(data);
+    const response = await fetch("http://localhost:3001/api/employees", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response.ok) {
+      console.log("Сотрудник успешно добавлен");
+    } else {
+      console.error("Ошибка при добавлении сотрудника");
+    }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }

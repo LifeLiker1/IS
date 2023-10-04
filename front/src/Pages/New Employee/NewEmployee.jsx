@@ -3,20 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { AddEmployee } from "../../Functions/addEmployee";
 import "./NewEmployee.scss";
 import InputMask from "react-input-mask";
-import ImageUpload from "../../Functions/ImageUpload";
 
 import { Button, Form, Input, TreeSelect } from "antd";
-
-const normFile = (e) => {
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return e?.fileList;
-};
+import ImageUpload from "../../Functions/ImageUpload"; // Импортируем компонент ImageUpload
 
 function MyComponent() {
   const navigate = useNavigate();
-  document.title = "Добавление нового сотрудника"
+  document.title = "Добавление нового сотрудника";
 
   const [formData, setFormData] = useState({
     name: "",
@@ -28,18 +21,19 @@ function MyComponent() {
     position: "",
     about: "",
     hobbies: "",
-    image: "",
+    image: null,
   });
 
   const handleImageUpload = (imageFile) => {
+    console.log(imageFile)
     setFormData({
       ...formData,
       image: imageFile,
     });
   };
-
+  
   const [districts, setDistricts] = useState([]);
-
+  
   const handleSubmit = async () => {
     const {
       name,
@@ -54,21 +48,23 @@ function MyComponent() {
       image,
     } = formData;
 
-    await AddEmployee(
-      name,
-      surname,
-      sex,
-      city,
-      district,
-      street,
-      mobilePhone,
-      departament,
-      position,
-      about,
-      hobbies,
-      image
-    );
-    navigate("/");
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", name);
+    formDataToSend.append("surname", surname);
+    formDataToSend.append("sex", sex);
+    formDataToSend.append("city", city);
+    formDataToSend.append("district", district);
+    formDataToSend.append("street", street);
+    formDataToSend.append("mobilePhone", mobilePhone);
+    formDataToSend.append("departament", departament);
+    formDataToSend.append("position", position);
+    formDataToSend.append("about", about);
+    formDataToSend.append("hobbies", hobbies);
+    formDataToSend.append("image", image);
+
+    await AddEmployee(formDataToSend); // Отправляем данные в функцию AddEmployee
+
+    navigate("/employees");
   };
 
   const handleChange = (e) => {
@@ -269,7 +265,7 @@ function MyComponent() {
           />
         </Form.Item>
         <Form.Item label="Изображение">
-          <ImageUpload onChange={handleImageUpload} />
+          <ImageUpload onImageUpload={handleImageUpload} /> 
         </Form.Item>
       </Form>
       <Button className="Add_employee" onClick={handleSubmit}>
@@ -281,13 +277,12 @@ function MyComponent() {
     </>
   );
 }
-export const AddEmployeeButton = () => (
-  <Button className="Add_employee">Добавить сотрудника</Button>
-);
+
 
 export const CancelButton = () => (
   <Button className="Diss_employee" href="/employees">
     Отмена
   </Button>
 );
+
 export default MyComponent;

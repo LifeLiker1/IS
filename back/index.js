@@ -1,14 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const Employee = require("./Modules/Employee");
-const User = require("./Modules/User.js")
+const Employee = require("./Models/Employee");
+const User = require("./Models/User.js")
 const userRoutes = require("./routes/users");
 const authRoutes = require('./Functions/auth')
 const { specs, swaggerUi } = require("./Functions/swagger");
+const bodyParser = require("body-parser");
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use('/', userRoutes)
 app.use('/', authRoutes)
@@ -50,6 +53,7 @@ mongoose.connection.on("connected", () => {
       console.log(error);
     }
   });
+  
 
   app.get("/api/employees/:id", async (req,res) => {
     try {
