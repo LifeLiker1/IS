@@ -1,20 +1,55 @@
+// Переменные
+$background: #3a91ab;
+
+/* Общие стили */
 .employee_block {
   margin-top: 100px;
   margin-left: 75px;
+}
+
+/* Стили для контейнера с сотрудниками */
+.department-employees {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); // Создаем 4 столбца
-  gap: 20px; // Расстояние между карточками
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  .employee_names {
+    margin-top: 95%;
+    text-align: center;
+    text-decoration: none !important;
+  }
 }
 
-/* Стили для каждой карточки */
+.card-employee {
+  display: flex;
+  width: 240px;
+  height: 240px;
+}
+
+/* Стили для поля поиска */
+.search_field {
+  min-width: 500px;
+  max-width: 800px;
+  margin: auto;
+}
+
+/* Стили для карточек */
 .ant-card {
-  // width: 100%;
-  background-color: red;
+  // background-color: $background;
+  transition: transform 0.3s; // Добавляем анимацию для свойства transform
 }
 
-/* Стили для изображения внутри карточки */
+/* Стили для изображения в карточках */
 .ant-card-cover > img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+}
+
+/* Стили для карточек при наведении */
+.ant-card:hover {
+  transform: scale(1.1); // Увеличиваем карточку при наведении
+}
+
+/* Стили для изображения в карточках при наведении */
+.ant-card:hover .ant-card-cover > img {
+  transform: scale(1); // Увеличиваем изображение внутри карточки при наведении
 }

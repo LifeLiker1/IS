@@ -31,7 +31,7 @@ const EmployeeDetails = () => {
     // на основе `employeeId` и установите их в `employee`
     const fetchData = async () => {
       try {
-        document.title = `Личное дело сотрудника ${employee.surname} ${employee.name}`
+        document.title = "Личное дело сотрудника"
         const response = await fetch(`http://localhost:3001/api/employees/${employeeId}`);
         const data = await response.json();
         console.log(data)

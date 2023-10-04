@@ -3,7 +3,7 @@
   border: 0;
 }
 header{
-  background-color: yellow;
+  background-color: #3a91ab;
   width: 100%;
   height: 75px;
   position: fixed;
@@ -11,7 +11,12 @@ header{
   z-index: 1;
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: space-between;
+  img{
+    width: 100px;
+    height: 100px;
+  }
+  
   nav{
     // background-color: red;
     width: 500px;

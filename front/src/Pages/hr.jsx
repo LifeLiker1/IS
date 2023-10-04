@@ -10,7 +10,7 @@ const HR = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      document.title = "Страница отдела кадров"
+      document.title = "Страница отдела кадров";
       try {
         const response = await fetch("http://localhost:3001/api/employees");
         if (!response.ok) {
@@ -47,6 +47,7 @@ const HR = () => {
       <div className="search_field">
         <Form.Item label="Мне нужны сотрудники" className="dep_sel">
           <TreeSelect
+            placeholder="Выберите отдел для отображения сотрудников"
             onChange={(value) => setSelectedDepartment(value)}
             treeData={[
               { title: "Все", value: 0 },
@@ -63,17 +64,24 @@ const HR = () => {
         <div>
           <div className="department-employees">
             {filteredEmployees.map((employee) => (
+              <div className="card-employee">
               <Link key={employee._id} to={`/employees/${employee._id}`}>
                 <Card
                   hoverable
+                  // cover={<img alt={alts} src={alts} />}
                   style={{
                     width: 240,
+                    minHeight: 250,
+                    backgroundImage: `url("../Images/Man1.jpg)`,
+                    backgroundSize: "cover",
                   }}
-                  cover={<img alt="example" src={employee.image} />}
                 >
-                  <Meta title={`${employee.surname} ${employee.name}`} />
+                  <div className="employee_names">
+                    <Meta title={`${employee.surname} ${employee.name}`} />
+                  </div>
                 </Card>
               </Link>
+              </div>
             ))}
           </div>
         </div>
