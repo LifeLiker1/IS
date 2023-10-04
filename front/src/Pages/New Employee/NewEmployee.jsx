@@ -25,46 +25,37 @@ function MyComponent() {
   });
 
   const handleImageUpload = (imageFile) => {
-    console.log(imageFile)
+    console.log(imageFile);
     setFormData({
       ...formData,
       image: imageFile,
     });
   };
-  
+
   const [districts, setDistricts] = useState([]);
-  
+
   const handleSubmit = async () => {
-    const {
-      name,
-      surname,
-      sex,
-      address: { city, district, street },
-      mobilePhone,
-      departament,
-      position,
-      about,
-      hobbies,
-      image,
-    } = formData;
+    try {
+      const response = await fetch("http://localhost:3001/api/employees", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Устанавливаем заголовок для отправки JSON
+        },
+        body: JSON.stringify(formData), // Преобразуем объект formData в JSON
+      });
 
-    const formDataToSend = new FormData();
-    formDataToSend.append("name", name);
-    formDataToSend.append("surname", surname);
-    formDataToSend.append("sex", sex);
-    formDataToSend.append("city", city);
-    formDataToSend.append("district", district);
-    formDataToSend.append("street", street);
-    formDataToSend.append("mobilePhone", mobilePhone);
-    formDataToSend.append("departament", departament);
-    formDataToSend.append("position", position);
-    formDataToSend.append("about", about);
-    formDataToSend.append("hobbies", hobbies);
-    formDataToSend.append("image", image);
+      if (response.ok) {
+        console.log("Сотрудник успешно добавлен");
+      } else {
+        console.error("Ошибка при добавлении сотрудника");
+      }
+    } catch (error) {
+      console.error(error);
+    }
 
-    await AddEmployee(formDataToSend); // Отправляем данные в функцию AddEmployee
+    await AddEmployee(); // Отправляем данные в функцию AddEmployee
 
-    navigate("/employees");
+    // navigate("/employees");
   };
 
   const handleChange = (e) => {
@@ -227,11 +218,11 @@ function MyComponent() {
               },
               {
                 title: "Технический отдел",
-                value: "Tech_Department",
+                value: "Технический отдел",
               },
               {
                 title: "Юридический",
-                value: "HR",
+                value: "Юридический",
               },
             ]}
             value={formData.departament}
@@ -265,7 +256,7 @@ function MyComponent() {
           />
         </Form.Item>
         <Form.Item label="Изображение">
-          <ImageUpload onImageUpload={handleImageUpload} /> 
+          <ImageUpload onImageUpload={handleImageUpload} />
         </Form.Item>
       </Form>
       <Button className="Add_employee" onClick={handleSubmit}>
@@ -277,7 +268,6 @@ function MyComponent() {
     </>
   );
 }
-
 
 export const CancelButton = () => (
   <Button className="Diss_employee" href="/employees">

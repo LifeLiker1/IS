@@ -10,77 +10,6 @@ const upload = multer({ storage });
 
 const router = Router();
 
-// Загрузка сотрудника в формате form-data
-router.post("/api/employees", authMiddleware, upload.single("image"), async (req, res) => {
-  try {
-    const {
-      name,
-      surname,
-      sex,
-      // Добавьте остальные поля
-    } = req.body;
-
-    // Создайте запись сотрудника
-    const newEmployee = new Employee({
-      name,
-      surname,
-      sex,
-      // Добавьте остальные поля с данными сотрудника
-    });
-
-    if (req.file) {
-      // Если есть загруженное изображение, сохраните его в GridFS
-      const gfs = Grid(conn.db);
-      const writeStream = gfs.createWriteStream({
-        filename: req.file.originalname,
-        contentType: req.file.mimetype,
-      });
-      writeStream.write(req.file.buffer);
-      writeStream.end();
-
-      writeStream.on("close", (file) => {
-        // Свяжите сотрудника с идентификатором изображения в GridFS
-        newEmployee.image = file._id;
-        newEmployee.save(); // Сохраните данные сотрудника
-
-        res.status(201).json(newEmployee);
-      });
-    } else {
-      // Если изображение не было загружено, сохраните сотрудника без изображения
-      await newEmployee.save();
-      res.status(201).json(newEmployee);
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Ошибка сервера" });
-  }
-});
-
-// Загрузка изображения в GridFS
-router.post("/api/upload-image", authMiddleware, upload.single("image"), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: "Файл не загружен" });
-    }
-
-    const gfs = Grid(conn.db);
-    const writeStream = gfs.createWriteStream({
-      filename: req.file.originalname,
-      contentType: req.file.mimetype,
-    });
-
-    writeStream.write(req.file.buffer);
-    writeStream.end();
-
-    writeStream.on("close", (file) => {
-      res.status(201).json({ _id: file._id });
-    });
-  } catch (error) {
-    console.error("Ошибка при загрузке изображения:", error);
-    res.status(500).json({ error: "Ошибка сервера при загрузке изображения" });
-  }
-});
-
 // Добавьте другие маршруты здесь, если необходимо
 
 //запрос на всех сотрудников
@@ -112,13 +41,13 @@ router.get("/api/employees/:id", authMiddleware, async (req, res) => {
 // фильтр сотрудников по отделам
 router.get('/api/employees', authMiddleware, async (req, res) => {
   try {
-    const { department } = req.query;
+    const { departament } = req.query;
 
-    if (!department) {
+    if (!departament) {
       return res.status(400).json({ message: 'Отдел не указан' });
     }
 
-    const employees = await Employee.find({ department });
+    const employees = await Employee.find({ departament });
 
     res.json(employees);
   } catch (error) {

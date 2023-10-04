@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 
 const HR = () => {
   const [employees, setEmployees] = useState([]);
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedDepartament, setSelectedDepartment] = useState(null);
   const { Meta } = Card;
 
   useEffect(() => {
     const fetchData = async () => {
-      document.title = "Страница отдела кадров"
+      document.title = "Страница отдела кадров";
       try {
         const response = await fetch("http://localhost:3001/api/employees");
         if (!response.ok) {
@@ -27,20 +27,20 @@ const HR = () => {
   }, []);
 
   // Функция для фильтрации сотрудников по отделу
-  const filteredEmployees = selectedDepartment
-    ? employees.filter((employee) => employee.department === selectedDepartment)
+  const filteredEmployees = selectedDepartament
+    ? employees.filter((employee) => employee.departament === selectedDepartament)
     : employees;
 
   // Отображение уведомления при изменении selectedDepartment
   useEffect(() => {
-    if (selectedDepartment) {
+    if (filteredEmployees.length === 0 && selectedDepartament !== 0) {
       notification.open({
         message: "Внимание",
-        description: `Нет сотрудников в ${selectedDepartment} отделе`,
+        description: `Нет сотрудников в ${selectedDepartament} отделе`,
         duration: 3,
       });
     }
-  }, [selectedDepartment]);
+  }, [selectedDepartament, filteredEmployees]);
 
   return (
     <div className="employee_block">
@@ -51,41 +51,31 @@ const HR = () => {
             treeData={[
               { title: "Все", value: 0 },
               { title: "IT", value: "IT" },
-              { title: "Технический отдел", value: "Tech_Department" },
-              { title: "Юридический", value: "HR" },
+              { title: "Технический отдел", value: "Технический отдел" },
+              { title: "Юридический", value: "Юридический" },
             ]}
           />
         </Form.Item>
       </div>
 
       {/* Отображение сотрудников выбранного отдела */}
-      {filteredEmployees.length !== 0 ? (
-        <div>
-          <div className="department-employees">
-            {filteredEmployees.map((employee) => (
-              <Link key={employee._id} to={`/employees/${employee._id}`}>
-                <Card
-                  hoverable
-                  style={{
-                    width: 240,
-                  }}
-                  cover={<img src={employee.image} alt="example"  />}
-                >
-                  <Meta title={`${employee.surname} ${employee.name}`} />
-                </Card>
-              </Link>
-            ))}
-          </div>
+      <div>
+        <div className="department-employees">
+          {filteredEmployees.map((employee) => (
+            <Link key={employee._id} to={`/employees/${employee._id}`}>
+              <Card
+                hoverable
+                style={{
+                  width: 240,
+                }}
+                cover={<img src={employee.image} alt="example" />}
+              >
+                <Meta title={`${employee.surname} ${employee.name}`} />
+              </Card>
+            </Link>
+          ))}
         </div>
-      ) : (
-        <div>
-          {selectedDepartment ? (
-            <p>Нет сотрудников в {selectedDepartment} отделе</p>
-          ) : (
-            <p>Выберите отдел для отображения сотрудников</p>
-          )}
-        </div>
-      )}
+      </div>
     </div>
   );
 };

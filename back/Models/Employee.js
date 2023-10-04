@@ -11,7 +11,7 @@ const employeeSchema = new Schema({
     street: { type: String, required: false },
   },
   mobilePhone: { type: String, required: false, default: 0 },
-  department: { type: String, required: false },
+  departament: { type: String, required: false },
   position: { type: String, required: false },
   about: { type: String, required: false },
   hobbies: { type: String, required: false },
