@@ -28,12 +28,14 @@ const HR = () => {
 
   // Функция для фильтрации сотрудников по отделу
   const filteredEmployees = selectedDepartament
-    ? employees.filter((employee) => employee.departament === selectedDepartament)
+    ? employees.filter(
+        (employee) => employee.departament === selectedDepartament
+      )
     : employees;
 
   // Отображение уведомления при изменении selectedDepartment
   useEffect(() => {
-    if (filteredEmployees.length === 0 && selectedDepartament !== 0) {
+    if (filteredEmployees.length === 0 && selectedDepartament !== null) {
       notification.open({
         message: "Внимание",
         description: `Нет сотрудников в ${selectedDepartament} отделе`,
@@ -59,14 +61,14 @@ const HR = () => {
       </div>
 
       {/* Отображение сотрудников выбранного отдела */}
-      <div>
+      <div className="employee_card">
         <div className="department-employees">
           {filteredEmployees.map((employee) => (
             <Link key={employee._id} to={`/employees/${employee._id}`}>
               <Card
                 hoverable
                 style={{
-                  width: 240,
+                  width: 250,
                 }}
                 cover={<img src={employee.image} alt="example" />}
               >

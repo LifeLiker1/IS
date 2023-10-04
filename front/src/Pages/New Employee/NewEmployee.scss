@@ -1,55 +1,55 @@
-.main_form {
-    margin-top: 150px;
-//     width: 1000px;
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center; // Центрирование по горизонтали
-//     justify-content: center; // Центрирование по вертикали
-//     background-color: red;
-  
-    // .head {
-    //   text-align: center;
-    //   margin-bottom: 100px;
-    // }
-  
-    // .colums {
-    //   display: flex;
-    //   flex-direction: row;
-    //   align-items: center;
-    //   justify-content: space-around;
-  
-    //   .left_column {
-    //     width: 300px;
-    //     height: 300px;
-    //     background-color: yellow;
-  
-    //     .img {
-    //       width: 300px;
-    //       height: 300px;
-    //     }
-    //   }
-  
-    //   .right_column {
-    //     width: 50%;
-    //   }
-    // }
-  
-    // .field_inp {
-    //   width: auto;
-    // }
-  }
-  
-  .Diss_employee{
-    color: black;
-  }
-  .Diss_employee:hover{
-    transition: (0.75s);
-    color: black;
-    background-color: red;
-  }
 
-  .Add_employee:hover{
-    transition: (0.75s);
-    color: black;
-    background-color: rgb(2, 171, 2);
+.main_form {
+  margin-top: 75px !important;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #e3c4a8;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+  .about_employee {
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+
+    .bio_container,
+    .hob_container {
+      width: 48%; // Разделение на две колонки с небольшим отступом
+      padding: 10px;
+      border: 2px solid #000000;
+      border-radius: 5px;
+    }
+
+    .bio_container {
+      background-color: #f0f0f0;
+    }
+
+    .hob_container {
+      background-color: #f9f9f9;
+    }
+
   }
+  
+  .form-item {
+    margin-bottom: 20px;
+    .ant-form-item-label {
+      text-align: left;
+    }
+  }
+  
+  .button-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .Diss_employee,
+    .Add_employee {
+      flex: 1;
+    }
+
+  }
+}

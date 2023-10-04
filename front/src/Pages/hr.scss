@@ -7,24 +7,6 @@ $background: #3a91ab;
   margin-left: 75px;
 }
 
-/* Стили для контейнера с сотрудниками */
-.department-employees {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  .employee_names {
-    margin-top: 95%;
-    text-align: center;
-    text-decoration: none !important;
-  }
-}
-
-.card-employee {
-  display: flex;
-  width: 240px;
-  height: 240px;
-}
-
 /* Стили для поля поиска */
 .search_field {
   min-width: 500px;
@@ -32,10 +14,43 @@ $background: #3a91ab;
   margin: auto;
 }
 
+.employee_card {
+  width: 250px;
+  background-color: red;
+}
+
+/* Стили для контейнера с сотрудниками */
+.department-employees {
+  display: grid;
+  grid-template-columns: repeat(4, 2fr);
+  gap: 20px;
+  .employee_names {
+    margin-top: 95%;
+    text-align: center;
+    text-decoration: none !important;
+  }
+  .department-employees > img {
+    width: 100%;
+    height: 200px;
+  }
+}
+
+.card-employees {
+  display: flex;
+  width: 240px;
+  height: 240px;
+}
+
 /* Стили для карточек */
 .ant-card {
-  // background-color: $background;
-  transition: transform 0.3s; // Добавляем анимацию для свойства transform
+  background-color: $background;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    -webkit-box-shadow 0.3s ease,
+    -moz-box-shadow 0.3s ease;
+  height: 250px;
+  width: 250px;
 }
 
 /* Стили для изображения в карточках */
@@ -46,7 +61,10 @@ $background: #3a91ab;
 
 /* Стили для карточек при наведении */
 .ant-card:hover {
-  transform: scale(1.1); // Увеличиваем карточку при наведении
+  transform: scale(1.1);
+  box-shadow: 0px 0px 81px 21px rgba(58, 145, 171, 0.75);
+  -webkit-box-shadow: 0px 0px 81px 21px rgba(58, 145, 171, 0.75);
+  -moz-box-shadow: 0px 0px 81px 21px rgba(58, 145, 171, 0.75); // Увеличиваем карточку при наведении
 }
 
 /* Стили для изображения в карточках при наведении */

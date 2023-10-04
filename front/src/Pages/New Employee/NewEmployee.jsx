@@ -6,6 +6,7 @@ import InputMask from "react-input-mask";
 
 import { Button, Form, Input, TreeSelect } from "antd";
 import ImageUpload from "../../Functions/ImageUpload"; // Импортируем компонент ImageUpload
+import TextArea from "antd/es/input/TextArea";
 
 function MyComponent() {
   const navigate = useNavigate();
@@ -15,7 +16,8 @@ function MyComponent() {
     name: "",
     surname: "",
     sex: "",
-    address: { city: "", district: "", street: "" },
+    address: { city: "", district: "" },
+    street: "",
     mobilePhone: "",
     departament: "",
     position: "",
@@ -55,7 +57,7 @@ function MyComponent() {
 
     await AddEmployee(); // Отправляем данные в функцию AddEmployee
 
-    // navigate("/employees");
+    navigate("/employees");
   };
 
   const handleChange = (e) => {
@@ -192,13 +194,19 @@ function MyComponent() {
           />
         </Form.Item>
         <Form.Item label="Улица">
-          <Input
-            name="street"
+          <TextArea
+            rows={1}
             value={formData.address.street}
-            onChange={handleChange}
+            onChange={(e) => {
+              const value = e.target.value;
+              setFormData({
+                ...formData,
+                street: value,
+              });
+            }}
           />
         </Form.Item>
-        <Form.Item label="Мобильный телефон">
+        <Form.Item label="Телефон">
           <InputMask
             mask="+7 (999) 999-99-99"
             maskChar="*"
@@ -255,16 +263,48 @@ function MyComponent() {
             }}
           />
         </Form.Item>
+        <Form.Item label="О себе :">
+          <TextArea
+            rows={4}
+            value={formData.about}
+            onChange={(e) => {
+              const value = e.target.value;
+              setFormData({
+                ...formData,
+                about: value,
+              });
+            }}
+          />
+        </Form.Item>
+        <Form.Item label="Увличения :">
+          <TextArea
+            rows={2}
+            value={formData.hobbies}
+            onChange={(e) => {
+              const value = e.target.value;
+              setFormData({
+                ...formData,
+                hobbies: value,
+              });
+            }}
+          />
+        </Form.Item>
         <Form.Item label="Изображение">
           <ImageUpload onImageUpload={handleImageUpload} />
         </Form.Item>
+        <div className="button-container">
+          <Button
+            type="primary"
+            className="Add_employee"
+            onClick={handleSubmit}
+          >
+            Добавить сотрудника
+          </Button>
+          <Button className="Diss_employee" href="/employee">
+            Отмена
+          </Button>
+        </div>
       </Form>
-      <Button className="Add_employee" onClick={handleSubmit}>
-        Добавить сотрудника
-      </Button>
-      <Button className="Diss_employee" href="/">
-        Отмена
-      </Button>
     </>
   );
 }
@@ -276,3 +316,5 @@ export const CancelButton = () => (
 );
 
 export default MyComponent;
+
+// Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis ipsa labore, porro numquam, harum laborum mollitia ducimus, provident corrupti ut magni quas! Ratione sapiente dolorem tempore est. Temporibus, dolorem quia!

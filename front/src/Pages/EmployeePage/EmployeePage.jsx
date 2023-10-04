@@ -68,7 +68,7 @@ const EmployeeDetails = () => {
           <p>Имя - {employee.name}</p>
           <p>Фамилия - {employee.surname} </p>
           <p>Пол - {employee.sex}</p>
-          <p>Адрес проживания - {employee.city} </p>
+          <p>Адрес проживания - {`${employee.address.city}, ${employee.address.district}, ${employee.street}`}</p>
           <p>Мобильный - {employee.mobilePhone}</p>
           <p>Департамент - {employee.departament} </p>
           <p>Должность - {employee.position} </p>
@@ -88,7 +88,7 @@ const EmployeeDetails = () => {
         </div>
         <div className="right_column"></div>
       </div>
-      <Button onClick={firedEmployee}>Уволить сотрудника</Button>
+      <Button type="primary" danger onClick={firedEmployee}>Уволить сотрудника</Button>
       <CancelButton />
     </div>
   );
