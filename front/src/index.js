@@ -16,9 +16,9 @@ root.render(
       <Header />
       <Routes>
         <Route path="/" element={<Auth />} /> {/* Стартовая страница */}
+        <Route path="/employees" element={<App />} />
         <Route path="/newEmployee" element={<NewEmployee />} />
         <Route path="/employees/:employeeId" element={<EmployeePage />} />
-        <Route path="/employees" element={<App />} />
         <Route path="/IT" element={<IT/>}/>
       </Routes>
     </Router>

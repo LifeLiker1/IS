@@ -20,7 +20,7 @@ function Header() {
   };
 
   return (
-    <header>
+    <>{token ? (<header>
       <div>
         <img src={logo} alt="logo"></img>
       </div>
@@ -35,7 +35,8 @@ function Header() {
           <Button href="/">Войти</Button>
         )}
       </nav>
-    </header>
+    </header>): (null)}</>
+    
   );
 }
 

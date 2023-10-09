@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./auth.scss";
-import { notification } from "antd";
+import { notification, Button } from "antd";
+import { useNavigate } from "react-router-dom"; // Импортируйте useNavigate из react-router-dom
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authToken, setAuthToken] = useState(localStorage.getItem("token"))
+  const [authToken, setAuthToken] = useState(localStorage.getItem("token"));
+  const navigate = useNavigate(); // Используйте useNavigate для перенаправления
 
   useEffect(() => {
     // При монтировании компонента проверяем, есть ли токен в localStorage
@@ -14,7 +16,6 @@ const Auth = () => {
       setAuthToken(storedToken);
     }
   }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,25 +31,34 @@ const Auth = () => {
           password,
         }),
       });
+
       if (response.ok) {
         const data = await response.json();
         const { token } = data;
         localStorage.setItem("token", token);
+        const Departament = data.user.departament;
+        console.log(data);
+        console.log(Departament);
         notification.open({
           message: "Авторизация успешна",
           duration: 3,
         });
-        window.location.href = "/employees";
+
+        if (Departament === "IT") {
+          navigate("/employees");
+        } else if (Departament === "Технический отдел") {
+          navigate("/employees");
+        } else if (Departament === "HR") {
+          navigate("/employees");
+        }
       } else {
         notification.open({
           message: "Ошибка авторизации",
           duration: 3,
         });
-
-        console.error(response.error);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -77,7 +87,9 @@ const Auth = () => {
           />
         </div>
         <div>
-          <input className="submit_btn" type="submit" value="Sign in" />
+          <Button type="primary" htmlType="submit">
+            Войти
+          </Button>
         </div>
       </form>
     </div>

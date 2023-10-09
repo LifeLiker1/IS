@@ -107,34 +107,6 @@ mongoose.connection.on("connected", () => {
     }
   });
 
-
-  // app.get("/api/users", async (req, res) => {
-  //   try {
-  //     const users = await User.find();
-  //     if (!users || users.length === 0) {
-  //       return res.status(400).json({ message: "Сотрудники не найдены" });
-  //     }
-  //     res.json(users);
-  //   } catch (error) {
-  //     console.error(error);
-  //     res.status(500).json({ message: "Ошибка сервера" });
-  //   }
-  // });
-  
-  // app.get("/api/users/:id", async (req, res) => {
-  //   try {
-  //     const user = await User.findById(req.params.id);
-  //     if (!user) {
-  //       return res.status(400).json({ message: "Сотрудник не найден" });
-  //     }
-  //     res.json(user);
-  //   } catch (error) {
-  //     console.error(error);
-  //     res.status(500).json({ message: "Ошибка сервера" });
-  //   }
-  // });
-
-
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

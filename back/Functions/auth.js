@@ -10,11 +10,11 @@ router.post("/api/login", async (req, res) => {
     const { email, password } = req.body;
     const userExists = await UserModel.findOne({ email });
     if (!userExists) {
-      return res.status(400).json({ message: "User does not exist!" });
+      return res.status(400).json({ message: "Пользователь не найден!" });
     }
     const isMatch = await bcrypt.compare(password, userExists.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Password is not valid!" });
+      return res.status(400).json({ message: "Не верный пароль!" });
     }
     const token = jwt.sign({ userId: userExists.id }, "test", {
       expiresIn: "15min",

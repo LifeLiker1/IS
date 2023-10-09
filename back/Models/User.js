@@ -23,4 +23,4 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("User", UserSchema); // Изменим имя модели на "User" с заглавной буквы
+module.exports = mongoose.model("User", UserSchema);
