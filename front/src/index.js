@@ -6,7 +6,7 @@ import Header from "./header/HRheader.jsx";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import NewEmployee from "./HR/Pages/New Employee/NewEmployee";
 import EmployeePage from "./HR/Pages/EmployeePage/EmployeePage.jsx";
-import Auth from "./HR/Auth/auth.jsx";
+import Auth from "./Auth/auth.jsx";
 import IT from "./IT/IT.jsx"
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
