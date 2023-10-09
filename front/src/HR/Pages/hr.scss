@@ -5,6 +5,7 @@ $background: #3a91ab;
 .employee_block {
   margin-top: 100px;
   margin-left: 75px;
+  width: 90%;
 }
 
 /* Стили для поля поиска */
@@ -14,15 +15,12 @@ $background: #3a91ab;
   margin: auto;
 }
 
-.employee_card {
-  width: 250px;
-  background-color: red;
-}
-
 /* Стили для контейнера с сотрудниками */
 .department-employees {
+  width: 1500px;
+  margin-left: 15%;
   display: grid;
-  grid-template-columns: repeat(4, 2fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
   .employee_names {
     margin-top: 95%;
@@ -30,7 +28,7 @@ $background: #3a91ab;
     text-decoration: none !important;
   }
   .department-employees > img {
-    width: 100%;
+    // width: 100%;
     height: 200px;
   }
 }

@@ -23,7 +23,7 @@ const router = Router();
  */
 router.post("/api/register", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, departament, position } = req.body;
     if (!email) {
       return res.status(400).json({ message: "Необходимы email " });
     }
@@ -42,6 +42,8 @@ router.post("/api/register", async (req, res) => {
     const newUser = new User({
       email,
       password: hashedPassword,
+      departament: departament,
+      position: position,
     });
 
     await newUser.save();

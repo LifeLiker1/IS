@@ -56,17 +56,27 @@ router.get('/api/employees', authMiddleware, async (req, res) => {
   }
 });
 
-app.post("/api/employees", async (req, res) => {
+// Маршрут для создания нового сотрудника
+router.post("/api/employees", authMiddleware, upload.single("image"), async (req, res) => {
   try {
-    const newEmployee = new Employee(req.body);
+    // Проверяем, есть ли файл (изображение) в запросе
+    const image = req.file ? req.file.buffer : undefined;
+
+    // Создаем нового сотрудника, включая изображение, если оно есть
+    const newEmployee = new Employee({
+      ...req.body,
+      image,
+    });
+
     await newEmployee.save();
-    res.json(newEmployee);
+    res.status(201).json(newEmployee);
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ message: "Ошибка сервера" });
   }
 });
 
-app.delete("/api/employees/:id", async(req, res) => {
+router.delete("/api/employees/:id", authMiddleware, async(req, res) => {
   try {
       const employee = await Employee.findById(req.params.id)
       if (!employee){

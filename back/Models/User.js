@@ -11,10 +11,14 @@ const UserSchema = new mongoose.Schema(
       type: String, // Изменим тип на String
       required: true,
     },
-    // name: {
-    //   type: String, // Добавим поле для имени пользователя
-    //   required: true,
-    // },
+    departament: {
+      type: String, // поле отдела пользователя
+      required: true,
+    },
+    position: {
+      type: String, // должность пользователя в отделе
+      required: true,
+    },
   },
   { timestamps: true }
 );

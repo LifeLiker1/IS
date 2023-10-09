@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./EmployeePage.scss";
 import { CancelButton } from "../New Employee/NewEmployee";
-import { Button } from "antd";
+import { Button, notification } from "antd";
 
 const EmployeeDetails = () => {
   const { employeeId } = useParams();
@@ -18,8 +18,17 @@ const EmployeeDetails = () => {
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Ошибка при удалении сотрудника");
+      if(response.ok){
+        notification.open({
+          message: "Сотрудник уволен",
+          duration: 3,
+        });
+      }
+      else{
+        notification.open({
+          message: "Ошибка при увольнении сотрудника",
+          duration: 3,
+        });
       }
 
       // После успешного удаления, перенаправляем пользователя на другую страницу
