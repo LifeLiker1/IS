@@ -68,7 +68,6 @@ function Header() {
               >
                 <Button>Меню</Button>
               </Dropdown>
-              <Button onClick={handleLogout}>Выход</Button>
             </>
           </nav>
         </header>
