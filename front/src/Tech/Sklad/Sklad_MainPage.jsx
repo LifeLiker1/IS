@@ -1,0 +1,23 @@
+import React from 'react'
+import "./sklad.scss"
+import Header from '../Header/TechHeader'
+import Working_Parts from './Working_Parts/Working_Parts'
+import Faulty_Parts from "./Faulty_Parts/Faulty_Parts"
+
+const sklad = () => {
+  return (
+    <div>
+      <Header/>
+      <div className="sklad_body">
+        <div className='left_column'>
+          <Working_Parts/>
+        </div>
+        <div className='right_column'>
+          <Faulty_Parts/>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default sklad

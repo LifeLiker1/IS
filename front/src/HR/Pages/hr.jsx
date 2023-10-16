@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./hr.scss";
-import { Card, Form, TreeSelect, notification } from "antd";
+import { Card, Form, TreeSelect, notification, Button, Result } from "antd";
 import { Link } from "react-router-dom";
+import Header from "../header/HRheader";
+import Man from "../../Images/Man1.jpg"
 
 const HR = () => {
   const [employees, setEmployees] = useState([]);
@@ -66,7 +68,8 @@ const HR = () => {
   return (
     <div className="employee_block">
       {token ? (
-      <><div className="search_field">
+        <><div className="search_field">
+        <Header/>
           <Form.Item label="Мне нужны сотрудники" className="dep_sel">
             <TreeSelect
               onChange={(value) => setSelectedDepartment(value)}
@@ -87,7 +90,7 @@ const HR = () => {
                     style={{
                       width: 250,
                     }}
-                    cover={<img src={employee.image} alt="example" />}
+                    cover={<img src={Man} alt="example" />}
                   >
                     <Meta title={`${employee.surname} ${employee.name}`} />
                   </Card>
@@ -95,7 +98,12 @@ const HR = () => {
               ))}
             </div>
           </div></>
-      ) : null /* Убрано отображение уведомления, чтобы избежать дублирования */}
+      ) : <Result
+      status="403"
+      title="403"
+      subTitle="У Вас нет прав для просмотра этого контента, необходима авторизация."
+      extra={<Button type="primary" href="/">Войти</Button>}
+    />}
     </div>
   );
 };

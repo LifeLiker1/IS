@@ -45,9 +45,9 @@ const Auth = () => {
         });
 
         if (Departament === "IT") {
-          navigate("/employees");
+          navigate("/it");
         } else if (Departament === "Технический отдел") {
-          navigate("/employees");
+          navigate("/tech");
         } else if (Departament === "HR") {
           navigate("/employees");
         }

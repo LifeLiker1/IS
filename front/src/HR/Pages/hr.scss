@@ -4,7 +4,7 @@ $background: #3a91ab;
 /* Общие стили */
 .employee_block {
   margin-top: 100px;
-  margin-left: 75px;
+  // margin-left: 75px;
   width: 90%;
 }
 
@@ -15,23 +15,30 @@ $background: #3a91ab;
   margin: auto;
 }
 
-/* Стили для контейнера с сотрудниками */
-.department-employees {
-  width: 1500px;
-  margin-left: 15%;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+.employee_card {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 20px;
-  .employee_names {
-    margin-top: 95%;
-    text-align: center;
-    text-decoration: none !important;
-  }
-  .department-employees > img {
-    // width: 100%;
-    height: 200px;
+  .department-employees {
+    max-width: 250px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 100px;
+    .employee_names {
+      margin-top: 95%;
+      text-align: center;
+      text-decoration: none !important;
+    }
+    
+    .department-employees > img {
+      width: 100%;
+      height: 200px;
+    }
   }
 }
+
+/* Стили для контейнера с сотрудниками */
 
 .card-employees {
   display: flex;
@@ -62,10 +69,12 @@ $background: #3a91ab;
   transform: scale(1.1);
   box-shadow: 0px 0px 81px 21px rgba(58, 145, 171, 0.75);
   -webkit-box-shadow: 0px 0px 81px 21px rgba(58, 145, 171, 0.75);
-  -moz-box-shadow: 0px 0px 81px 21px rgba(58, 145, 171, 0.75); // Увеличиваем карточку при наведении
+  -moz-box-shadow: 0px 0px 81px 21px rgba(58, 145, 171, 0.75);
+  // Увеличиваем карточку при наведении
 }
 
 /* Стили для изображения в карточках при наведении */
 .ant-card:hover .ant-card-cover > img {
-  transform: scale(1); // Увеличиваем изображение внутри карточки при наведении
+  transform: scale(1);
+  // Увеличиваем изображение внутри карточки при наведении
 }

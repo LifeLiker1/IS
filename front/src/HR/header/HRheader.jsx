@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./header.scss";
 import { Button } from "antd";
-import logo from "../HR/Images/logo_transparent.png"
+import logo from "../../Images/logo_transparent.png"
 
 function Header() {
   const [token, setToken] = useState(null);
