@@ -3,33 +3,6 @@ const User = require("../Models/User");
 const bcrypt = require("bcryptjs");
 const router = Router();
 
-/**
- * @swagger
- * /api/register:
- *   get:
- *     summary: Регистрация нового пользователя
- *     description: Регистрация нового пользователя
- *     tags:
- *       - Пользователи
- *     responses:
- *       200:
- *         description: Успешный ответ
- *       201:
- *         description: Пользователь успешно зарегистрирован
- *       401:
- *         description: Не введен e-mail
- *       402:
- *         description: Не введен пароль
- *       403:
- *         description: Не введен отдел
- *       404:
- *         description: Не введена должность
- *       405:
- *         description: Пользователь с таким email уже существует
- *       500:
- *         description: Ошибка сервера
- */
-
 router.post("/api/register", async (req, res) => {
   try {
     const { email, password, departament, position } = req.body;
@@ -70,50 +43,17 @@ router.post("/api/register", async (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/users:
- *   get:
- *     summary: Получение данных пользователей
- *     description: Получение данных пользователей
- *     tags:
- *       - Пользователи
- *     responses:
- *       200:
- *         description: Успешный ответ
- *       400:
- *         description: Некорректный запрос
- *       500:
- *         description: Ошибка сервера
- */
 
 router.get("/api/users", async (req, res) => {
   try {
     const user = await User.find();
     res.status(200).json(user);
-    
   } catch (error) {
     res.status(500).json({ message: "Ошибка сервера" });
     console.log(error);
   }
 });
 
-/**
- * @swagger
- * api/users/:id:
- *   get:
- *     summary: Получение данных конкретного пользователя
- *     description: Получение данных через id
- *     tags:
- *       - Пользователи
- *     responses:
- *       200:
- *         description: Успешный ответ
- *       400:
- *         description: Некорректный запрос
- *       500:
- *         description: Ошибка сервера
- */
 router.get("/api/users/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
@@ -124,21 +64,6 @@ router.get("/api/users/:id", async (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/users/:id:
- *   get:
- *     summary: Удаление пользователя
- *     tags:
- *       - Пользователи
- *     responses:
- *       200:
- *         description: Успешный ответ
- *       404:
- *         description: Сотрудник не найден
- *       500:
- *         description: Ошибка сервера
- */
 router.delete("/api/users/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id)

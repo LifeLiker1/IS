@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
 
-const employeeSchema = new Schema({
+const employeeSchema = new mongoose.Schema({
   name: { type: String, required: false },
   surname: { type: String, required: false },
   sex: { type: String, required: false },
@@ -15,10 +14,6 @@ const employeeSchema = new Schema({
   position: { type: String, required: false },
   about: { type: String, required: false },
   hobbies: { type: String, required: false },
-  // Добавляем поле для хранения идентификатора изображения
-  image: { type: Schema.Types.ObjectId, ref: "Image", required: false}
 });
 
-const employeeModel = mongoose.model("employee", employeeSchema);
-
-module.exports = employeeModel;
+module.exports = mongoose.model("employee", employeeSchema);
