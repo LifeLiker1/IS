@@ -2,19 +2,19 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const employeeSchema = new Schema({
-  name: { type: String, required: true },
-  surname: { type: String, required: true },
-  sex: { type: String, required: true },
+  name: { type: String, required: false },
+  surname: { type: String, required: false },
+  sex: { type: String, required: false },
   address: {
-    city: { type: String, required: true },
-    district: { type: String, required: true }
+    city: { type: String, required: false },
+    district: { type: String, required: false }
   },
-  street: { type: String, required: true },
-  mobilePhone: { type: String, required: true, default: 0 },
-  departament: { type: String, required: true },
-  position: { type: String, required: true },
-  about: { type: String, required: true },
-  hobbies: { type: String, required: true },
+  street: { type: String, required: false },
+  mobilePhone: { type: String, required: false, default: 0 },
+  departament: { type: String, required: false },
+  position: { type: String, required: false },
+  about: { type: String, required: false },
+  hobbies: { type: String, required: false },
   // Добавляем поле для хранения идентификатора изображения
   image: { type: Schema.Types.ObjectId, ref: "Image", required: false}
 });

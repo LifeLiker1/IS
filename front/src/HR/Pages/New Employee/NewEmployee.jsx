@@ -247,16 +247,16 @@ function MyComponent() {
         <TreeSelect
           treeData={[
             {
-              title: "IT",
-              value: "IT",
+              title: "IT отдел",
+              value: "IT отдел",
             },
             {
               title: "Технический отдел",
               value: "Технический отдел",
             },
             {
-              title: "Юридический",
-              value: "Юридический",
+              title: "Диспетчерский отдел",
+              value: "Диспетчерский отдел",
             },
           ]}
           value={formData.departament}

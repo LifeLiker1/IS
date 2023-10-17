@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./EmployeePage.scss";
 import { CancelButton } from "../New Employee/NewEmployee";
-import { Button, notification } from "antd";
+import { Button, notification, Empty } from "antd";
 
 const EmployeeDetails = () => {
   const { employeeId } = useParams();
@@ -83,7 +83,7 @@ const EmployeeDetails = () => {
           <p>Должность - {employee.position} </p>
           <img
             src={`data:image/jpg;base64,${employee.image}`}
-            alt="SomePicture"
+            alt= {<Empty />}
           />
 
           <div className="pesonal_inf">
