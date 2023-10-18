@@ -10,7 +10,6 @@ const Auth = () => {
   const navigate = useNavigate(); // Используйте useNavigate для перенаправления
 
   useEffect(() => {
-    // При монтировании компонента проверяем, есть ли токен в localStorage
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setAuthToken(storedToken);

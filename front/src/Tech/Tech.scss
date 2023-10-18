@@ -6,9 +6,12 @@
     display: flex;
     flex-direction: row;
     .tables{
-        min-width: 90%;
+        min-width: 84%;
+        max-width: 85%;
     }
     .statistic{
-
+        display: flex;
+        justify-content: center;
+        min-width: 15%;
     }
 }

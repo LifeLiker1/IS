@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Tabs, Space, Table, Tag } from "antd";
+import { Tabs, Space, Table, Tag, Modal, Button } from "antd";
 import { useCount } from "./CountContext";
 
 const TableEquipment = () => {
   const [equipment, setEquipment] = useState([]);
-  const { countNotWorking, setCountNotWorking } = useCount();
+  const { setCountNotWorking } = useCount();
   const [selectedLocation, setSelectedLocation] = useState("ADEM");
-  const [activeTabKey, setActiveTabKey] = useState('1');
+  const [activeTabKey, setActiveTabKey] = useState("1");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedEquipment, setSelectedEquipment] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -27,7 +29,6 @@ const TableEquipment = () => {
           throw new Error("Некорректный формат данных");
         }
         setEquipment(data);
-        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -55,36 +56,42 @@ const TableEquipment = () => {
     }, 0);
     setCountNotWorking(count); // Обновите значение countNotWorking
   }, [equipment]);
-  
-    const items = [
-      {
-        key: '1',
-        label: 'ADEM',
-      },
-      {
-        key: '2',
-        label: 'Ялян',
-      },
-      {
-        key: '3',
-        label: 'Алатау',
-      },
-    ];
+
+  const items = [
+    {
+      key: "1",
+      label: "ADEM",
+    },
+    {
+      key: "2",
+      label: "Ялян",
+    },
+    {
+      key: "3",
+      label: "Алатау",
+    },
+  ];
 
   const handleTabChange = (key) => {
     setActiveTabKey(key);
     // Установите выбранное расположение на основе ключа вкладки
-    if (key === '1') {
+    if (key === "1") {
       setSelectedLocation("ADEM");
-    } else if (key === '2') {
+    } else if (key === "2") {
       setSelectedLocation("Ялян");
-    } else if (key === '3') {
+    } else if (key === "3") {
       setSelectedLocation("Алатау");
     }
   };
-
+  
+  console.log(selectedEquipment)
+  
+  const handleOpenModal = (record) => {
+    setSelectedEquipment(record);
+    setModalVisible(true);
+  };
   const filteredData = data.filter((item) => item.adress === selectedLocation);
-
+  
   const columns = [
     {
       title: "Модель",
@@ -136,8 +143,7 @@ const TableEquipment = () => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a href="#">Выписать заявку</a>
-          <a>Delete</a>
+          <a href="#" onClick={handleOpenModal}>Выписать заявку</a>
         </Space>
       ),
     },
@@ -145,6 +151,31 @@ const TableEquipment = () => {
 
   return (
     <div>
+      {/* Добавьте модальное окно */}
+      <Modal
+        title="Выписать заявку"
+        visible={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        footer={[
+          <Button key="cancel" onClick={() => setModalVisible(false)}>
+            Закрыть
+          </Button>,
+          // <Button key="submit" type="primary" onClick={() => handleSubmit(selectedEquipment)}>
+          //   Выписать заявку
+          // </Button>,
+        ]}
+      >
+        {selectedEquipment && (
+          <div>
+            <p>Модель: {selectedEquipment.model}</p>
+            <p>Тип: {selectedEquipment.type}</p>
+            <p>Расположение: {selectedEquipment.address}</p>
+            <p>Тег: {selectedEquipment.tag}</p>
+            {/* Добавьте другие данные оборудования, которые вам нужны */}
+          </div>
+        )}
+      </Modal>
+
       <Tabs activeKey={activeTabKey} items={items} onChange={handleTabChange} />
       <Table columns={columns} dataSource={filteredData} />
     </div>

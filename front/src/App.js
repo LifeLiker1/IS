@@ -1,12 +1,12 @@
 import './App.css';
-import Auth from "./Auth/auth.jsx"
+import Hr from "./HR/Pages/hr.jsx"
 
 
 function App() {
   
   return (
     <div className="App">
-      <Auth/>
+      <Hr/>
     </div>
   );
 }
