@@ -1,9 +1,14 @@
-*{
-    background-color: balck;
-}
 
 .main{
-    width: 100vh;
+    min-width: 100vh;
     height: 100vh;
     margin-top: 100px;
+    display: flex;
+    flex-direction: row;
+    .tables{
+        min-width: 90%;
+    }
+    .statistic{
+
+    }
 }

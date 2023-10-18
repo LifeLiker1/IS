@@ -1,24 +1,22 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+require("dotenv").config();
 const userRoutes = require("./routes/users");
-const employeeRoutes = require ("./routes/employee")
-const equipmentRoutes = require("./routes/equipment.js")
-const authRoutes = require('./Functions/auth')
+const employeeRoutes = require("./routes/employee");
+const equipmentRoutes = require("./routes/equipment.js");
+const authRoutes = require("./Functions/auth");
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/", userRoutes);
+app.use("/", authRoutes);
+app.use("/", employeeRoutes);
+app.use("/", equipmentRoutes);
 
-app.use('/', userRoutes)
-app.use('/', authRoutes)
-app.use('/', employeeRoutes)
-app.use('/', equipmentRoutes)
-
-
-const PORT = 3001;
-const uri =
-  "mongodb+srv://dbUser:HuaweiGT3@cluster0.qi0blxm.mongodb.net/AllEmployers";
+const PORT = process.env.PORT;
+const uri = process.env.uri;
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -30,4 +28,3 @@ mongoose.connection.on("connected", () => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
