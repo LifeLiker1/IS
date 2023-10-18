@@ -1,53 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./auth.scss";
-import { notification, Button } from "antd";
-import { useNavigate } from "react-router-dom"; // Импортируйте useNavigate из react-router-dom
+import { notification, Button, Form, Input, Checkbox } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authToken, setAuthToken] = useState(localStorage.getItem("token"));
-  const navigate = useNavigate(); // Используйте useNavigate для перенаправления
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setAuthToken(storedToken);
-    }
-  }, []);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const onFinish = async (values) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/login`, {
+      const response = await fetch("http://localhost:3001/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`
         },
         body: JSON.stringify({
-          email,
-          password,
+          email: values.username,
+          password: values.password,
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        const { token } = data;
+        const { token, user } = data;
         localStorage.setItem("token", token);
-        const Departament = data.user.departament;
-        console.log(data);
-        console.log(Departament);
+        const departament = user.departament;
+        const role = user.role;
+
         notification.open({
           message: "Авторизация успешна",
           duration: 3,
         });
 
-        if (Departament === "IT") {
+        if (departament === "IT" || role === "IT_technician") {
           navigate("/it");
-        } else if (Departament === "Технический отдел") {
+        } else if (departament === "Технический отдел" || role === "technican") {
           navigate("/tech");
-        } else if (Departament === "HR") {
+        } else if (departament === "HR") {
           navigate("/employees");
         }
       } else {
@@ -63,34 +53,46 @@ const Auth = () => {
 
   return (
     <div className="wrapper">
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
+      <Form
+        name="basic"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        style={{ maxWidth: 600 }}
+        onFinish={onFinish}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="Почта"
+          name="username"
+          rules={[{ required: true, message: "Вы не ввели свою почту" }]}
+        >
+          <Input
             className="user-input"
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Введите вашу почту"
+            placeholder="Введите свою электронную почту"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </div>
-        <div>
-          <input
+        </Form.Item>
+
+        <Form.Item
+          label="Пароль"
+          name="password"
+          rules={[{ required: true, message: "Вы не ввели пароль!" }]}
+        >
+          <Input.Password
             type="password"
-            name="password"
-            id="password"
-            placeholder="Введите ваш пароль"
+            placeholder="Введите Ваш пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </div>
-        <div>
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">
             Войти
           </Button>
-        </div>
-      </form>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

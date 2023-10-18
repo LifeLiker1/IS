@@ -1,56 +1,37 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
-
-*,
-*:after,
-*:before {
-    box-sizing: border-box;
-}
-
-html,
-body {
-    font-family: "Roboto", sans-serif;
-}
-
 .wrapper {
-    width: 300px;
-    margin: 12% auto;
-}
-
-form {
-    position: relative;
-}
-
-.submit_btn {
-    float: right;
-    border: 1px solid black;
-    padding: 7px 15px;
-    border-radius: 3px;
-    font-size: 0.8em;
-    cursor: pointer;
-
-    &:hover {
-        background-color: rgb(255, 255, 85);
-        transition: 0.7s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; // Настройте высоту под свои потребности
+  
+    form {
+      max-width: 600px;
+  
+      .user-input {
+        width: 100%;
+      }
+  
+      .ant-form-item-label {
+        text-align: right;
+      }
+  
+      .ant-form-item-control {
+        text-align: left;
+      }
+  
+      .ant-form-item-control-input {
+        display: flex;
+        flex-direction: column;
+      }
+  
+      .ant-form-item-control-input-content {
+        width: 100%;
+      }
+  
+      .ant-btn {
+        width: 100%;
+      }
     }
-}
-
-input {
-    width: 100%;
-    padding: 5px;
-    height: 40px;
-    border-radius: 3px;
-    margin: 5px 0;
-    outline: none;
-}
-
-input[type="email"]:focus,
-input[type="password"]:focus {
-    border: 1px solid black;
-    box-shadow: none;
-}
-
-input[type="email"],
-input[type="password"] {
-    background: transparent;
-    border: 2px solid black;
-}
+  }
+  
