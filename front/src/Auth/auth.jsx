@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./auth.scss";
 import { notification, Button, Form, Input, Checkbox } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -7,16 +7,32 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+    } else {
+      console.log(token);
+    }
+  };
+
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   const onFinish = async (values) => {
     try {
       const response = await fetch("http://localhost:3001/api/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Добавьте токен в заголовок
+          "Content-Type": "application/json", // Установите тип контента, если необходимо
         },
         body: JSON.stringify({
-          email: values.username,
+          id:values._id,
+          email: values.email,
           password: values.password,
         }),
       });
@@ -35,7 +51,10 @@ const Auth = () => {
 
         if (departament === "IT" || role === "IT_technician") {
           navigate("/it");
-        } else if (departament === "Технический отдел" || role === "technican") {
+        } else if (
+          departament === "Технический отдел" ||
+          role === "technican"
+        ) {
           navigate("/tech");
         } else if (departament === "HR") {
           navigate("/employees");
@@ -63,7 +82,7 @@ const Auth = () => {
       >
         <Form.Item
           label="Почта"
-          name="username"
+          name="email"
           rules={[{ required: true, message: "Вы не ввели свою почту" }]}
         >
           <Input

@@ -1,9 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const passport = require("passport"); // Добавьте эту строку
-const LocalStrategy = require("passport-local").Strategy; // И эту
-const session = require("express-session"); // Подключите express-session
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy; 
+const session = require("express-session");
+const authMiddleware = require("./Functions/authMiddle")
 
 require("dotenv").config();
 const app = express();
@@ -37,11 +38,11 @@ app.use(passport.session());
 passport.use(
   new LocalStrategy(
     {
-      usernameField: "email", // Поле для ввода электронной почты
-      passwordField: "password", // Поле для ввода пароля
+      usernameField: "email", 
+      passwordField: "password",
     },
     (email, password, done) => {
-      // Здесь выполните аутентификацию с использованием модели User или другой подходящей логики.
+      console.log(User)
       User.findOne({ email: email }, (err, user) => {
         if (err) {
           return done(err);

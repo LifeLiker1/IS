@@ -14,9 +14,13 @@ async function Employee(chatId) {
     const employees = await response.json();
 
     // Преобразуйте данные о сотрудниках в нужный формат
-    const employeeText = employees.map((employee, index) => {
-      return `Сотрудник ${index + 1}:\nИмя: ${employee.name}:\nФамилия: ${employee.surname}:\nОтдел:${employee.departament}\nДолжность: ${employee.position}\n`;
-    }).join("\n");
+    const employeeText = employees
+      .map((employee, index) => {
+        return `Сотрудник ${index + 1}:\nИмя: ${employee.name}:\nФамилия: ${
+          employee.surname
+        }\nОтдел:${employee.departament}\nДолжность: ${employee.position}\n`;
+      })
+      .join("\n");
 
     // Теперь у вас есть текст с данными о сотрудниках
     const message = `Данные о сотрудниках:\n${employeeText}`;
@@ -38,9 +42,15 @@ async function Application(chatId) {
     const application = await response.json();
 
     // Преобразуйте данные о сотрудниках в нужный формат
-    const applicationText = application.map((application, index) => {
-      return `Заявка ${index + 1}:\nМодель: ${application.model}:\nТип Оборудования ${application.type}:\nАдресс ${application.adress}\nНеисправность ${application. text}\n`;
-    }).join("\n");
+    const applicationText = application
+      .map((application, index) => {
+        return `Заявка ${index + 1}\nМодель: ${
+          application.model
+        }\nТип Оборудования ${application.type}\nАдресс ${
+          application.adress
+        }\nНеисправность ${application.text}\n`;
+      })
+      .join("\n");
 
     // Теперь у вас есть текст с данными о сотрудниках
     const message = `Данные о заявках:\n${applicationText}`;
@@ -54,7 +64,6 @@ async function Application(chatId) {
   }
 }
 
-// Замените 'YOUR_BOT_TOKEN' на фактический токен вашего бота
 const bot = new TelegramBot(process.env.BOT_API, { polling: true });
 
 const commands = [
@@ -74,7 +83,6 @@ const commands = [
 
 bot.setMyCommands(commands);
 
-// Обработчик команды /start
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, "Здравствуйте.");
@@ -83,16 +91,19 @@ bot.onText(/\/start/, async (msg) => {
 bot.onText(/\/employee/, async (msg) => {
   const chatId = msg.chat.id;
   try {
-    await Employee(chatId); 
+    await Employee(chatId);
   } catch (error) {
-    bot.sendMessage(chatId, "Произошла ошибка при получении данных о сотрудниках.");
+    bot.sendMessage(
+      chatId,
+      "Произошла ошибка при получении данных о сотрудниках."
+    );
     console.error("Произошла ошибка:", error);
   }
 });
 bot.onText(/\/application/, async (msg) => {
   const chatId = msg.chat.id;
   try {
-    await Application(chatId); 
+    await Application(chatId);
   } catch (error) {
     bot.sendMessage(chatId, "Произошла ошибка при получении данных о заявках.");
     console.error("Произошла ошибка:", error);

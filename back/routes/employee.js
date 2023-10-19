@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const Employee = require("../Models/Employee");
 const router = Router();
+const authMiddleware = require("../Functions/authMiddle")
 
 router.get("/api/employees", async (req, res) => {
   try {

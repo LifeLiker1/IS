@@ -3,12 +3,15 @@ const UserModel = require("../Models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("./authMiddle");
+require("dotenv").config();
+const secretKey = process.env.SECRET_KEY;
 const router = Router();
 
 router.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const userExists = await UserModel.findOne({ email });
+    console.log(userExists)
     if (!userExists) {
       return res.status(400).json({ message: "Пользователь не найден!" });
     }
@@ -16,7 +19,8 @@ router.post("/api/login", async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Не верный пароль!" });
     }
-    const token = jwt.sign({ userId: userExists.id }, "test", {
+    req.user = userExists;
+    const token = jwt.sign({ userId: userExists.id, userName: userExists.email, userPassword: userExists.password }, secretKey, {
       expiresIn: "15min",
     });
 
@@ -34,9 +38,5 @@ router.post("/api/login", async (req, res) => {
   }
 });
 
-// Пример защищенного маршрута, который требует JWT токена
-router.get("/protected", authMiddleware, (req, res) => {
-  res.status(200).json({ message: "You have access!" });
-});
 
 module.exports = router;

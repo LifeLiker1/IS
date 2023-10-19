@@ -167,7 +167,7 @@ const TableEquipment = () => {
       >
         {selectedEquipment && (
           <div>
-            <p>Модель: {selectedEquipment.model}</p>
+            <p>Модель: {data.model}</p>
             <p>Тип: {selectedEquipment.type}</p>
             <p>Расположение: {selectedEquipment.address}</p>
             <p>Тег: {selectedEquipment.tag}</p>

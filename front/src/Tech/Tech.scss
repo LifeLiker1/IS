@@ -4,14 +4,16 @@
     height: 100vh;
     margin-top: 100px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     .tables{
         min-width: 84%;
         max-width: 85%;
     }
     .statistic{
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        min-width: 15%;
+        min-width: 500px;
+        // background-color: black;
     }
 }
