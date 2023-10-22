@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./auth.scss";
-import { notification, Button, Form, Input, Checkbox } from "antd";
+import { notification, Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
+import HRheader from "../HR/header/HRheader.jsx"
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-
+  const [userNumber, setUserNumber] = useState(null);
+  
   const checkToken = () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -21,7 +23,7 @@ const Auth = () => {
   useEffect(() => {
     checkToken();
   }, []);
-
+  
   const onFinish = async (values) => {
     try {
       const response = await fetch("http://localhost:3001/api/login", {
@@ -43,12 +45,13 @@ const Auth = () => {
         localStorage.setItem("token", token);
         const departament = user.departament;
         const role = user.role;
-
+        setUserNumber(user.email)
+        
         notification.open({
           message: "Авторизация успешна",
           duration: 3,
         });
-
+        
         if (departament === "IT" || role === "IT_technician") {
           navigate("/it");
         } else if (
@@ -69,9 +72,10 @@ const Auth = () => {
       console.error(error);
     }
   };
-
+  
   return (
     <div className="wrapper">
+          <HRheader message = {userNumber}/>
       <Form
         name="basic"
         labelCol={{ span: 8 }}

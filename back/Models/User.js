@@ -19,10 +19,10 @@ const UserSchema = new mongoose.Schema(
       type: String, // должность пользователя в отделе
       required: true,
     },
-    role:{
-      type: String, // роль пользователя в системе
-      required: true,
-    }
+    // role:{
+    //   type: String, // роль пользователя в системе
+    //   required: true,
+    // }
   },
   { timestamps: true }
 );

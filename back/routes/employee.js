@@ -1,7 +1,9 @@
 const { Router } = require("express");
 const Employee = require("../Models/Employee");
 const router = Router();
-const authMiddleware = require("../Functions/authMiddle")
+const passport = require('passport');
+const authenticate = passport.authenticate('local', {session: false});
+
 
 router.get("/api/employees", async (req, res) => {
   try {

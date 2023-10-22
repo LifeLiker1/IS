@@ -10,9 +10,9 @@ const HR = () => {
   const [selectedDepartament, setSelectedDepartment] = useState(null);
   const [token, setToken] = useState(null);
   const [showAuthNotification, setShowAuthNotification] = useState(false); // Новое состояние для уведомления
-
+  
   const { Meta } = Card;
-
+  
   useEffect(() => {
     const fetchData = async () => {
       document.title = "Страница отдела кадров";
@@ -36,7 +36,7 @@ const HR = () => {
       setShowAuthNotification(true); // Показать уведомление об отсутствии авторизации
     }
   }, []);
-
+  
   // Функция для фильтрации сотрудников по отделу
   const filteredEmployees = selectedDepartament
     ? employees.filter(

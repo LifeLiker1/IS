@@ -9,6 +9,7 @@ const EmployeeDetails = () => {
   const [employee, setEmployee] = useState(null);
   const history = useNavigate();
 
+
   async function firedEmployee() {
     try {
       const response = await fetch(

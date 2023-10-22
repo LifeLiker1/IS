@@ -2,9 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy; 
+const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
-const authMiddleware = require("./Functions/authMiddle")
+const bcrypt = require("bcrypt"); // Добавляем библиотеку bcrypt
 
 require("dotenv").config();
 const app = express();
@@ -14,8 +14,7 @@ const employeeRoutes = require("./routes/employee");
 const equipmentRoutes = require("./routes/equipment");
 const authRoutes = require("./Functions/auth");
 const telegaRoutes = require("./routes/Telega");
-const applicationRoutes = require("./routes/application")
-
+const applicationRoutes = require("./routes/application");
 
 const User = require("./Models/User");
 
@@ -38,11 +37,10 @@ app.use(passport.session());
 passport.use(
   new LocalStrategy(
     {
-      usernameField: "email", 
+      usernameField: "email",
       passwordField: "password",
     },
     (email, password, done) => {
-      console.log(User)
       User.findOne({ email: email }, (err, user) => {
         if (err) {
           return done(err);
@@ -50,7 +48,7 @@ passport.use(
         if (!user) {
           return done(null, false, { message: "Неверная электронная почта" });
         }
-        if (!user.validatePassword(password)) {
+        if (!bcrypt.compareSync(password, user.password)) { // Сравнение паролей с использованием bcrypt
           return done(null, false, { message: "Неверный пароль" });
         }
         return done(null, user);

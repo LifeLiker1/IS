@@ -23,7 +23,6 @@ router.post("/api/login", async (req, res) => {
     const token = jwt.sign({ userId: userExists.id, userName: userExists.email, userPassword: userExists.password }, secretKey, {
       expiresIn: "15min",
     });
-
     // Отправляем токен в заголовке ответа
     res.header("Authorization", `Bearer ${token}`).status(200).json({
       token,
@@ -32,6 +31,7 @@ router.post("/api/login", async (req, res) => {
         password: null,
       },
     });
+    console.log(token)
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
