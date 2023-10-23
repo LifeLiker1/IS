@@ -39,51 +39,14 @@ const locationMap = {
   7: "Нурлы-Тау",
 };
 
-// const columns = [
-//     {
-//       title: "Модель",
-//       dataIndex: "name",
-//       key: "name",
-//       render: (text) => <a>{text}</a>,
-//     },
-//     {
-//       title: "Тип",
-//       dataIndex: "type",
-//       key: "type",
-//     },
-//     {
-//       title: "Расположение",
-//       dataIndex: "address",
-//       key: "address",
-//     },
-//     {
-//       title: "Tags",
-//       key: "tag",
-//       dataIndex: "tag",
-//       render: (tag) => {
-//         if (tag) {
-//           let color;
-//           switch (tag.toLowerCase()) {
-//             case "неисправно":
-//               color = "error";
-//               break;
-//             case "заявка":
-//               color = "warning";
-//               break;
-//             case "в работе":
-//               color = "success";
-//               break;
-//             default:
-//               color = "geekblue";
-//           }
-//           return (
-//             // <Tag color={color} key={tag}>
-//             //   {tag.toUpperCase()}
-//             // </Tag>
-//           );
-//         }
-//         return null;
-//       },
-//     },
-// ]
-export { items, locationMap };
+const optionsForModal = [
+  { value: "Застревание талона", label: "Застревание талона" },
+  { value: "Замятие купюры", label: "Замятие купюры" },
+  { value: "Застревание монет", label: "Застревание монет" },
+  { value: "Не работает шлагбаум", label: "Не работает шлагбаум" },
+  { value: "Не открывает шлабгаум", label: "Не открывает шлабгаум" },
+  { value: "Не работает камера", label: "Не работает камера" },
+  { value: "Другое", label: "Другое" },
+];
+
+export { items, locationMap, optionsForModal };

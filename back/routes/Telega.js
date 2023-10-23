@@ -35,7 +35,7 @@ async function Employee(chatId) {
 }
 async function Application(chatId) {
   try {
-    const response = await fetch("http://localhost:3001/api/application");
+    const response = await fetch("http://localhost:3001/api/equipment");
     if (!response.ok) {
       throw new Error("Ошибка при выполнении запроса");
     }

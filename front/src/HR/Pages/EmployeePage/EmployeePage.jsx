@@ -15,7 +15,7 @@ const EmployeeDetails = () => {
       const response = await fetch(
         `http://localhost:3001/api/employees/${employeeId}`,
         {
-          method: "DELETE", // Используем метод DELETE для удаления
+          method: "DELETE",
         }
       );
 
@@ -32,16 +32,13 @@ const EmployeeDetails = () => {
         });
       }
 
-      // После успешного удаления, перенаправляем пользователя на другую страницу
-      history("/employees"); // Замените "/employees" на URL страницы, куда вы хотите перейти после удаления
+      history("/employees");
     } catch (error) {
       console.error("Ошибка при удалении сотрудника:", error);
     }
   }
 
   useEffect(() => {
-    // Здесь выполните запрос на сервер для получения данных о сотруднике
-    // на основе `employeeId` и установите их в `employee`
     const fetchData = async () => {
       try {
         document.title = "Личное дело сотрудника";

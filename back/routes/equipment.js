@@ -28,15 +28,41 @@ router.post("/api/equipment", async (req, res) => {
 
 router.delete("/api/equipment", async (req, res) => {
   try {
-    const equipment = Equipment.find()
-    if(!equipment){
-      return res.status(404).json("Оборудование не найдено")
+    const equipment = Equipment.find();
+    if (!equipment) {
+      return res.status(404).json("Оборудование не найдено");
     }
-    await Equipment.deleteMany()
-    res.status(200).json("Оборудование удалено")
+    await Equipment.deleteMany();
+    res.status(200).json("Оборудование удалено");
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-})
+});
+
+// PUT-запрос для обновления данных по ID
+router.put("/api/equipment/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { tag, text } = req.body;
+
+    // Проверяем, существует ли оборудование с указанным ID
+    const existingEquipment = await Equipment.findById(id);
+    if (!existingEquipment) {
+      return res.status(404).json("Оборудование не найдено");
+    }
+
+    // Обновляем поля tag и text
+    existingEquipment.tag = tag;
+    existingEquipment.text = text;
+
+    // Сохраняем обновленные данные
+    const updatedEquipment = await existingEquipment.save();
+
+    res.status(200).json(updatedEquipment);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json("Произошла ошибка при обновлении оборудования");
+  }
+});
 
 module.exports = router;
