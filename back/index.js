@@ -4,7 +4,7 @@ const cors = require("cors");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
-const bcrypt = require("bcrypt"); // Добавляем библиотеку bcrypt
+const bcrypt = require("bcrypt"); 
 
 require("dotenv").config();
 const app = express();
@@ -23,7 +23,7 @@ app.use(express.json());
 
 app.use(
   session({
-    secret: process.env.SECRET_KEY, // Замените на свой секретный ключ
+    secret: process.env.SECRET_KEY, 
     resave: false,
     saveUninitialized: false,
   })
@@ -33,7 +33,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Настройка локальной стратегии Passport
 passport.use(
   new LocalStrategy(
     {
@@ -48,7 +47,7 @@ passport.use(
         if (!user) {
           return done(null, false, { message: "Неверная электронная почта" });
         }
-        if (!bcrypt.compareSync(password, user.password)) { // Сравнение паролей с использованием bcrypt
+        if (!bcrypt.compareSync(password, user.password)) {
           return done(null, false, { message: "Неверный пароль" });
         }
         return done(null, user);
@@ -57,7 +56,6 @@ passport.use(
   )
 );
 
-// Настройка сериализации и десериализации пользователя
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });

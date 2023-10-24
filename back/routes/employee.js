@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const Employee = require("../Models/Employee");
 const router = Router();
-const passport = require('passport');
-const authenticate = passport.authenticate('local', {session: false});
+const passport = require("passport");
+const authenticate = passport.authenticate("local", { session: false });
 
 
 router.get("/api/employees", async (req, res) => {
@@ -15,20 +15,17 @@ router.get("/api/employees", async (req, res) => {
   }
 });
 
-
-router.get("/api/employees/:id", async (req,res) => {
+router.get("/api/employees/:id", async (req, res) => {
   try {
-    const employee = await Employee.findById(req.params.id)
+    const employee = await Employee.findById(req.params.id);
     if (!employee) {
       return res.status(404).json("Сотрудник не найден");
     }
-    res.status(200).json(employee)
+    res.status(200).json(employee);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-})
-
-
+});
 
 router.post("/api/employees", async (req, res) => {
   try {
@@ -40,33 +37,30 @@ router.post("/api/employees", async (req, res) => {
   }
 });
 
-
-
-router.delete("/api/employees/:id", async(req, res) => {
+router.delete("/api/employees/:id", async (req, res) => {
   try {
-      const employee = await Employee.findById(req.params.id)
-      if (!employee){
-          return res.status(404).json("Сотрудник не найден")
-      }
-      await Employee.deleteOne({ _id: req.params.id})
-      res.status(200).json("Сотрудник уволен");
+    const employee = await Employee.findById(req.params.id);
+    if (!employee) {
+      return res.status(404).json("Сотрудник не найден");
+    }
+    await Employee.deleteOne({ _id: req.params.id });
+    res.status(200).json("Сотрудник уволен");
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
 });
 
-router.delete("/api/employees", async(req, res) => {
+router.delete("/api/employees", async (req, res) => {
   try {
-      const employee = await Employee.find()
-      if (!employee){
-          return res.status(404).json("Сотрудник не найден")
-      }
-      await Employee.deleteMany()
-      res.status(200).json("Сотрудник уволен");
+    const employee = await Employee.find();
+    if (!employee) {
+      return res.status(404).json("Сотрудник не найден");
+    }
+    await Employee.deleteMany();
+    res.status(200).json("Сотрудник уволен");
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
 });
-
 
 module.exports = router;
