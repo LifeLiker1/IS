@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Tabs, Space, Table, Tag, Modal, Button, Select } from "antd";
 import { useCount } from "./CountContext";
 import { fetchData } from "./Functions/Responses";
-import { items, locationMap, optionsForModal } from "./Functions/ItemsForTable";
+import { items, locationMap, optionsForModal, ticketRemaining } from "./Functions/ItemsForTable";
 
 const TableEquipment = () => {
   const [equipment, setEquipment] = useState([]);

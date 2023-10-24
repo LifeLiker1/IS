@@ -39,6 +39,10 @@ const locationMap = {
   7: "Нурлы-Тау",
 };
 
+function ticketRemaining(){
+    const remaining = 10000;
+}
+
 const optionsForModal = [
   { value: "Застревание талона", label: "Застревание талона" },
   { value: "Замятие купюры", label: "Замятие купюры" },
@@ -49,4 +53,4 @@ const optionsForModal = [
   { value: "Другое", label: "Другое" },
 ];
 
-export { items, locationMap, optionsForModal };
+export { items, locationMap, optionsForModal, ticketRemaining };

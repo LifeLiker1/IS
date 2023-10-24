@@ -19,14 +19,12 @@ const Table = () => {
         }
         const data = responce.json();
         setEquipment(data)
-        console.log(equipment)
       } catch (error) {
         console.log(error);
       }
     }
     fetchData()
 }, []);
-console.log(equipment)
 
   const items = [
     {

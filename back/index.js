@@ -15,6 +15,7 @@ const equipmentRoutes = require("./routes/equipment");
 const authRoutes = require("./Functions/auth");
 const telegaRoutes = require("./routes/Telega");
 const applicationRoutes = require("./routes/application");
+const ticketRoutes = require("./routes/tickets")
 
 const User = require("./Models/User");
 
@@ -72,6 +73,7 @@ app.use("/", employeeRoutes);
 app.use("/", equipmentRoutes);
 app.use("/", telegaRoutes);
 app.use("/", applicationRoutes);
+app.use("/", ticketRoutes)
 
 const PORT = process.env.PORT;
 const uri = process.env.uri;

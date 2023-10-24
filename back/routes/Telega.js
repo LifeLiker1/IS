@@ -4,6 +4,7 @@ const fetch = require("node-fetch");
 require("dotenv").config();
 
 const router = Router();
+const bot = new TelegramBot(process.env.BOT_API, { polling: true });
 
 async function Employee(chatId) {
   try {
@@ -13,7 +14,6 @@ async function Employee(chatId) {
     }
     const employees = await response.json();
 
-    // Преобразуйте данные о сотрудниках в нужный формат
     const employeeText = employees
       .map((employee, index) => {
         return `Сотрудник ${index + 1}:\nИмя: ${employee.name}:\nФамилия: ${
@@ -22,7 +22,6 @@ async function Employee(chatId) {
       })
       .join("\n");
 
-    // Теперь у вас есть текст с данными о сотрудниках
     const message = `Данные о сотрудниках:\n${employeeText}`;
     bot.sendMessage(chatId, message);
   } catch (error) {
@@ -31,6 +30,22 @@ async function Employee(chatId) {
       chatId,
       "Произошла ошибка при получении данных о сотрудниках."
     );
+  }
+}
+
+async function SetTicket(chatId) {
+  try {
+    const response = await fetch("http://localhost:3001/api/tickets/decrease",{
+      method: "POST",
+    });
+    if (!response.ok) {
+      throw new Error("Ошибка при выполнении запроса");
+    }else{
+      bot.sendMessage(chatId, "Талоны загружены")
+    }
+  } catch (error) {
+    console.error("Произошла ошибка:", error);
+    bot.sendMessage(chatId, "Произошла ошибка при отправке данных");
   }
 }
 async function Application(chatId) {
@@ -64,7 +79,6 @@ async function Application(chatId) {
   }
 }
 
-const bot = new TelegramBot(process.env.BOT_API, { polling: true });
 
 const commands = [
   {
@@ -79,6 +93,7 @@ const commands = [
     command: "application",
     description: "Все заявки",
   },
+  { command: "tickets", description: "Установил талон" },
 ];
 
 bot.setMyCommands(commands);
@@ -109,5 +124,15 @@ bot.onText(/\/application/, async (msg) => {
     console.error("Произошла ошибка:", error);
   }
 });
+
+bot.onText(/\/tickets/, async(msg) => {
+  const chatId = msg.chat.id;
+  try {
+    await SetTicket(chatId);
+  } catch (error) {
+    bot.sendMessage(chatId, "Произошла ошибка при получении данных");
+    console.error("Произошла ошибка:", error);
+  }
+})
 
 module.exports = router;
