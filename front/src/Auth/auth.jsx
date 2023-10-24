@@ -46,6 +46,7 @@ const Auth = () => {
         const departament = user.departament;
         const role = user.role;
         setUserNumber(user.email)
+        console.log(data)
         
         notification.open({
           message: "Авторизация успешна",

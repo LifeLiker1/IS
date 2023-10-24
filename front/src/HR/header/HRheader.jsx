@@ -3,14 +3,13 @@ import "./header.scss";
 import { Button } from "antd";
 import logo from "../../Images/logo_transparent.png"
 
-function Header(props) {
+function Header() {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
-      console.log(props)
     }
   }, []);
 
@@ -25,7 +24,6 @@ function Header(props) {
       <div>
         <img src={logo} alt="logo"></img>
       </div>
-      <p>Hello {props.message}</p>
       <nav>
         {token ? (
           <>

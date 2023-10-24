@@ -3,8 +3,14 @@ import { useNavigate } from "react-router-dom";
 import "./NewEmployee.scss";
 import InputMask from "react-input-mask";
 import { Button, Form, Input, TreeSelect, notification } from "antd";
-import ImageUpload from "../../Functions/ImageUpload"; // Импортируем компонент ImageUpload
+import ImageUpload from "../../Functions/ImageUpload";
 import TextArea from "antd/es/input/TextArea";
+import {
+  citySet,
+  districtSet,
+  employeeDepartment,
+  employeeTitle,
+} from "./Parameters";
 
 function MyComponent() {
   const navigate = useNavigate();
@@ -19,7 +25,7 @@ function MyComponent() {
     } else {
       setShowAuthNotification(true);
     }
-  }, []); // Уберите зависимость, чтобы этот эффект выполнялся только один раз
+  }, []);
 
   useEffect(() => {
     if (showAuthNotification) {
@@ -29,7 +35,6 @@ function MyComponent() {
       });
     }
   }, [showAuthNotification]);
-
 
   const [formData, setFormData] = useState({
     name: "",
@@ -60,9 +65,9 @@ function MyComponent() {
       const response = await fetch("http://localhost:3001/api/employees", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Установите заголовок Content-Type на application/json
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData), // Преобразуйте объект formData в JSON и отправьте его
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
@@ -79,7 +84,7 @@ function MyComponent() {
 
   const handleSubmit = async () => {
     try {
-      await AddEmployee(); // Отправляем данные в функцию AddEmployee
+      await AddEmployee();
 
       navigate("/employees");
     } catch (error) {
@@ -102,32 +107,10 @@ function MyComponent() {
         ...formData.address,
         city: value,
       },
-      district: "", // Сбрасываем выбранный район при изменении города
+      district: "",
     });
 
-    const districtData = {
-      Алматы: [
-        { title: "Алатауский", value: "Алатауский" },
-        { title: "Алмалинский", value: "Алмалинский" },
-        { title: "Ауэзовский", value: "Ауэзовский" },
-        { title: "Бостандыкский", value: "Бостандыкский" },
-        { title: "Жетысуский", value: "Жетысуский" },
-        { title: "Медеуский", value: "Медеуский" },
-        { title: "Наурызбайский", value: "Наурызбайский" },
-        { title: "Турксибский", value: "Турксибский" },
-      ],
-      Астана: [
-        { title: "Район 1", value: "Район 1" },
-        { title: "Район 2", value: "Район 2" },
-        { title: "Район 3", value: "Район 3" },
-      ],
-      Шымкент: [
-        { title: "Район A", value: "Район A" },
-        { title: "Район B", value: "Район B" },
-        { title: "Район C", value: "Район C" },
-      ],
-    };
-
+    const districtData = districtSet;
     setDistricts(districtData[value] || []);
   };
 
@@ -142,196 +125,163 @@ function MyComponent() {
   };
 
   return (
-    <>{token ? (<Form
-      className="main_form"
-      labelCol={{
-        span: 4,
-      }}
-      wrapperCol={{
-        span: 14,
-      }}
-      layout="horizontal"
-      style={{
-        maxWidth: 600,
-      }}
-    >
-      <Form.Item label="Имя">
-        <Input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-        />
-      </Form.Item>
-      <Form.Item label="Фамилия">
-        <Input
-          type="text"
-          name="surname"
-          value={formData.surname}
-          onChange={handleChange}
-        />
-      </Form.Item>
-      <Form.Item label="Пол">
-        <TreeSelect
-          treeData={[
-            {
-              title: "Мужской",
-              value: "Мужской",
-            },
-            {
-              title: "Женский",
-              value: "Женский",
-            },
-          ]}
-          value={formData.sex}
-          onChange={(value) => {
-            setFormData({
-              ...formData,
-              sex: value,
-            });
+    <>
+      {token ? (
+        <Form
+          className="main_form"
+          labelCol={{
+            span: 4,
           }}
-        />
-      </Form.Item>
-      <Form.Item label="Город">
-        <TreeSelect
-          treeData={[
-            {
-              title: "Алматы",
-              value: "Алматы",
-            },
-            {
-              title: "Астана",
-              value: "Астана",
-            },
-            {
-              title: "Шымкент",
-              value: "Шымкент",
-            },
-          ]}
-          value={formData.address.city}
-          onChange={handleCityChange}
-        />
-      </Form.Item>
-      <Form.Item label="Район">
-        <TreeSelect
-          treeData={districts}
-          value={formData.address.district}
-          onChange={handleDistrictChange}
-        />
-      </Form.Item>
-      <Form.Item label="Улица">
-        <TextArea
-          rows={1}
-          value={formData.address.street}
-          onChange={(e) => {
-            const value = e.target.value;
-            setFormData({
-              ...formData,
-              street: value,
-            });
+          wrapperCol={{
+            span: 14,
           }}
-        />
-      </Form.Item>
-      <Form.Item label="Телефон">
-        <InputMask
-          mask="+7 (999) 999-99-99"
-          maskChar="*"
-          name="mobilePhone"
-          value={formData.mobilePhone}
-          onChange={handleChange}
+          layout="horizontal"
+          style={{
+            maxWidth: 600,
+          }}
         >
-          {(inputProps) => <Input {...inputProps} />}
-        </InputMask>
-      </Form.Item>
-      <Form.Item label="Отдел">
-        <TreeSelect
-          treeData={[
-            {
-              title: "IT отдел",
-              value: "IT отдел",
-            },
-            {
-              title: "Технический отдел",
-              value: "Технический отдел",
-            },
-            {
-              title: "Диспетчерский отдел",
-              value: "Диспетчерский отдел",
-            },
-          ]}
-          value={formData.departament}
-          onChange={(value) => {
-            setFormData({
-              ...formData,
-              departament: value,
-            });
-          }}
-        />
-      </Form.Item>
-      <Form.Item label="Должность">
-        <TreeSelect
-          treeData={[
-            {
-              title: "Начальник отдела",
-              value: "Начальник отдела",
-            },
-            {
-              title: "Заместитель начальника отдела",
-              value: "Заместитель начальника отдела",
-            },
-          ]}
-          value={formData.position}
-          onChange={(value) => {
-            setFormData({
-              ...formData,
-              position: value,
-            });
-          }}
-        />
-      </Form.Item>
-      <Form.Item label="О себе :">
-        <TextArea
-          rows={4}
-          value={formData.about}
-          onChange={(e) => {
-            const value = e.target.value;
-            setFormData({
-              ...formData,
-              about: value,
-            });
-          }}
-        />
-      </Form.Item>
-      <Form.Item label="Увличения :">
-        <TextArea
-          rows={2}
-          value={formData.hobbies}
-          onChange={(e) => {
-            const value = e.target.value;
-            setFormData({
-              ...formData,
-              hobbies: value,
-            });
-          }}
-        />
-      </Form.Item>
-      <Form.Item label="Изображение">
-        <ImageUpload onImageUpload={handleImageUpload} />
-      </Form.Item>
-      <div className="button-container">
-        <Button
-          type="primary"
-          className="Add_employee"
-          onClick={handleSubmit}
-        >
-          Добавить сотрудника
-        </Button>
-        <Button className="Diss_employee" href="/employees">
-          Отмена
-        </Button>
-      </div>
-    </Form>) : (null)}
-      
+          <Form.Item label="Имя">
+            <Input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+          </Form.Item>
+          <Form.Item label="Фамилия">
+            <Input
+              type="text"
+              name="surname"
+              value={formData.surname}
+              onChange={handleChange}
+            />
+          </Form.Item>
+          <Form.Item label="Пол">
+            <TreeSelect
+              treeData={[
+                {
+                  title: "Мужской",
+                  value: "Мужской",
+                },
+                {
+                  title: "Женский",
+                  value: "Женский",
+                },
+              ]}
+              value={formData.sex}
+              onChange={(value) => {
+                setFormData({
+                  ...formData,
+                  sex: value,
+                });
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Город">
+            <TreeSelect
+              treeData={citySet}
+              value={formData.address.city}
+              onChange={handleCityChange}
+            />
+          </Form.Item>
+          <Form.Item label="Район">
+            <TreeSelect
+              treeData={districts}
+              value={formData.address.district}
+              onChange={handleDistrictChange}
+            />
+          </Form.Item>
+          <Form.Item label="Улица">
+            <TextArea
+              rows={1}
+              value={formData.address.street}
+              onChange={(e) => {
+                const value = e.target.value;
+                setFormData({
+                  ...formData,
+                  street: value,
+                });
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Телефон">
+            <InputMask
+              mask="+7 (999) 999-99-99"
+              maskChar="*"
+              name="mobilePhone"
+              value={formData.mobilePhone}
+              onChange={handleChange}
+            >
+              {(inputProps) => <Input {...inputProps} />}
+            </InputMask>
+          </Form.Item>
+          <Form.Item label="Отдел">
+            <TreeSelect
+              treeData={employeeDepartment}
+              value={formData.departament}
+              onChange={(value) => {
+                setFormData({
+                  ...formData,
+                  departament: value,
+                });
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Должность">
+            <TreeSelect
+              treeData={employeeTitle}
+              value={formData.position}
+              onChange={(value) => {
+                setFormData({
+                  ...formData,
+                  position: value,
+                });
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="О себе :">
+            <TextArea
+              rows={4}
+              value={formData.about}
+              onChange={(e) => {
+                const value = e.target.value;
+                setFormData({
+                  ...formData,
+                  about: value,
+                });
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Увличения :">
+            <TextArea
+              rows={2}
+              value={formData.hobbies}
+              onChange={(e) => {
+                const value = e.target.value;
+                setFormData({
+                  ...formData,
+                  hobbies: value,
+                });
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Изображение">
+            <ImageUpload onImageUpload={handleImageUpload} />
+          </Form.Item>
+          <div className="button-container">
+            <Button
+              type="primary"
+              className="Add_employee"
+              onClick={handleSubmit}
+            >
+              Добавить сотрудника
+            </Button>
+            <Button className="Diss_employee" href="/employees">
+              Отмена
+            </Button>
+          </div>
+        </Form>
+      ) : null}
     </>
   );
 }
