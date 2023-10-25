@@ -4,7 +4,6 @@ const router = Router();
 const passport = require("passport");
 const authenticate = passport.authenticate("local", { session: false });
 
-
 router.get("/api/employees", async (req, res) => {
   try {
     const employee = await Employee.find();
@@ -14,6 +13,18 @@ router.get("/api/employees", async (req, res) => {
     console.log(error);
   }
 });
+
+router.get("/api/employees/onShift", async (req, res) => {
+  try {
+    const employee = await Employee.find({ onShift: false });
+    res.status(200).json(employee);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500).json({ error: "Произошла ошибка при поиске сотрудников на смене" });
+  }
+});
+
 
 router.get("/api/employees/:id", async (req, res) => {
   try {
@@ -62,5 +73,8 @@ router.delete("/api/employees", async (req, res) => {
     console.log(error);
   }
 });
+
+
+
 
 module.exports = router;

@@ -6,7 +6,7 @@ const employeeSchema = new mongoose.Schema({
   sex: { type: String, required: false },
   address: {
     city: { type: String, required: false },
-    district: { type: String, required: false }
+    district: { type: String, required: false },
   },
   street: { type: String, required: false },
   mobilePhone: { type: String, required: false, default: 0 },
@@ -14,6 +14,7 @@ const employeeSchema = new mongoose.Schema({
   position: { type: String, required: false },
   about: { type: String, required: false },
   hobbies: { type: String, required: false },
+  onShift: { type: Boolean, required: false, default: false }
 });
 
 module.exports = mongoose.model("employee", employeeSchema);
