@@ -3,7 +3,7 @@ import Header from "./Header/ITHeader";
 import Table from "./Table/Table";
 import { Button, Modal } from "antd";
 import "./IT.scss";
-import { getTickets } from "./Functions/Responses";
+import { getTickets } from "./Functions/Responses"
 
 const IT = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
