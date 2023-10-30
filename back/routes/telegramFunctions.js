@@ -16,6 +16,7 @@ const commandsForUser = [
     description: "Все заявки",
   },
   { command: "tickets", description: "Установил талон" },
+  { command: "logout", description: "Выход" },
 ];
 
 

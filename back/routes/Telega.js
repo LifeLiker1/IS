@@ -9,73 +9,71 @@ const bot = new TelegramBot(process.env.BOT_API, { polling: true });
 
 const commands = commandsForUser;
 let isAuth = false;
+let authenticatedUserId = null;
 
-bot.setMyCommands(commands);
+
+
+function checkAuthentication(userId) {
+  return userId === authenticatedUserId;
+}
 
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
-  const options = {
-    reply_markup: {
-      keyboard: [
-        [
-          {
-            text: "Авторизация",
-            request_contact: true,
-          },
+  
+  if (!isAuth) {
+    const options = {
+      reply_markup: {
+        keyboard: [
+          [
+            {
+              text: "Авторизация",
+              request_contact: true,
+            },
+          ],
         ],
-      ],
-      resize_keyboard: true,
-      one_time_keyboard: true,
-    },
-  };
-  bot.sendMessage(
-    chatId,
-    "Здравствуйте. Для авторизации нажмите кнопку 'Авторизация'.",
-    options
-  );
-});
+        resize_keyboard: true,
+      },
+    };
+    bot.sendMessage(
+      chatId,
+      "Здравствуйте. Для авторизации нажмите кнопку 'Авторизация'.",
+      options
+      );
+    } else {
+      const commandsForAuthorized = commands;
+      bot.setMyCommands(commandsForAuthorized);
+      checkAuthentication()
+      bot.sendMessage(chatId, "Добро пожаловать! Вы авторизованы.");
+    }
+  });
 
-bot.on("contact", (msg) => {
+  if(isAuth){bot.setMyCommands(commands);}
+
+bot.on("contact", async (msg) => {
   const chatId = msg.chat.id;
   const phoneNumber = msg.contact.phone_number;
-  async function SearchPhone() {
+  try {
     const response = await fetch("http://localhost:3001/api/employees", {
       method: "GET",
     });
-    try {
-      const result = await response.json();
-      const findEmployee = result.find((employee) => employee.mobilePhone === phoneNumber)
-      if(findEmployee){
-        const isAuth = true
-        bot.sendMessage(chatId, `Здравствйте ${findEmployee.name} ${findEmployee.surname}`);
-      }else{
-        const isAuth = false
-        bot.sendMessage(chatId, `Пользователя с таким номером телефона не найдено`);
-      }
-      console.log(phoneNumber)
-      console.log(findEmployee)
-    } catch (error) {
-      console.log(error);
+    const result = await response.json();
+    const findEmployee = result.find((employee) => employee.mobilePhone === phoneNumber);
+
+    if (findEmployee) {
+      isAuth = true;
+      bot.sendMessage(chatId, `Здравствуйте ${findEmployee.name} ${findEmployee.surname}`);
+    } else {
+      isAuth = false;
+      bot.sendMessage(chatId, `Пользователя с таким номером телефона не найдено`);
     }
+
+    console.log(phoneNumber);
+    console.log(findEmployee);
+  } catch (error) {
+    console.log(error);
+    bot.sendMessage(chatId, "Произошла ошибка при попытке авторизации.");
   }
-  SearchPhone();
-  bot.sendMessage(chatId, `Вы ввели номер телефона: ${phoneNumber}`);
-  // Здесь можно добавить код для дальнейших действий, связанных с авторизацией.
 });
-
-
-// async function Auth(chatId) {
-//   try {
-//     const response = await fetch("http://localhost:3001/api/employees");
-//     if (response.ok) {
-//       console.log("Hello World");
-//     }
-//     const result = await response.json();
-//     const findEmployee = result.findOne({ mobilePhone: "77471082141" });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 async function Employee(chatId) {
   try {
@@ -152,7 +150,7 @@ async function Application(chatId) {
 
 bot.onText(/\/employee/, async (msg) => {
   const chatId = msg.chat.id;
-  if(!isAuth){try {
+  if(isAuth){try {
     await Employee(chatId);
   } catch (error) {
     bot.sendMessage(
@@ -167,32 +165,46 @@ bot.onText(/\/employee/, async (msg) => {
 });
 bot.onText(/\/application/, async (msg) => {
   const chatId = msg.chat.id;
-  try {
+  if(isAuth){try {
     await Application(chatId);
   } catch (error) {
     bot.sendMessage(chatId, "Произошла ошибка при получении данных о заявках.");
     console.error("Произошла ошибка:", error);
+  }}else{
+    bot.sendMessage(chatId, "Вы не авторизированы")
   }
 });
 
 bot.onText(/\/tickets/, async (msg) => {
   const chatId = msg.chat.id;
-  try {
+  if(isAuth){try {
     await SetTicket(chatId);
   } catch (error) {
     bot.sendMessage(chatId, "Произошла ошибка при получении данных");
     console.error("Произошла ошибка:", error);
+  }}else{
+    bot.sendMessage(chatId, "Вы не авторизированы")
   }
 });
 
 bot.onText(/\/auth/, async (msg) => {
   const chatId = msg.chat.id;
-  try {
+  if(isAuth){try {
     await Auth(chatId);
   } catch (error) {
     bot.sendMessage(chatId, "Произошла ошибка при получении данных");
     console.error("Произошла ошибка:", error);
+  }}else{
+    bot.sendMessage(chatId, "Вы не авторизированы")
   }
+});
+
+bot.onText(/\/logout/, (msg) => {
+  const chatId = msg.chat.id;
+  const userId = msg.from.id;
+    authenticatedUserId = null; // Разлогиниваем пользователя
+    isAuth = false;
+    bot.sendMessage(chatId, "Вы успешно разлогинились.");
 });
 
 module.exports = router;

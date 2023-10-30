@@ -210,7 +210,11 @@ function MyComponent() {
               maskChar="*"
               name="mobilePhone"
               value={formData.mobilePhone}
-              onChange={handleChange}
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/\D/g, ""); // Удаляем все символы, не являющиеся цифрами
+                formData.mobilePhone = rawValue; // Обновляем значение в форме
+                handleChange(e); // Вызываем обработчик изменения, если это необходимо
+              }}
             >
               {(inputProps) => <Input {...inputProps} />}
             </InputMask>
