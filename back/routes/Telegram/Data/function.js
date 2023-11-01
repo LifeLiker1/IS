@@ -34,6 +34,34 @@ async function Employee(chatId, isAuth) {
   }
 }
 
+//функция сотрудников на смене
+async function onShift(chatId, isAuth) {
+  try {
+    const response = await fetch("http://localhost:3001/api/employees/onShift");
+    if (!response.ok) {
+      throw new Error("Ошибка при выполнении запроса");
+    }
+    const employees = await response.json();
+    console.log(employees)
+    const EmployeesOnShift = employees
+      .map((employee, index) => {
+        return `Сотрудник ${index + 1}:\nИмя: ${employee.name}:\nФамилия: ${
+          employee.surname
+        }\nДолжность: ${employee.position}\n`;
+      })
+      .join("\n");
+
+    const message = `Сотрудники на смене:\n${EmployeesOnShift}`;
+    bot.sendMessage(chatId, message);
+  } catch (error) {
+    console.error("Произошла ошибка:", error);
+    bot.sendMessage(
+      chatId,
+      "Произошла ошибка при получении должности сотрудника."
+    );
+  }
+}
+
 //функция установки талонов
 async function SetTicket(chatId, isAuth) {
   try {
@@ -81,27 +109,12 @@ async function Application(chatId, isAuth) {
   }
 }
 
-async function positionResponce(chatId, isAuth){
-  try {
-    const responce = await fetch("http://localhost:3001/api/employees")
-    if (!response.ok) {
-      throw new Error("Ошибка при выполнении запроса");
-    }
-    const application = await responce.json
-  } catch (error) {
-    console.error("Произошла ошибка:", error);
-    bot.sendMessage(
-      chatId,
-      "Произошла ошибка при получении должности сотрудника."
-    ); 
-  }
-}
-
 module.exports = {
   Employee,
   SetTicket,
   Application,
   checkAuthentication,
+  onShift,
   TelegramBot,
   bot,
 };

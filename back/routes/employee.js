@@ -4,6 +4,16 @@ const router = Router();
 const passport = require("passport");
 const authenticate = passport.authenticate("local", { session: false });
 
+router.get("/api/employees", async (req, res) => {
+  try {
+    const employee = await Employee.find();
+    res.status(200).json(employee);
+  } catch (error) {
+    res.status(500).json({ message: "Ошибка сервера" });
+    console.log(error);
+  }
+});
+
 router.get("/api/employees/params", async (req, res) => {
   try {
     const { mobilePhone, position } = req.query;
@@ -66,6 +76,7 @@ router.post("/api/employees/updateOnShift", async (req, res) => {
       .json({ error: "Произошла ошибка при обновлении поля onShift" });
   }
 });
+
 router.post("/api/employees/resetOnShift", async (req, res) => {
   try {
     const mobilePhone = req.body.mobilePhone; // Переданный номер телефона

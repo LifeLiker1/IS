@@ -4,6 +4,7 @@ const {
   SetTicket,
   Application,
   checkAuthentication,
+  onShift,
   TelegramBot,
   bot,
 } = require("./Data/function");
@@ -44,7 +45,7 @@ bot1.on("contact", async (msg) => {
 
   try {
     const response = await fetch(
-      `http://localhost:3001/api/employees?mobilePhone=${phoneNumber}`,
+      `http://localhost:3001/api/employees/params?mobilePhone=${phoneNumber}`,
       {
         method: "GET",
       }
@@ -64,7 +65,10 @@ bot1.on("contact", async (msg) => {
 
     // В зависимости от должности сотрудника, создайте соответствующее меню
     let keyboard;
-    if (result.position === "Начальник отдела") {
+    if (
+      result.position === "Начальник отдела" ||
+      result.position === "Заместитель начальника отдела"
+    ) {
       keyboard = keyboardForManagement;
     } else if (
       result.position === "Диспетчер" ||
@@ -74,10 +78,27 @@ bot1.on("contact", async (msg) => {
     }
 
     bot1.sendMessage(chatId, `Здравствуйте ${name} ${surname}`, keyboard);
-    isAuth = true
+    isAuth = true;
   } catch (error) {
     console.log(error);
     bot1.sendMessage(chatId, "Произошла ошибка при попытке авторизации.");
+  }
+});
+
+bot1.onText(/Техники на смене/, async (msg) => {
+  const chatId = msg.chat.id;
+  if (isAuth) {
+    try {
+      await onShift(chatId, isAuth, bot1)
+    } catch (error) {
+      bot1.sendMessage(
+        chatId,
+        "Произошла ошибка при получении данных о сотрудниках."
+      );
+      console.error("Произошла ошибка:", error);
+    }
+  } else {
+    bot1.sendMessage(chatId, "Вы не авторизированы");
   }
 });
 
@@ -97,6 +118,7 @@ bot1.onText(/Все сотруднинки/, async (msg) => {
     bot1.sendMessage(chatId, "Вы не авторизированы");
   }
 });
+
 bot1.onText(/Все заявки/, async (msg) => {
   const chatId = msg.chat.id;
   if (isAuth) {
