@@ -13,7 +13,7 @@ const userRoutes = require("./routes/users");
 const employeeRoutes = require("./routes/employee");
 const equipmentRoutes = require("./routes/equipment");
 const authRoutes = require("./Functions/auth");
-const telegaRoutes = require("./routes/Telega");
+const telegaRoutes = require("./routes/Telegram/telegram");
 const applicationRoutes = require("./routes/application");
 const ticketRoutes = require("./routes/tickets")
 

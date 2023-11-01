@@ -23,5 +23,16 @@ async function fetchData(selectedLocation, setEquipment) {
   }
 }
 
+async function onShift(){
+  try {
+    const responce = await fetch ("http://localhost:3001/api/employees/onShift")
+    console.log(responce)
+    const data = await responce.json()
+    console.log(data)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
-export { fetchData};
+
+export { fetchData, onShift};

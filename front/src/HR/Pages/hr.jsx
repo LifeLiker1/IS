@@ -3,16 +3,16 @@ import "./hr.scss";
 import { Card, Form, TreeSelect, notification, Button, Result } from "antd";
 import { Link } from "react-router-dom";
 import Header from "../header/HRheader";
-import Man from "../../Images/Man1.jpg"
+import Man from "../../Images/Man1.jpg";
 
 const HR = () => {
   const [employees, setEmployees] = useState([]);
   const [selectedDepartament, setSelectedDepartment] = useState(null);
   const [token, setToken] = useState(null);
   const [showAuthNotification, setShowAuthNotification] = useState(false); // Новое состояние для уведомления
-  
+
   const { Meta } = Card;
-  
+
   useEffect(() => {
     const fetchData = async () => {
       document.title = "Страница отдела кадров";
@@ -23,6 +23,7 @@ const HR = () => {
         }
         const data = await response.json();
         setEmployees(data);
+        console.log(data)
       } catch (error) {
         console.error("Ошибка при получении данных:", error);
       }
@@ -36,7 +37,7 @@ const HR = () => {
       setShowAuthNotification(true); // Показать уведомление об отсутствии авторизации
     }
   }, []);
-  
+
   // Функция для фильтрации сотрудников по отделу
   const filteredEmployees = selectedDepartament
     ? employees.filter(
@@ -68,37 +69,50 @@ const HR = () => {
   return (
     <div className="employee_block">
       {token ? (
-        <><div className="search_field">
-        <Header/>
-          <Form.Item label="Мне нужны сотрудники" className="dep_sel">
-            <TreeSelect
-              onChange={(value) => setSelectedDepartment(value)}
-              treeData={[
-                { title: "Все", value: 0 },
-                { title: "IT", value: "IT отдел" },
-                { title: "Технического отдела", value: "Технический отдел" },
-                { title: "Диспетчерского отдела", value: "Диспетчерский отдел" },
-              ]} />
-          </Form.Item>
-        </div>
+        <>
+          <div className="search_field">
+            <Header />
+            <Form.Item label="Мне нужны сотрудники" className="dep_sel">
+              <TreeSelect
+                onChange={(value) => setSelectedDepartment(value)}
+                treeData={[
+                  { title: "Все", value: 0 },
+                  { title: "IT", value: "IT отдел" },
+                  { title: "Технического отдела", value: "Технический отдел" },
+                  {
+                    title: "Диспетчерского отдела",
+                    value: "Диспетчерский отдел",
+                  },
+                ]}
+              />
+            </Form.Item>
+          </div>
           <div className="employee_card">
-              {filteredEmployees.map((employee) => (
+            {filteredEmployees && filteredEmployees.length > 0 ? (
+              filteredEmployees.map((employee) => (
                 <Link key={employee._id} to={`/employees/${employee._id}`}>
-                  <Card
-                    hoverable
-                    cover={<img src={Man} alt="example" />}
-                  >
+                  <Card hoverable cover={<img src={Man} alt="example" />}>
                     <Meta title={`${employee.surname} ${employee.name}`} />
                   </Card>
                 </Link>
-              ))}
-          </div></>
-      ) : <Result
-      status="403"
-      title="403"
-      subTitle="У Вас нет прав для просмотра этого контента, необходима авторизация."
-      extra={<Button type="primary" href="/">Войти</Button>}
-    />}
+              ))
+            ) : (
+              <div>No employees found</div>
+            )}
+          </div>
+        </>
+      ) : (
+        <Result
+          status="403"
+          title="403"
+          subTitle="У Вас нет прав для просмотра этого контента, необходима авторизация."
+          extra={
+            <Button type="primary" href="/">
+              Войти
+            </Button>
+          }
+        />
+      )}
     </div>
   );
 };
