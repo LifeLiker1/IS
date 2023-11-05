@@ -5,7 +5,7 @@ import { Progress, Button } from "antd";
 import TableEquipment from "./Table/table";
 import { CountProvider, useCount } from "./Table/CountContext";
 import { getTickets } from "../IT/Functions/Responses";
-import { onShift } from "./Table/Functions/Responses";
+import  OnShift  from "./Table/OnShift";
 
 const Tech = () => {
   return (
@@ -19,6 +19,7 @@ const TechContent = () => {
   const { countNotWorking } = useCount();
   const [statistic, setStatistic] = useState(false);
   const [countData, setCountData] = useState(null);
+
   const statVisible = () => {
     setStatistic(!statistic);
   };
@@ -34,11 +35,8 @@ const TechContent = () => {
   };
 
   GetQuantity();
-  onShift();
-  console.log(onShift)
 
   const ostatok = Math.abs(100000 - countData);
-  console.log(ostatok);
 
   return (
     <div>
@@ -48,7 +46,7 @@ const TechContent = () => {
           <TableEquipment />
         </div>
         <div>
-          <p>На смене сегодня:</p>
+          <p>На смене сегодня:<OnShift/></p>
         </div>
         <Button onClick={statVisible}>
           {statistic ? "Скрыть статистику" : "Показать статистику"}
@@ -57,7 +55,7 @@ const TechContent = () => {
           <div className="statistic">
             <p>Работающее оборудование</p>
             <Progress percent={100 - countNotWorking} status="active" />
-            <p>Остаток талонов</p>
+            <p>Остаток талонов </p>
             <Progress percent={ostatok} status="active" />
             <p>Или {countData} штук</p>
           </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./NewEmployee.scss";
 import InputMask from "react-input-mask";
-import { Button, Form, Input, TreeSelect, notification } from "antd";
+import { Button, Form, Input, TreeSelect, notification, DatePicker } from "antd";
 import ImageUpload from "../../Functions/ImageUpload";
 import TextArea from "antd/es/input/TextArea";
 import {
@@ -11,6 +11,8 @@ import {
   employeeDepartment,
   employeeTitle,
 } from "./Parameters";
+import Calendars from "./calendar";
+import FormItem from "antd/es/form/FormItem";
 
 function MyComponent() {
   const navigate = useNavigate();
@@ -176,6 +178,9 @@ function MyComponent() {
                 });
               }}
             />
+          </Form.Item>
+          <Form.Item label="Дата рождения">
+              <Calendars/>
           </Form.Item>
           <Form.Item label="Город">
             <TreeSelect

@@ -1,3 +1,4 @@
+import { useState } from "react";
 
 async function fetchData(selectedLocation, setEquipment) {
   document.title = "Страница диспетчера";
@@ -23,16 +24,4 @@ async function fetchData(selectedLocation, setEquipment) {
   }
 }
 
-async function onShift(){
-  try {
-    const responce = await fetch ("http://localhost:3001/api/employees/onShift")
-    console.log(responce)
-    const data = await responce.json()
-    console.log(data)
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-
-export { fetchData, onShift};
+export { fetchData};
