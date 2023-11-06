@@ -3,7 +3,7 @@ import "./hr.scss";
 import { Card, Form, TreeSelect, notification, Button, Result } from "antd";
 import { Link } from "react-router-dom";
 import Header from "../../Components/header/HRheader";
-import Man from "../../../Images/Man1.jpg";
+import Man from "../../../Images/avataaars.svg";
 
 const HR = () => {
   const [employees, setEmployees] = useState([]);
