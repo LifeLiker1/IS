@@ -1,6 +1,4 @@
-import { useState } from "react";
-
-async function fetchData(selectedLocation, setEquipment) {
+async function fetchData() {
   document.title = "Страница диспетчера";
   try {
     const response = await fetch("http://localhost:3001/api/equipment", {
@@ -15,13 +13,13 @@ async function fetchData(selectedLocation, setEquipment) {
     }
 
     const data = await response.json();
-    if (!Array.isArray(data)) {
-      throw new Error("Некорректный формат данных");
-    }
-    setEquipment(data);
+    console.log(data);
+    
+    return data; // Вернуть данные из функции
   } catch (error) {
     console.error(error);
+    throw error; // Если произошла ошибка, выбросить ее для обработки в родительском компоненте
   }
 }
 
-export { fetchData};
+export { fetchData };

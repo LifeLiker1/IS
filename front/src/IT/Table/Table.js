@@ -1,36 +1,58 @@
 import React, { useEffect, useState } from "react";
-import { Collapse } from "antd";
+import { Collapse, Spin } from "antd";
 import "./Table.scss";
+// import { fetchData } from "../../Tech/Table/Functions/Responses";
 
 const Table = () => {
-    const [equipment, setEquipment] = useState([]);
+  const [equipment, setEquipment] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     async function fetchData() {
-      document.title ="Страница IT";
+      document.title = "Страница диспетчера";
       try {
-        const responce = await fetch("http://localhost:3001/api/equipment", {
+        const response = await fetch("http://localhost:3001/api/equipment", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
         });
-        if(!responce.ok){
-            throw new Error(`Что то пошло не так: ${responce.error}`)
+    
+        if (!response.ok) {
+          throw new Error(`Ошибка при получении данных: ${response.status} ${response.statusText}`);
         }
-        const data = responce.json();
-        setEquipment(data)
+    
+        const data = await response.json();
+        console.log(data)
+        setEquipment(data);
+        setLoading(false);
       } catch (error) {
         console.log(error);
+        setError("Произошла ошибка");
+        setLoading(false);
       }
     }
-    fetchData()
-}, []);
+    fetchData();
+  }, []);
 
   const items = [
     {
       key: "1",
       label: "Оборудование на парковке",
-      children: <p>{equipment.adress}</p>,
+      children: (
+        <div>
+          {Array.isArray(equipment) && equipment.length > 0 ? (
+            equipment.map((item) => (
+              <p key={item.id}>
+                {item.adress}{item.model}{item.type}
+              </p>
+            ))
+          ) : (
+            <p>Нет доступных данных</p>
+          )}
+        </div>
+      ),
     },
     {
       key: "2",
@@ -38,9 +60,16 @@ const Table = () => {
       // children: <p>{text}</p>,
     },
   ];
+
   return (
     <div>
-      <Collapse items={items} />
+      {loading ? (
+        <Spin size="large" />
+      ) : error ? (
+        <div>{error}</div>
+      ) : (
+        <Collapse items={items} />
+      )}
     </div>
   );
 };

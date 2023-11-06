@@ -14,6 +14,16 @@ const TableEquipment = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
+    fetchData()
+      .then((data) => {
+        setEquipment(data); // Установите полученные данные в состояние родительского компонента
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
     if (equipment.length === 0) {
       fetchData(selectedLocation, setEquipment);
     }
@@ -70,7 +80,6 @@ const TableEquipment = () => {
       });
 
       if (response.ok) {
-        // Обработайте успешный ответ от сервера
         console.log("Заявка отправлена успешно.");
       } else {
         console.error("Произошла ошибка при отправке заявки.");
@@ -137,6 +146,7 @@ const TableEquipment = () => {
 
   return (
     <div>
+      
       <Modal
         title="Выписать заявку"
         visible={modalVisible}
