@@ -9,12 +9,13 @@ async function fetchData() {
     });
 
     if (!response.ok) {
-      throw new Error(`Ошибка при получении данных: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Ошибка при получении данных: ${response.status} ${response.statusText}`
+      );
     }
 
     const data = await response.json();
     console.log(data);
-    
     return data; // Вернуть данные из функции
   } catch (error) {
     console.error(error);

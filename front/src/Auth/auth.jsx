@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./auth.scss";
 import { notification, Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
-import HRheader from "../HR/header/HRheader.jsx"
+import HRheader from "../HR/Components/header/HRheader.jsx"
 
 const Auth = () => {
   const [email, setEmail] = useState("");

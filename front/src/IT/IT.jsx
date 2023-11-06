@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "./Header/ITHeader";
+import Header from "./Components/Header/ITHeader";
 import Table from "./Table/Table";
 import { Button, Modal } from "antd";
 import "./IT.scss";
@@ -7,6 +7,7 @@ import { getTickets } from "./Functions/Responses"
 
 const IT = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [countData, setCountData] = useState(null);
   const showModal = () => {
     setIsModalOpen(true);

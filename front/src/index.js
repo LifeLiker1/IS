@@ -3,8 +3,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import NewEmployee from "./HR/Pages/New Employee/NewEmployee";
-import EmployeePage from "./HR/Pages/EmployeePage/EmployeePage.jsx";
+import NewEmployee from "./HR/Components/Pages/New Employee/NewEmployee";
+import EmployeePage from "./HR/Components/Pages/EmployeePage/EmployeePage.jsx";
 import Auth from "./Auth/auth.jsx";
 import IT from "./IT/IT.jsx"
 import Tech from "./Tech/Tech";

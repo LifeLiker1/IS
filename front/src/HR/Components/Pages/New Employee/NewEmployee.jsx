@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./NewEmployee.scss";
 import InputMask from "react-input-mask";
 import { Button, Form, Input, TreeSelect, notification, DatePicker } from "antd";
-import ImageUpload from "../../Functions/ImageUpload";
+import ImageUpload from "../../../Functions/ImageUpload";
 import TextArea from "antd/es/input/TextArea";
 import {
   citySet,
@@ -12,7 +12,6 @@ import {
   employeeTitle,
 } from "./Parameters";
 import Calendars from "./calendar";
-import FormItem from "antd/es/form/FormItem";
 
 function MyComponent() {
   const navigate = useNavigate();

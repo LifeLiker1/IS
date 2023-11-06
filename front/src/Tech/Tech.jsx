@@ -36,8 +36,6 @@ const TechContent = () => {
 
   GetQuantity();
 
-  const ostatok = Math.abs(100000 - countData);
-
   return (
     <div>
       <Header />
@@ -55,9 +53,7 @@ const TechContent = () => {
           <div className="statistic">
             <p>Работающее оборудование</p>
             <Progress percent={100 - countNotWorking} status="active" />
-            <p>Остаток талонов </p>
-            <Progress percent={ostatok} status="active" />
-            <p>Или {countData} штук</p>
+            <p>Остаток талонов {countData} штук</p>
           </div>
         ) : null}
       </div>

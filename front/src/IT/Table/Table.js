@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Collapse, Spin } from "antd";
 import "./Table.scss";
+import { fetchData } from "../../Tech/Table/Functions/Responses";
 // import { fetchData } from "../../Tech/Table/Functions/Responses";
 
 const Table = () => {
@@ -9,31 +10,16 @@ const Table = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchData() {
-      document.title = "Страница диспетчера";
-      try {
-        const response = await fetch("http://localhost:3001/api/equipment", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-    
-        if (!response.ok) {
-          throw new Error(`Ошибка при получении данных: ${response.status} ${response.statusText}`);
-        }
-    
-        const data = await response.json();
-        console.log(data)
+    fetchData()
+      .then((data) => {
         setEquipment(data);
         setLoading(false);
-      } catch (error) {
+      })
+      .catch((error) => {
         console.log(error);
         setError("Произошла ошибка");
         setLoading(false);
-      }
-    }
-    fetchData();
+      });
   }, []);
 
   const items = [
@@ -45,7 +31,8 @@ const Table = () => {
           {Array.isArray(equipment) && equipment.length > 0 ? (
             equipment.map((item) => (
               <p key={item.id}>
-                {item.adress}{item.model}{item.type}
+                {item.adress}<br/>
+                {item.model} {item.type}
               </p>
             ))
           ) : (

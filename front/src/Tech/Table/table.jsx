@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Tabs, Space, Table, Tag, Modal, Button, Select } from "antd";
 import { useCount } from "./CountContext";
 import { fetchData } from "./Functions/Responses";
+// eslint-disable-next-line no-unused-vars
 import { items, locationMap, optionsForModal, ticketRemaining } from "./Functions/ItemsForTable";
 
 const TableEquipment = () => {
@@ -27,6 +28,7 @@ const TableEquipment = () => {
     if (equipment.length === 0) {
       fetchData(selectedLocation, setEquipment);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedLocation]);
 
   const data = equipment.map((item, index) => ({
@@ -45,7 +47,7 @@ const TableEquipment = () => {
       return count;
     }, 0);
     setCountNotWorking(count);
-  }, [equipment]);
+  }, [equipment, setCountNotWorking]);
 
   const handleTabChange = (key) => {
     setActiveTabKey(key);
@@ -98,6 +100,7 @@ const TableEquipment = () => {
       title: "Модель",
       dataIndex: "name",
       key: "name",
+      // eslint-disable-next-line jsx-a11y/anchor-is-valid
       render: (text) => <a>{text}</a>,
     },
     {

@@ -7,7 +7,7 @@ import {
   AppstoreTwoTone,
 } from "@ant-design/icons";
 import { Button, Dropdown } from "antd"; // Удалим Tooltip
-import logo from "../../Images/logo_transparent.png";
+import logo from "../../../Images/logo_transparent.png";
 
 function Header() {
   const [token, setToken] = useState(null);
