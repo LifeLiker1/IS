@@ -3,7 +3,13 @@ import { Tabs, Space, Table, Tag, Modal, Button, Select } from "antd";
 import { useCount } from "./CountContext";
 import { fetchData } from "./Functions/Responses";
 // eslint-disable-next-line no-unused-vars
-import { items, locationMap, optionsForModal, ticketRemaining } from "./Functions/ItemsForTable";
+import {
+  items,
+  locationMap,
+  optionsForBarriers,
+  optionsForPOFs,
+  ticketRemaining,
+} from "./Functions/ItemsForTable";
 
 const TableEquipment = () => {
   const [equipment, setEquipment] = useState([]);
@@ -13,6 +19,7 @@ const TableEquipment = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [modalParameters, setModalParameters] = useState(null);
 
   useEffect(() => {
     fetchData()
@@ -28,7 +35,7 @@ const TableEquipment = () => {
     if (equipment.length === 0) {
       fetchData(selectedLocation, setEquipment);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedLocation]);
 
   const data = equipment.map((item, index) => ({
@@ -60,6 +67,14 @@ const TableEquipment = () => {
   const handleOpenModal = (record) => {
     setSelectedEquipment(record);
     setModalVisible(true);
+    if (selectedEquipment.type === "Платежный терминал") {
+      setModalParameters(optionsForPOFs);
+    } else if (
+      selectedEquipment.type === "Стойка выезда" ||
+      selectedEquipment.type === "Стойка въезда"
+    ) {
+      setModalParameters(optionsForBarriers);
+    }
   };
 
   const handleRequestChange = (value) => {
@@ -68,7 +83,7 @@ const TableEquipment = () => {
 
   const sendRequest = async () => {
     const requestData = {
-      equipmentId: selectedEquipment.id, 
+      equipmentId: selectedEquipment.id,
       requestType: selectedRequest,
     };
 
@@ -149,7 +164,6 @@ const TableEquipment = () => {
 
   return (
     <div>
-      
       <Modal
         title="Выписать заявку"
         visible={modalVisible}
@@ -160,7 +174,7 @@ const TableEquipment = () => {
           </Button>,
           <Button key="cancel" onClick={() => setModalVisible(false)}>
             Закрыть
-          </Button>
+          </Button>,
         ]}
       >
         {selectedEquipment && (
@@ -173,7 +187,14 @@ const TableEquipment = () => {
             <Select
               defaultValue=""
               style={{ width: 250 }}
-              options={optionsForModal}
+              options={modalParameters}
+              onChange={handleRequestChange}
+            /><br/>
+            Поломка:
+            <Select
+              defaultValue=""
+              style={{ width: 250 }}
+              options={modalParameters}
               onChange={handleRequestChange}
             />
           </div>

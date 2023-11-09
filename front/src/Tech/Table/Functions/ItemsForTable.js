@@ -39,18 +39,30 @@ const locationMap = {
   7: "Нурлы-Тау",
 };
 
-function ticketRemaining(){
-    const remaining = 10000;
+function ticketRemaining() {
+  const remaining = 10000;
 }
 
-const optionsForModal = [
+const optionsForBarriers = [
   { value: "Застревание талона", label: "Застревание талона" },
-  { value: "Замятие купюры", label: "Замятие купюры" },
   { value: "Застревание монет", label: "Застревание монет" },
   { value: "Не работает шлагбаум", label: "Не работает шлагбаум" },
   { value: "Не открывает шлабгаум", label: "Не открывает шлабгаум" },
+  { value: "Другое", label: "Другое" },
+];
+
+const optionsForPOFs = [
+  { value: "Застревание талона", label: "Застревание талона" },
+  { value: "Замятие купюры", label: "Замятие купюры" },
+  { value: "Застревание монет", label: "Застревание монет" },
   { value: "Не работает камера", label: "Не работает камера" },
   { value: "Другое", label: "Другое" },
 ];
 
-export { items, locationMap, optionsForModal, ticketRemaining };
+export {
+  items,
+  locationMap,
+  optionsForBarriers,
+  optionsForPOFs,
+  ticketRemaining,
+};

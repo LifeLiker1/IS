@@ -5,7 +5,7 @@ import { Progress, Button } from "antd";
 import TableEquipment from "./Table/table";
 import { CountProvider, useCount } from "./Table/CountContext";
 import { getTickets } from "../IT/Functions/Responses";
-import  OnShift  from "./Table/OnShift";
+import  OnShift  from "./Table/Functions/OnShift";
 
 const Tech = () => {
   return (
