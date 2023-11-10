@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Tabs, Space, Table, Tag, Modal, Button, Select } from "antd";
 import { useCount } from "./CountContext";
-import { fetchData } from "./Functions/Responses";
+import { fetchDataOnField } from "./Functions/Responses";
 // eslint-disable-next-line no-unused-vars
 import {
   items,
   locationMap,
   optionsForBarriers,
   optionsForPOFs,
-  ticketRemaining,
 } from "./Functions/ItemsForTable";
 
 const TableEquipment = () => {
@@ -22,9 +21,10 @@ const TableEquipment = () => {
   const [modalParameters, setModalParameters] = useState(null);
 
   useEffect(() => {
-    fetchData()
+    fetchDataOnField()
       .then((data) => {
-        setEquipment(data); // Установите полученные данные в состояние родительского компонента
+        setEquipment(data); 
+        console.log(data)
       })
       .catch((error) => {
         console.error(error);
@@ -33,16 +33,19 @@ const TableEquipment = () => {
 
   useEffect(() => {
     if (equipment.length === 0) {
-      fetchData(selectedLocation, setEquipment);
+      fetchDataOnField(selectedLocation, setEquipment);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedLocation]);
+
+  console.log(equipment)
 
   const data = equipment.map((item, index) => ({
     key: index.toString(),
     name: item.model,
     type: item.type,
     address: item.adress,
+    market: item.market,
     tag: item.tag,
   }));
 
@@ -66,15 +69,17 @@ const TableEquipment = () => {
 
   const handleOpenModal = (record) => {
     setSelectedEquipment(record);
-    setModalVisible(true);
-    if (selectedEquipment.type === "Платежный терминал") {
+  
+    if (record.type === "Платежный терминал") {
       setModalParameters(optionsForPOFs);
     } else if (
-      selectedEquipment.type === "Стойка выезда" ||
-      selectedEquipment.type === "Стойка въезда"
+      record.type === "Стойка выезда" ||
+      record.type === "Стойка въезда"
     ) {
       setModalParameters(optionsForBarriers);
     }
+  
+    setModalVisible(true);
   };
 
   const handleRequestChange = (value) => {
@@ -88,7 +93,7 @@ const TableEquipment = () => {
     };
 
     try {
-      const response = await fetch(`/api/equipment/${selectedEquipment.id}`, {
+      const response = await fetch(`/api/equipmentOnField/${selectedEquipment.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -108,7 +113,7 @@ const TableEquipment = () => {
     setModalVisible(false);
   };
 
-  const filteredData = data.filter((item) => item.address === selectedLocation);
+  const filteredData = data.filter((item) => item.market.toLowerCase === selectedLocation);
 
   const columns = [
     {

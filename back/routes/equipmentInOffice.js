@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const Equipment = require("../Models/Equipment");
+const Equipment = require("../Models/EquipmentInOffice");
 const authMiddleware = require("../Functions/authMiddle.js");
 const mongoose = require("mongoose");
 const conn = mongoose.connection;
@@ -7,7 +7,7 @@ const conn = mongoose.connection;
 const router = Router();
 
 //запрос на все оборудование
-router.get("/api/equipment", async (req, res) => {
+router.get("/api/equipmentInOffice", async (req, res) => {
   try {
     const equipment = await Equipment.find();
     res.status(200).json(equipment);
@@ -16,7 +16,7 @@ router.get("/api/equipment", async (req, res) => {
   }
 });
 
-router.post("/api/equipment", async (req, res) => {
+router.post("/api/equipmentInOffice", async (req, res) => {
   try {
     const newEquipment = new Equipment(req.body);
     await newEquipment.save();
@@ -26,7 +26,7 @@ router.post("/api/equipment", async (req, res) => {
   }
 });
 
-router.delete("/api/equipment", async (req, res) => {
+router.delete("/api/equipmentInOffice", async (req, res) => {
   try {
     const equipment = Equipment.find();
     if (!equipment) {
@@ -40,7 +40,7 @@ router.delete("/api/equipment", async (req, res) => {
 });
 
 // PUT-запрос для обновления данных по ID
-router.put("/api/equipment/:id", async (req, res) => {
+router.put("/api/equipmentInOffice/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { tag, text } = req.body;

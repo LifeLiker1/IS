@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Tech.scss";
 import Header from "./Header/TechHeader.jsx";
 import { Progress, Button } from "antd";
 import TableEquipment from "./Table/table";
 import { CountProvider, useCount } from "./Table/CountContext";
 import { getTickets } from "../IT/Functions/Responses";
-import  OnShift  from "./Table/Functions/OnShift";
+import OnShift from "./Table/Functions/OnShift";
 
 const Tech = () => {
   return (
@@ -19,37 +19,40 @@ const TechContent = () => {
   const { countNotWorking } = useCount();
   const [statistic, setStatistic] = useState(false);
   const [countData, setCountData] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false); // Добавлено состояние для отслеживания загрузки данных
 
-  const statVisible = () => {
-    setStatistic(!statistic);
-  };
-  const GetQuantity = async () => {
-    const ticketsData = await getTickets();
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const ticketsData = await getTickets();
+        const totalCount = ticketsData.reduce(
+          (total, ticket) => total + ticket.count,
+          0
+        );
+        setCountData(totalCount);
+        setDataLoaded(true); // Помечаем, что данные загружены
+      } catch (error) {
+        console.error("Ошибка при получении данных", error);
+      }
+    }
 
-    // Вычислите сумму значений count
-    const totalCount = ticketsData.reduce(
-      (total, ticket) => total + ticket.count,
-      0
-    );
-    setCountData(totalCount);
-  };
-
-  GetQuantity();
+    fetchData();
+  }, []);
 
   return (
     <div>
       <Header />
       <div className="main">
         <div className="tables">
-          <TableEquipment />
+          {dataLoaded ? <TableEquipment /> : <p>Загрузка данных...</p>}
         </div>
         <div>
-          <p>На смене сегодня:<OnShift/></p>
+          <p>На смене сегодня: {<OnShift />}</p>
         </div>
-        <Button onClick={statVisible}>
+        <Button onClick={() => setStatistic(!statistic)}>
           {statistic ? "Скрыть статистику" : "Показать статистику"}
         </Button>
-        {statistic ? (
+        {statistic && dataLoaded ? (
           <div className="statistic">
             <p>Работающее оборудование</p>
             <Progress percent={100 - countNotWorking} status="active" />

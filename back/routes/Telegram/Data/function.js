@@ -82,7 +82,7 @@ async function SetTicket(chatId, isAuth) {
 //Список заявок
 async function Application(chatId, isAuth) {
   try {
-    const response = await fetch("http://localhost:3001/api/equipment");
+    const response = await fetch("http://localhost:3001/api/equipmentOnField");
     if (!response.ok) {
       throw new Error("Ошибка при выполнении запроса");
     }

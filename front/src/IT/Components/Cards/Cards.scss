@@ -1,0 +1,15 @@
+.mainBlock {
+    width: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(250px, 1fr)
+        );
+        grid-gap: 24px; 
+        min-width: 100vh;
+    }
+}

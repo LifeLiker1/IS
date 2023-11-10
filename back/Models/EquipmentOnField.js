@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const equipmentSchema = new mongoose.Schema({
+const equipmentOnFieldSchema = new mongoose.Schema({
   manufacturer: { type: String, required: false },
   model: { type: String, required: false },
   type: {
@@ -16,9 +16,10 @@ const equipmentSchema = new mongoose.Schema({
   adress: {
     type: String,
     required: false,
-    // city: { },
     // district: { type: String, required: false },
   },
+  market: { type: String, required: false },
+
   tag: {
     type: String,
     required: false,
@@ -27,4 +28,4 @@ const equipmentSchema = new mongoose.Schema({
   text: { type: String, required: false },
 });
 
-module.exports = mongoose.model("equipment", equipmentSchema);
+module.exports = mongoose.model("equipmentOnField", equipmentOnFieldSchema);

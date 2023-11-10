@@ -11,7 +11,8 @@ const app = express();
 
 const userRoutes = require("./routes/users");
 const employeeRoutes = require("./routes/employee");
-const equipmentRoutes = require("./routes/equipment");
+const equipmentOnFieldRoutes = require("./routes/equipmentOnField");
+const equipmentInOfficeRoutes = require("./routes/equipmentInOffice")
 const authRoutes = require("./Functions/auth");
 const telegaRoutes = require("./routes/Telegram/telegram");
 const applicationRoutes = require("./routes/application");
@@ -70,7 +71,8 @@ passport.deserializeUser((id, done) => {
 app.use("/", userRoutes);
 app.use("/", authRoutes);
 app.use("/", employeeRoutes);
-app.use("/", equipmentRoutes);
+app.use("/", equipmentInOfficeRoutes);
+app.use("/", equipmentOnFieldRoutes);
 app.use("/", telegaRoutes);
 app.use("/", applicationRoutes);
 app.use("/", ticketRoutes)
