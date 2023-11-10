@@ -113,7 +113,7 @@ const TableEquipment = () => {
     setModalVisible(false);
   };
 
-  const filteredData = data.filter((item) => item.market.toLowerCase === selectedLocation);
+  const filteredData = data.filter((item) => item.market === selectedLocation);
 
   const columns = [
     {
