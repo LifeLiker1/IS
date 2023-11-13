@@ -1,8 +1,8 @@
 import React from 'react'
 import "./sklad.scss"
-import Header from '../Header/TechHeader'
 import Working_Parts from './Working_Parts/Working_Parts'
 import Faulty_Parts from "./Faulty_Parts/Faulty_Parts"
+import Header from '../../../Header/Header'
 
 const sklad = () => {
   return (

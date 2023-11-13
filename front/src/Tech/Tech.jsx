@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Tech.scss";
-import Header from "./Header/TechHeader.jsx";
+import Header from "../Header/Header";
 import { Progress, Button } from "antd";
 import TableEquipment from "./Table/TableEquipment";
 import { CountProvider, useCount } from "./Table/CountContext";

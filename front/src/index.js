@@ -8,7 +8,7 @@ import EmployeePage from "./HR/Components/Pages/EmployeePage/EmployeePage.jsx";
 import Auth from "./Auth/auth.jsx";
 import IT from "./IT/IT.jsx";
 import Tech from "./Tech/Tech";
-import Sklad from "./Tech/Sklad/Sklad_MainPage.jsx";
+import Sklad from "./IT/Components/Sklad/Sklad_MainPage";
 import InOffice from "./IT/Components/Tables/InOffice/InOffice";
 import OnField from "./IT/Components/Tables/OnField/OnField";
 
@@ -24,8 +24,8 @@ root.render(
         <Route path="/it" element={<IT />} />
         <Route path="/it/equipmentInOffice" element={<InOffice/>}/>
         <Route path="/it/equipmentOnField" element={<OnField/>}/>
+        <Route path="/it/warehouse" element={<Sklad />} />
         <Route path="/tech" element={<Tech />} />
-        <Route path="/tech/stock" element={<Sklad />} />
       </Routes>
     </Router>
   </React.StrictMode>

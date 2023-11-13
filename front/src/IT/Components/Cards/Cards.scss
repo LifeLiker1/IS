@@ -6,8 +6,8 @@
     justify-content: center;
     .cards-container {
         display: flex;
+        width: 1000px;
         justify-content: space-between;
-        grid-gap: 36px; 
     }
 }
 

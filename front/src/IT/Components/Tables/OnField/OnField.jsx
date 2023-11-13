@@ -1,6 +1,6 @@
 import React from "react";
 import TableEquipment from "../../../../Tech/Table/TableEquipment";
-import Header from "../../Header/ITHeader";
+import Header from "../../../../Header/Header";
 import './OnField.scss'
 
 const OnField = () => {

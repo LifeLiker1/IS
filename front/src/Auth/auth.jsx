@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./auth.scss";
 import { notification, Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
-import HRheader from "../HR/Components/header/HRheader.jsx"
+import Header from "../Header/Header"
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -76,7 +76,7 @@ const Auth = () => {
   
   return (
     <div className="wrapper">
-          <HRheader message = {userNumber}/>
+          <Header message = {userNumber}/>
       <Form
         name="basic"
         labelCol={{ span: 8 }}

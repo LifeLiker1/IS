@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Collapse, Spin } from "antd";
 import { fetchDataInOffice } from "../../../../Tech/Table/Functions/Responses";
+import Header from "../../../../Header/Header";
 
 const InOffice = () => {
   const [equipment, setEquipment] = useState([]);
@@ -50,6 +51,7 @@ const InOffice = () => {
 
   return (
     <div>
+      <Header/>
       {loading ? (
         <Spin size="large" />
       ) : error ? (

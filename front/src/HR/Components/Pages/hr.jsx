@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./hr.scss";
 import { Card, Form, TreeSelect, notification, Button, Result } from "antd";
 import { Link } from "react-router-dom";
-import Header from "../../Components/header/HRheader";
+import Header from "../../../Header/Header";
 import Man from "../../../Images/avataaars.svg";
 
 const HR = () => {
