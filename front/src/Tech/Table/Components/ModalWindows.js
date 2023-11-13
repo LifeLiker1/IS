@@ -11,12 +11,12 @@ const ModalForIT = ({
 }) => {
   return (
     <Modal
-      title="Выписать заявку"
+      title="Изменить данные оборудования"
       visible={visible}
       onCancel={onCancel}
       footer={[
         <Button key="post" type="primary" onClick={onPost}>
-          Выписать заявку
+          Принять изменения
         </Button>,
         <Button key="cancel" onClick={onCancel}>
           Закрыть

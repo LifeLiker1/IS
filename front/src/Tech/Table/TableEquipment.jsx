@@ -145,6 +145,7 @@ const TableEquipment = () => {
         columns={ColumnsForTable(handleOpenModal)}
         dataSource={filteredData}
       />
+      
     </div>
   );
 };

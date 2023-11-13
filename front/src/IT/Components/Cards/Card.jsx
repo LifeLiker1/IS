@@ -1,8 +1,7 @@
 import React from "react";
 import "./Cards.scss";
+import { cardForField, cardForWarehouse, cardForOffice } from "./CardStyle";
 import { Card } from "antd";
-import onField from "../../../Images/OnField.jpeg";
-import inOffice from "../../../Images/InOffice.jpeg";
 import { Link } from "react-router-dom";
 const { Meta } = Card;
 
@@ -11,13 +10,21 @@ const Cards = () => {
     <div className="mainBlock">
       <div className="cards-container">
         <Link to={"equipmentOnField"}>
-          <Card hoverable cover={<img alt="example" src={onField} />}>
+          <Card hoverable style={cardForField}>
             <Meta title="Оборудование на парковках" />
           </Card>
         </Link>
         <Link to={"equipmentInOffice"}>
-          <Card hoverable cover={<img alt="example" src={inOffice} />}>
+          <Card hoverable style={cardForOffice} >
             <Meta title="Оборудование в офисе" />
+          </Card>
+        </Link>
+        <Link to={"warehouse"}>
+          <Card
+            hoverable
+            style={cardForWarehouse}
+          >
+            <Meta title="Перейти на склад" />
           </Card>
         </Link>
       </div>
