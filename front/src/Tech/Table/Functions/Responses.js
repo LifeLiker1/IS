@@ -1,5 +1,4 @@
 async function fetchDataOnField() {
-  document.title = "Страница диспетчера";
   try {
     const response = await fetch("http://localhost:3001/api/equipmentOnField", {
       method: "GET",
@@ -21,8 +20,8 @@ async function fetchDataOnField() {
     throw error; // Если произошла ошибка, выбросить ее для обработки в родительском компоненте
   }
 }
+
 async function fetchDataInOffice() {
-  document.title = "Страница диспетчера";
   try {
     const response = await fetch("http://localhost:3001/api/equipmentInOffice", {
       method: "GET",
@@ -38,10 +37,10 @@ async function fetchDataInOffice() {
     }
 
     const data = await response.json();
-    return data; // Вернуть данные из функции
+    return data;
   } catch (error) {
     console.error(error);
-    throw error; // Если произошла ошибка, выбросить ее для обработки в родительском компоненте
+    throw error; 
   }
 }
 

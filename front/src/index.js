@@ -22,8 +22,8 @@ root.render(
         <Route path="/employees/:employeeId" element={<EmployeePage />} />
         <Route path="/newEmployee" element={<NewEmployee />} />
         <Route path="/it" element={<IT />} />
-        <Route path="/it/equipmentInOffice" element={InOffice}/>
-        <Route path="/it/equipmentOnField" element={OnField}/>
+        <Route path="/it/equipmentInOffice" element={<InOffice/>}/>
+        <Route path="/it/equipmentOnField" element={<OnField/>}/>
         <Route path="/tech" element={<Tech />} />
         <Route path="/tech/stock" element={<Sklad />} />
       </Routes>

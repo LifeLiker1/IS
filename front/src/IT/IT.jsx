@@ -5,6 +5,7 @@ import "./IT.scss";
 
 
 const IT = () => {
+  document.title = "Страница IT-отдела";
   return (
     <div>
       <Header />
