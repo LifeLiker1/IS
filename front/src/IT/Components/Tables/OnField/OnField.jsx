@@ -2,6 +2,7 @@ import React from "react";
 import TableEquipment from "../../../../Tech/Table/TableEquipment";
 import Header from "../../../../Header/Header";
 import './OnField.scss'
+import AppFooter from "../../../../Footer/AppFooter";
 
 const OnField = () => {
   document.title = "Страница IT-отдела";
@@ -11,6 +12,7 @@ const OnField = () => {
       <div className="table">
         <TableEquipment />
       </div>
+      <AppFooter/>
     </div>
   );
 };

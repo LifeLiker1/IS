@@ -4,9 +4,8 @@ $background: #3a91ab;
 /* Общие стили */
 .employee_block {
   margin-top: 100px;
-  margin-left: 75px;
-  width: 90%;
-  // max-width: 2000px;
+  margin-left: 16%;
+  max-width: 1250px;
   min-height: 500px;
   .search_field {
     min-width: 500px;
@@ -19,22 +18,26 @@ $background: #3a91ab;
 
 .employee_card {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  flex-wrap: wrap;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
-  margin-left: 200px;
+  justify-content: space-around; // Центрируем карточки по горизонтали
+  align-items: center; // Выравниваем карточки по вертикали в начале контейнера
   min-height: 400px;
-    .employee_names {
-      margin-top: 95%;
-      text-align: center;
-      text-decoration: none !important;
-    }
-    
-    .department-employees > img {
-      width: 100%;
-      height: 200px;
-    }
+
+  .employee_names {
+    text-align: center;
+    text-decoration: none !important;
   }
+
+  .department-employees > img {
+    width: 100%;
+    height: 200px;
+  }
+  .emptyResult{
+    background-color: red;
+    margin-left: 500px;
+  }
+}
 
 .ant-card {
   background-color: $background;
@@ -47,7 +50,6 @@ $background: #3a91ab;
   max-height: 450px;
   max-width: 250px;
 }
-
 
 /* Стили для карточек при наведении */
 .ant-card:hover {

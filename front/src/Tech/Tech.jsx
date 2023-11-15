@@ -6,6 +6,7 @@ import TableEquipment from "./Table/TableEquipment";
 import { CountProvider, useCount } from "./Table/CountContext";
 import { getTickets } from "../IT/Functions/Responses";
 import OnShift from "./Table/Functions/OnShift";
+import AppFooter from "../Footer/AppFooter";
 
 
 const Tech = () => {
@@ -60,6 +61,7 @@ const TechContent = () => {
             <p>Остаток талонов {countData} штук</p>
           </div>
         ) : null}
+        <AppFooter/>
       </div>
     </div>
   );

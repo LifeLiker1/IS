@@ -1,5 +1,5 @@
 .mainBlock {
-    width: 1000px;
+    width: 1200px;
     max-height: 440px;
     display: flex;
     align-items: center;
@@ -7,7 +7,8 @@
     .cards-container {
         display: flex;
         width: 1000px;
-        justify-content: space-between;
+        justify-content: space-around;
     }
+    
 }
 

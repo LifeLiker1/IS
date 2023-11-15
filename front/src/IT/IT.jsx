@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../Header/Header";
+import AppFooter from "../Footer/AppFooter";
 import Cards from "./Components/Cards/Card";
 import "./IT.scss";
 
@@ -12,6 +13,7 @@ const IT = () => {
       <div className="main_block">
        <Cards/>
       </div>
+      <AppFooter/>
     </div>
   );
 };

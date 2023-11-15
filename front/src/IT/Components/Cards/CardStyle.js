@@ -6,18 +6,21 @@ const cardForField = {
   backgroundSize: "cover",
   backgroundRepeat: "no-repeat",
   color: "white",
+  minWidth: 250,
 };
 const cardForOffice = {
   background: `url(${inOffice})`,
   backgroundSize: "cover",
   backgroundRepeat: "no-repeat",
   color: "white",
+  minWidth: 250,
 };
 const cardForWarehouse = {
   background: `url(${Warehouse})`,
   backgroundSize: "cover",
   backgroundRepeat: "no-repeat",
   color: "white",
+  minWidth: 250,
 };
 
 export { cardForField, cardForWarehouse, cardForOffice };

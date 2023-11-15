@@ -1,0 +1,11 @@
+.Footer-div {
+    position: fixed;
+    bottom: 0;
+    width: 100%; // Ширина блока будет равна 100% ширины экрана
+    .ant-layout-footer {
+        background-color: #226089; // Цвет фона (можете заменить на свой)
+        color: white; // Цвет текста (можете заменить на свой)
+        text-align: center;
+        padding: 15px;
+    }
+}

@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./hr.scss";
-import { Card, Form, TreeSelect, notification, Button, Result } from "antd";
+import AppFooter from "../../../Footer/AppFooter";
+import {
+  Card,
+  Form,
+  TreeSelect,
+  notification,
+  Button,
+  Result,
+  Empty,
+} from "antd";
 import { Link } from "react-router-dom";
 import Header from "../../../Header/Header";
 import Man from "../../../Images/avataaars.svg";
@@ -23,7 +32,7 @@ const HR = () => {
         }
         const data = await response.json();
         setEmployees(data);
-        console.log(data)
+        console.log(data);
       } catch (error) {
         console.error("Ошибка при получении данных:", error);
       }
@@ -67,52 +76,63 @@ const HR = () => {
   }, [showAuthNotification]);
 
   return (
-    <div className="employee_block">
-      {token ? (
-        <>
-          <div className="search_field">
-            <Header />
-            <Form.Item label="Мне нужны сотрудники" className="dep_sel">
-              <TreeSelect
-                onChange={(value) => setSelectedDepartment(value)}
-                treeData={[
-                  { title: "Все", value: 0 },
-                  { title: "IT", value: "IT отдел" },
-                  { title: "Технического отдела", value: "Технический отдел" },
-                  {
-                    title: "Диспетчерского отдела",
-                    value: "Диспетчерский отдел",
-                  },
-                ]}
-              />
-            </Form.Item>
-          </div>
-          <div className="employee_card">
-            {filteredEmployees && filteredEmployees.length > 0 ? (
-              filteredEmployees.map((employee) => (
-                <Link key={employee._id} to={`/employees/${employee._id}`}>
-                  <Card hoverable cover={<img src={Man} alt="example" />}>
-                    <Meta title={`${employee.surname} ${employee.name}`} />
-                  </Card>
-                </Link>
-              ))
-            ) : (
-              <div>No employees found</div>
-            )}
-          </div>
-        </>
-      ) : (
-        <Result
-          status="403"
-          title="403"
-          subTitle="У Вас нет прав для просмотра этого контента, необходима авторизация."
-          extra={
-            <Button type="primary" href="/">
-              Войти
-            </Button>
-          }
-        />
-      )}
+    <div>
+      <Header />
+      <div className="employee_block">
+        {token ? (
+          <>
+            <div className="search_field">
+              <Form.Item label="Мне нужны сотрудники" className="dep_sel">
+                <TreeSelect
+                  onChange={(value) => setSelectedDepartment(value)}
+                  treeData={[
+                    { title: "Все", value: 0 },
+                    { title: "IT", value: "IT отдел" },
+                    {
+                      title: "Технического отдела",
+                      value: "Технический отдел",
+                    },
+                    {
+                      title: "Диспетчерского отдела",
+                      value: "Диспетчерский отдел",
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </div>
+            <div className="employee_card">
+              {filteredEmployees && filteredEmployees.length > 0 ? (
+                filteredEmployees.map((employee) => (
+                  <Link key={employee._id} to={`/employees/${employee._id}`}>
+                    <Card hoverable cover={<img src={Man} alt="example" />}>
+                      <Meta title={`${employee.surname} ${employee.name}`} />
+                    </Card>
+                  </Link>
+                ))
+              ) : (
+                  <Empty
+                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                    imageStyle={{ height: 160 }}
+                    description= "В выбранном отделе сотрудников нет"
+                    descriptionStyle={{width: 160}}
+                  ></Empty>
+              )}
+            </div>
+          </>
+        ) : (
+          <Result
+            status="403"
+            title="403"
+            subTitle="У Вас нет прав для просмотра этого контента, необходима авторизация."
+            extra={
+              <Button type="primary" href="/">
+                Войти
+              </Button>
+            }
+          />
+        )}
+      </div>
+      <AppFooter />
     </div>
   );
 };
