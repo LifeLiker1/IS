@@ -3,13 +3,18 @@ import { Tag, Space } from "antd";
 const ColumnsForTable = (handleOpenModal, pageType) => [
   {
     title: "Модель",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "model",
+    key: "model",
     // eslint-disable-next-line jsx-a11y/anchor-is-valid
     render: (text) => <a>{text}</a>,
   },
   {
     title: "Тип",
+    dataIndex: "type",
+    key: "type",
+  },
+  {
+    title: "Статус",
     dataIndex: "tag",
     key: "tag",
     render: (type) => {
@@ -36,8 +41,8 @@ const ColumnsForTable = (handleOpenModal, pageType) => [
   },
   {
     title: "Расположение",
-    dataIndex: "address",
-    key: "address",
+    dataIndex: "market",
+    key: "market",
   },
   {
     title: "Action",

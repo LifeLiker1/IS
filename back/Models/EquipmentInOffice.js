@@ -11,6 +11,14 @@ const equipmentInOffice = new mongoose.Schema({
     type: String,
     required: false,
   },
+  MACadress: {
+    type: String,
+    required: false,
+  },
+  IPadress: {
+    type: String,
+    required: false,
+  },
   tag: {
     type: String,
     required: false,

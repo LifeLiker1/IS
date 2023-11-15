@@ -4,7 +4,6 @@ import logo from "../Images/logo_transparent.png";
 import HeaderButton from "./HeaderButton";
 
 function Header() {
-
   return (
     <>
         <header>
@@ -12,7 +11,7 @@ function Header() {
             <img src={logo} alt="logo"></img>
           </div>
           <nav>
-            <HeaderButton/>
+            <HeaderButton />
           </nav>
         </header>
     </>

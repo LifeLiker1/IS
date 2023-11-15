@@ -5,6 +5,7 @@ import Faulty_Parts from "./Faulty_Parts/Faulty_Parts"
 import Header from '../../../Header/Header'
 
 const sklad = () => {
+  document.title="Склад"
   return (
     <div>
       <Header/>

@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const equipmentOnFieldSchema = new mongoose.Schema({
   manufacturer: { type: String, required: false },
   model: { type: String, required: false },
+  serialNumber: { type: String, required: false },
+  invertNumber:{ type: String, required: false },
   type: {
     type: String,
     required: false,

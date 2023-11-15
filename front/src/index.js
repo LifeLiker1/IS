@@ -11,6 +11,7 @@ import Tech from "./Tech/Tech";
 import Sklad from "./IT/Components/Warehouse/Warehouse_MainPage";
 import InOffice from "./IT/Components/Tables/InOffice/InOffice";
 import OnField from "./IT/Components/Tables/OnField/OnField";
+import AddEquipment from "./IT/Components/Warehouse/AddEquipment/AddEquipment";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -22,9 +23,10 @@ root.render(
         <Route path="/employees/:employeeId" element={<EmployeePage />} />
         <Route path="/newEmployee" element={<NewEmployee />} />
         <Route path="/it" element={<IT />} />
+        <Route path="/it/warehouse" element={<Sklad />} />
         <Route path="/it/equipmentInOffice" element={<InOffice/>}/>
         <Route path="/it/equipmentOnField" element={<OnField/>}/>
-        <Route path="/it/warehouse" element={<Sklad />} />
+        <Route path="/it/addEquipment" element={<AddEquipment />} />
         <Route path="/tech" element={<Tech />} />
       </Routes>
     </Router>

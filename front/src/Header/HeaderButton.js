@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import {
   StopTwoTone,
-  ProfileTwoTone,
+  PlusCircleOutlined,
   HomeTwoTone,
   AppstoreTwoTone,
 } from "@ant-design/icons";
-import { Button, Dropdown } from "antd"; // Удалим Tooltip
+import { Button, Dropdown } from "antd";
+import { useLocation } from "react-router-dom";
 
 const HeaderButton = () => {
   const [token, setToken] = useState(null);
+  const location = useLocation();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -16,102 +18,136 @@ const HeaderButton = () => {
     window.location.href = "/";
   };
 
-  function setButtons() {
-    if (document.title === "Страница отдела кадров") {
-      return[
+  const setButtons = () => {
+    const commonButtons = [];
+
+    if (location.pathname === "/employee") {
+      return [
         {
           icon: <AppstoreTwoTone />,
-          key: "1",
+          key: "2",
           label: <a href="/employee">На главную</a>,
         },
         {
           icon: <HomeTwoTone />,
-          key: "2",
+          key: "3",
           label: <a href="/newEmployee">Добавить сотрудника</a>,
         },
         {
           icon: <StopTwoTone />,
-          key: "3",
+          key: "5",
           onClick: handleLogout,
           danger: true,
           label: <a>Выход</a>,
         },
+        ...commonButtons,
       ];
-    } else if (document.title === "Страница IT-отдела") {
-      return[
+    } else if (location.pathname === "/it") {
+      return [
         {
           icon: <HomeTwoTone />,
-          key: "1",
+          key: "2",
           label: <a href="/it">На главную</a>,
         },
         {
           icon: <AppstoreTwoTone />,
-          key: "2",
+          key: "3",
           label: <a href="/it/warehouse">На склад</a>,
         },
         {
+          icon: <PlusCircleOutlined />,
+          key: "4",
+          label: <a href="/it/addEquipment">Добавить оборудование</a>,
+        },
+        {
           icon: <StopTwoTone />,
-          key: "3",
+          key: "5",
           onClick: handleLogout,
           danger: true,
           label: <a>Выход</a>,
         },
+        ...commonButtons,
       ];
-    } else if(document.title === "Страница Диспетчера"){
-      return[
+    } else if (
+      location.pathname === "/it/warehouse" ||
+      location.pathname === "/it/equipmentOnField"
+    ) {
+      return [
         {
           icon: <HomeTwoTone />,
-          key: "1",
+          key: "2",
+          label: <a href="/it">На главную</a>,
+        },
+        {
+          icon: <PlusCircleOutlined />,
+          key: "4",
+          label: <a href="/it/addEquipment">Добавить оборудование</a>,
+        },
+        {
+          icon: <StopTwoTone />,
+          key: "5",
+          onClick: handleLogout,
+          danger: true,
+          label: <a>Выход</a>,
+        },
+        ...commonButtons,
+      ];
+    } else if (location.pathname === "/it/addEquipment") {
+      return [
+        {
+          icon: <HomeTwoTone />,
+          key: "2",
+          label: <a href="/it">На главную</a>,
+        },
+        {
+          icon: <HomeTwoTone />,
+          key: "3",
+          label: <a href="/it/equipmentOnField">К списку оборудования</a>,
+        },
+        {
+          icon: <StopTwoTone />,
+          key: "5",
+          onClick: handleLogout,
+          danger: true,
+          label: <a>Выход</a>,
+        },
+        ...commonButtons,
+      ];
+    } else if (location.pathname === "/tech") {
+      return [
+        {
+          icon: <HomeTwoTone />,
+          key: "2",
           label: <a href="/tech">На главную</a>,
         },
         {
           icon: <StopTwoTone />,
-          key: "2",
+          key: "5",
           onClick: handleLogout,
           danger: true,
           label: <a>Выход</a>,
         },
-      ];
-    } else{
-      return[
-        {
-          icon: <HomeTwoTone />,
-          key: "1",
-          label: <a href="/">На главную</a>,
-        },
-        {
-          icon: <StopTwoTone />,
-          key: "2",
-          onClick: handleLogout,
-          danger: true,
-          label: <a>Выход</a>,
-        },
+        ...commonButtons,
       ];
     }
-  }
-  setButtons()
-  const items = setButtons()
-  console.log(items)
+
+    return commonButtons;
+  };
+
+  const items = setButtons();
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
-      console.log(token);
     }
-  }, [token]);
+  }, []);
+
   return (
     <div>
-      <>
-        <Dropdown
-          menu={{
-            items,
-          }}
-          placement="bottom"
-          arrow
-        >
-          <Button>Меню</Button>
-        </Dropdown>
-      </>
+      <Dropdown menu={{ items }} placement="bottom" arrow>
+        <Button>Меню</Button>
+      </Dropdown>
     </div>
   );
 };

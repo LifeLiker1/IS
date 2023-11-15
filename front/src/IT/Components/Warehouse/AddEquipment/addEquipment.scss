@@ -1,0 +1,33 @@
+// addEquipment.scss
+
+.main-form {
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 100px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 8px;
+  
+    .ant-form-item {
+      margin-bottom: 16px;
+    }
+  
+    .ant-form-item-control-input-content {
+      display: flex;
+      align-items: center;
+  
+      .ant-form-item-control-input {
+        width: 100%;
+      }
+  
+      .ant-select {
+        width: 100%;
+      }
+    }
+  
+    .ant-btn {
+      width: 100%;
+    }
+  }
+  
