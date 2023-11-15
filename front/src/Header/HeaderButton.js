@@ -72,6 +72,21 @@ const HeaderButton = () => {
           label: <a>Выход</a>,
         },
       ];
+    } else{
+      return[
+        {
+          icon: <HomeTwoTone />,
+          key: "1",
+          label: <a href="/">На главную</a>,
+        },
+        {
+          icon: <StopTwoTone />,
+          key: "2",
+          onClick: handleLogout,
+          danger: true,
+          label: <a>Выход</a>,
+        },
+      ];
     }
   }
   setButtons()

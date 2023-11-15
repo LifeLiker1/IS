@@ -8,7 +8,7 @@ import EmployeePage from "./HR/Components/Pages/EmployeePage/EmployeePage.jsx";
 import Auth from "./Auth/auth.jsx";
 import IT from "./IT/IT.jsx";
 import Tech from "./Tech/Tech";
-import Sklad from "./IT/Components/Sklad/Sklad_MainPage";
+import Sklad from "./IT/Components/Warehouse/Warehouse_MainPage";
 import InOffice from "./IT/Components/Tables/InOffice/InOffice";
 import OnField from "./IT/Components/Tables/OnField/OnField";
 
