@@ -18,13 +18,15 @@ require("dotenv").config();
 
 const router = Router();
 const bot1 = bot;
+const userLastInteraction = {};
 
 let isAuth = false;
 let authenticatedUserId = null;
 
 bot1.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
-
+  const userId = msg.chat.id;
+  userLastInteraction[userId] = Date.now();
   if (!isAuth) {
     let keyboard = keyboardForAll;
     bot1.sendMessage(
@@ -42,6 +44,7 @@ bot1.onText(/\/start/, async (msg) => {
 bot1.on("contact", async (msg) => {
   const chatId = msg.chat.id;
   const phoneNumber = msg.contact.phone_number;
+  const sessionTimeout = process.env.userSessionTimeout
 
   try {
     const response = await fetch(
@@ -62,8 +65,8 @@ bot1.on("contact", async (msg) => {
     const result = await response.json();
     const name = result.name || "Unknown";
     const surname = result.surname || "Unknown";
+    authenticatedUserId = phoneNumber;
 
-    // В зависимости от должности сотрудника, создайте соответствующее меню
     let keyboard;
     if (
       result.position === "Начальник отдела" ||
@@ -77,8 +80,22 @@ bot1.on("contact", async (msg) => {
       keyboard = keyboardForDisp;
     }
 
-    bot1.sendMessage(chatId, `Здравствуйте ${name} ${surname}`, keyboard);
-    isAuth = true;
+    const secondResponse = await fetch(
+      `http://localhost:3001/api/employees/updateOnShift`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ mobilePhone: phoneNumber }),
+      }
+    );
+    if (secondResponse.status === 200) {
+      bot1.sendMessage(chatId, `Здравствуйте ${name} ${surname}`, keyboard);
+      isAuth = true;
+    }else{
+      bot1.sendMessage(chatId, "Не удалось изменить статус onShift.");
+    }
   } catch (error) {
     console.log(error);
     bot1.sendMessage(chatId, "Произошла ошибка при попытке авторизации.");
@@ -89,7 +106,7 @@ bot1.onText(/Техники на смене/, async (msg) => {
   const chatId = msg.chat.id;
   if (isAuth) {
     try {
-      await onShift(chatId, isAuth, bot1)
+      await onShift(chatId, isAuth, bot1);
     } catch (error) {
       bot1.sendMessage(
         chatId,
@@ -153,8 +170,8 @@ bot1.onText(/Загрузить талоны/, async (msg) => {
 bot1.onText(/Выход/, async (msg) => {
   const chatId = msg.chat.id;
   try {
+    console.log(authenticatedUserId);
     if (isAuth) {
-      // Отправьте запрос для сброса статуса onShift сотрудника
       await fetch("http://localhost:3001/api/employees/resetOnShift", {
         method: "POST",
         headers: {
@@ -162,8 +179,8 @@ bot1.onText(/Выход/, async (msg) => {
         },
         body: JSON.stringify({ mobilePhone: authenticatedUserId }),
       });
-    }
 
+    }
     // Сбросите статус авторизации
     isAuth = false;
     authenticatedUserId = null;

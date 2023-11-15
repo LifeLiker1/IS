@@ -65,4 +65,4 @@ async function fetchDataInOffice() {
   }
 }
 
-export { fetchDataInOffice, fetchDataOnField };
+export { fetchDataInOffice, fetchDataOnField, addNewEquipment };

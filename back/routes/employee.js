@@ -79,9 +79,8 @@ router.post("/api/employees/updateOnShift", async (req, res) => {
 
 router.post("/api/employees/resetOnShift", async (req, res) => {
   try {
-    const mobilePhone = req.body.mobilePhone; // Переданный номер телефона
+    const mobilePhone = req.body.mobilePhone;
 
-    // Ищем сотрудника по номеру телефона и обновляем статус onShift на true
     const updatedEmployee = await Employee.findOneAndUpdate(
       { mobilePhone: mobilePhone },
       { $set: { onShift: false } },
@@ -89,7 +88,6 @@ router.post("/api/employees/resetOnShift", async (req, res) => {
     );
 
     if (!updatedEmployee) {
-      // Если сотрудник с указанным номером телефона не найден
       return res.status(404).json({ error: "Сотрудник не найден" });
     }
 
