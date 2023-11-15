@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./NewEmployee.scss";
 import InputMask from "react-input-mask";
-import { Button, Form, Input, TreeSelect, notification, DatePicker } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  TreeSelect,
+  notification,
+  DatePicker,
+} from "antd";
 import ImageUpload from "../../../Functions/ImageUpload";
 import TextArea from "antd/es/input/TextArea";
 import {
@@ -40,6 +47,7 @@ function MyComponent() {
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
+    dateOfBirth: "",
     sex: "",
     address: { city: "", district: "" },
     street: "",
@@ -124,6 +132,12 @@ function MyComponent() {
       },
     });
   };
+  const handleDateChange = (value) => {
+    setFormData({
+      ...formData,
+      dateOfBirth: value,
+    });
+  };
 
   return (
     <>
@@ -179,7 +193,7 @@ function MyComponent() {
             />
           </Form.Item>
           <Form.Item label="Дата рождения">
-              <Calendars/>
+            <Calendars onChange={handleDateChange} />
           </Form.Item>
           <Form.Item label="Город">
             <TreeSelect

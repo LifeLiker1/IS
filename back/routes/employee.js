@@ -148,4 +148,24 @@ router.delete("/api/employees", async (req, res) => {
   }
 });
 
+router.put(`/api/employees/:id`, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const newData = req.body;
+
+    const employee = await Employee.findById(id);
+
+    if (!employee) {
+      return res.status(404).json("Сотрудник не найден");
+    }
+
+    await Employee.findByIdAndUpdate(id, newData);
+
+    res.status(200).json("Данные сотрудника обновлены");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json("Произошла ошибка при обновлении данных сотрудника");
+  }
+});
+
 module.exports = router;

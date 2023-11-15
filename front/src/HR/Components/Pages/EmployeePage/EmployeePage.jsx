@@ -1,65 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./EmployeePage.scss";
+import * as EmployeeDetailsFunctions from "./Functions/EmployeeDetailsFunctions";
+import EmployeeRedactionForm from "./Functions/EmployeeRedactionForm";
 import { CancelButton } from "../New Employee/NewEmployee";
-import { Button, notification, Empty } from "antd";
+import { Button, Empty } from "antd";
 
 const EmployeeDetails = () => {
   const { employeeId } = useParams();
   const [employee, setEmployee] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const history = useNavigate();
 
-
-  async function firedEmployee() {
-    try {
-      const response = await fetch(
-        `http://localhost:3001/api/employees/${employeeId}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if(response.ok){
-        notification.open({
-          message: "Сотрудник уволен",
-          duration: 3,
-        });
-      }
-      else{
-        notification.open({
-          message: "Ошибка при увольнении сотрудника",
-          duration: 3,
-        });
-      }
-
-      history("/employees");
-    } catch (error) {
-      console.error("Ошибка при удалении сотрудника:", error);
-    }
-  }
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        document.title = "Личное дело сотрудника";
-        const response = await fetch(
-          `http://localhost:3001/api/employees/${employeeId}`
-        );
-  
-        if (!response.ok) {
-          throw new Error("Ошибка при получении данных");
-        }
-  
-        const data = await response.json(); // Получаем данные в формате JSON
-  
-        setEmployee(data);
-      } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-      }
-    };
-  
-    fetchData();
+    EmployeeDetailsFunctions.fetchData(employeeId, setEmployee);
   }, [employeeId]);
+
+  const firedEmployee = () => {
+    EmployeeDetailsFunctions.fireEmployee(employeeId, history);
+  };
+
+  const handleEditButtonClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
+
+  const handleSaveChanges = (values) => {
+    EmployeeDetailsFunctions.updateEmployeeData(
+      employeeId,
+      values,
+      setIsEditing
+    );
+    setIsEditing(false);
+  };
 
   if (!employee) {
     return <div>Loading...</div>;
@@ -68,35 +44,63 @@ const EmployeeDetails = () => {
   return (
     <div className="case_body">
       <div className="head">
-        <h1>Личное дело сотрудника {employee.surname} {employee.name}</h1>
+        <h1>
+          Личное дело сотрудника {employee.surname} {employee.name}
+        </h1>
       </div>
       <div className="text">
-        <div className="left_column">
-          <p>Имя - {employee.name}</p>
-          <p>Фамилия - {employee.surname} </p>
-          <p>Пол - {employee.sex}</p>
-          <p>Адрес проживания - {`${employee.address.city}, ${employee.address.district}, ${employee.street}`}</p>
-          <p>Мобильный - {employee.mobilePhone}</p>
-          <p>Департамент - {employee.departament} </p>
-          <p>Должность - {employee.position} </p>
-          <img
-            src={`data:image/jpg;base64,${employee.image}`}
-            alt= {<Empty />}
+        {isEditing ? (
+          <EmployeeRedactionForm
+            initialValues={employee}
+            onFinish={handleSaveChanges}
+            onCancel={handleCancelEdit}
           />
-
-          <div className="pesonal_inf">
-            <div className="about">
-              <p>О Себе - {employee.about} </p>
+        ) : (
+          <div className="left_column">
+            <p>Имя - {employee.name}</p>
+            <p>Фамилия - {employee.surname} </p>
+            <p>
+              Дата рождения -{" "}
+              {new Date(employee.dateOfBirth).toLocaleDateString("en-GB")}{" "}
+            </p>
+            <p>Пол - {employee.sex}</p>
+            <p>
+              Адрес проживания -{" "}
+              {`${employee.address.city}, ${employee.address.district}, ${employee.street}`}
+            </p>
+            <p>Мобильный - {employee.mobilePhone}</p>
+            <p>Департамент - {employee.departament} </p>
+            <p>Должность - {employee.position} </p>
+            <p>
+              Изображения -{" "}
+              <img
+                src={`data:image/jpg;base64,${employee.image}`}
+                alt={<Empty />}
+              />
+            </p>
+            <div className="pesonal_inf">
+              <div className="about">
+                <p>О Себе - {employee.about} </p>
+              </div>
+              <div className="hobbies">
+                <p>Увлечение - {employee.hobbies} </p>
+              </div>
             </div>
-            <div className="hobbies">
-              <p>Увлечение - {employee.hobbies} </p>
-            </div>
+            <div className="right_column"></div>
           </div>
-        </div>
-        <div className="right_column"></div>
+        )}
       </div>
-      <Button type="primary" danger onClick={firedEmployee}>Уволить сотрудника</Button>
-      <CancelButton />
+      {isEditing ? null : (
+        <>
+          <Button onClick={handleEditButtonClick}>
+            Изменить данные сотрудника
+          </Button>
+          <Button type="primary" danger onClick={firedEmployee}>
+            Уволить сотрудника
+          </Button>
+          <CancelButton />
+        </>
+      )}
     </div>
   );
 };

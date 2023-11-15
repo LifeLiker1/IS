@@ -50,7 +50,8 @@ const Auth = () => {
         
         notification.open({
           message: "Авторизация успешна",
-          duration: 3,
+          duration: 1.5,
+          placement: "top", // Здесь указываем положение
         });
         
         if (departament === "IT" || role === "IT_technician") {
