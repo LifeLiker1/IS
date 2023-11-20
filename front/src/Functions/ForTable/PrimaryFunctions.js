@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Spin } from 'antd';
 
+
+//отслеживание сотрудников на смене
 const OnShift = () => {
   const [useData, setUseData] = useState(null);
   const [loading, setLoading] = useState(true);

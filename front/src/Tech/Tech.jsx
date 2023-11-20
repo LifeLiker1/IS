@@ -4,8 +4,8 @@ import Header from "../Header/Header";
 import { Progress, Button } from "antd";
 import TableEquipment from "./Table/TableEquipment";
 import { CountProvider, useCount } from "./Table/CountContext";
-import { getTickets } from "../IT/Functions/Responses";
-import OnShift from "./Table/Functions/OnShift";
+import { getTickets } from "../Functions/ForTable/SecondaryFunctions";
+import OnShift from "../Functions/ForTable/PrimaryFunctions";
 import AppFooter from "../Footer/AppFooter";
 
 

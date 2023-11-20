@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Tabs, Table} from "antd";
 // import { useCount } from "./CountContext";
-import { fetchDataOnField } from "./Functions/Responses";
+import { fetchDataOnField } from "../../Functions/OnField/ApplicationOnField";
 import {
   items,
   locationMap,
   optionsForBarriers,
   optionsForPOFs,
-} from "./Functions/ItemsForTable";
+} from "../../Functions/ForTable/ItemsForTable";
 
-import { ColumnsForTable } from "./Components/TableComponents";
-import { ModalForDisp, ModalForIT } from "./Components/ModalWindows";
+import { ColumnsForTable } from "../../Functions/ForTable/TableComponents";
+import { ModalForIT } from "../../ModalWindows/ModalWindowsForIT/ModalWindowsForIT";
+import { ModalForDisp } from "../../ModalWindows/ModalWindowsForDisp/ModalWindowsForDisp";
 
 const TableEquipment = () => {
   const [equipment, setEquipment] = useState([]);

@@ -21,7 +21,7 @@ const HeaderButton = () => {
   const setButtons = () => {
     const commonButtons = [];
 
-    if (location.pathname === "/employee") {
+    if (location.pathname === "/employees") {
       return [
         {
           icon: <AppstoreTwoTone />,

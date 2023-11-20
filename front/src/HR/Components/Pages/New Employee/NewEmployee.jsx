@@ -10,7 +10,6 @@ import {
   notification,
   DatePicker,
 } from "antd";
-import ImageUpload from "../../../Functions/ImageUpload";
 import TextArea from "antd/es/input/TextArea";
 import {
   citySet,
@@ -287,9 +286,6 @@ function MyComponent() {
               }}
             />
           </Form.Item>
-          <Form.Item label="Изображение">
-            <ImageUpload onImageUpload={handleImageUpload} />
-          </Form.Item>
           <div className="button-container">
             <Button
               type="primary"
@@ -315,5 +311,3 @@ export const CancelButton = () => (
 );
 
 export default MyComponent;
-
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis ipsa labore, porro numquam, harum laborum mollitia ducimus, provident corrupti ut magni quas! Ratione sapiente dolorem tempore est. Temporibus, dolorem quia!

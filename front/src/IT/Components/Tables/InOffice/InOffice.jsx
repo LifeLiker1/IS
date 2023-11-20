@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Collapse, Spin } from "antd";
-import { fetchDataInOffice } from "../../../../Tech/Table/Functions/Responses";
+import { fetchDataInOffice } from "../../../../Functions/InOffice/ApplicationInOffice";
 import Header from "../../../../Header/Header";
 import AppFooter from "../../../../Footer/AppFooter";
 
@@ -52,7 +52,7 @@ const InOffice = () => {
 
   return (
     <div>
-      <Header/>
+      <Header />
       {loading ? (
         <Spin size="large" />
       ) : error ? (
@@ -60,7 +60,7 @@ const InOffice = () => {
       ) : (
         <Collapse items={items} />
       )}
-      <AppFooter/>
+      <AppFooter />
     </div>
   );
 };
