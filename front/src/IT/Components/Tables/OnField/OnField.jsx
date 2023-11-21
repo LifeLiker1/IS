@@ -1,5 +1,5 @@
 import React from "react";
-import TableEquipment from "../../../../Tech/Table/TableEquipment";
+import TableEquipment from "../../../../Tech/Table/MainTable";
 import Header from "../../../../Header/Header";
 import './OnField.scss'
 import AppFooter from "../../../../Footer/AppFooter";

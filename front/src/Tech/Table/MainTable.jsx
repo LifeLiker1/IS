@@ -10,8 +10,8 @@ import {
 } from "../../Functions/ForTable/ItemsForTable";
 
 import { ColumnsForTable } from "../../Functions/ForTable/TableComponents";
-import { ModalForIT } from "../../ModalWindows/ModalWindowsForIT/ModalWindowsForIT";
-import { ModalForDisp } from "../../ModalWindows/ModalWindowsForDisp/ModalWindowsForDisp";
+import { ModalForIT } from "../../Interactive/ModalWindows/ModalWindowsForIT/ModalWindowsForIT";
+import { ModalForDisp } from "../../Interactive/ModalWindows/ModalWindowsForDisp/ModalWindowsForDisp";
 
 const TableEquipment = () => {
   const [equipment, setEquipment] = useState([]);
@@ -95,7 +95,7 @@ const TableEquipment = () => {
 
     try {
       const response = await fetch(
-        `/api/equipmentOnField/${selectedEquipment.id}`,
+        `http://localhost:3001/api/equipmentOnField/${selectedEquipment.id}`,
         {
           method: "PUT",
           headers: {

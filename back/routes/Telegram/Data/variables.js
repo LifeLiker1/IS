@@ -47,6 +47,75 @@ const keyboardForManagement = {
   },
 };
 
+const keyboardForMarket = {
+  reply_markup: {
+    keyboard: [
+      [
+        {
+          text: "ADEM",
+        },
+        {
+          text: "Ялян",
+        },
+      ],
+      [
+        {
+          text: "Алатау-1",
+        },
+        {
+          text: "Алатау-2",
+        },
+      ],
+      [
+        {
+          text: "Болашак",
+        },
+      ],
+      [
+        {
+          text: "Арлан",
+        },
+        {
+          text: "Казына",
+        },
+      ],
+      [
+        {
+          text: "Нурлы-Тау",
+        },
+      ],
+    ],
+    resize_keyboard: true,
+  },
+};
+const keyboardForTech = {
+  reply_markup: {
+    keyboard: [
+      [
+        {
+          text: "Закрыть заявку",
+        },
+        {
+          text: "Все мои заявки",
+        },
+      ],
+      [
+        {
+          text: "Устранил неисправность",
+        },
+      ],
+      [
+        {
+          text: "Загрузил талоны",
+        },
+        {
+          text: "Выход",
+        },
+      ],
+    ],
+    resize_keyboard: true,
+  },
+};
 const keyboardForDisp = {
   reply_markup: {
     keyboard: [
@@ -75,5 +144,7 @@ module.exports = {
   keyboardForDisp,
   keyboardForManagement,
   keyboardForAll,
+  keyboardForTech,
+  keyboardForMarket,
   start,
 };

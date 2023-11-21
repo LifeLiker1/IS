@@ -3,6 +3,7 @@ import "./auth.scss";
 import { notification, Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import Header from "../Header/Header"
+// import { authFailed, authSucces } from "../Interactive/Notification/Notification";
 
 const Auth = () => {
   const [email, setEmail] = useState("");

@@ -12,6 +12,8 @@ const {
   keyboardForManagement,
   keyboardForAll,
   keyboardForDisp,
+  keyboardForTech,
+  keyboardForMarket,
 } = require("./Data/variables");
 const fetch = require("node-fetch");
 require("dotenv").config();
@@ -44,7 +46,6 @@ bot1.onText(/\/start/, async (msg) => {
 bot1.on("contact", async (msg) => {
   const chatId = msg.chat.id;
   const phoneNumber = msg.contact.phone_number;
-  const sessionTimeout = process.env.userSessionTimeout
 
   try {
     const response = await fetch(
@@ -68,33 +69,57 @@ bot1.on("contact", async (msg) => {
     authenticatedUserId = phoneNumber;
 
     let keyboard;
+
     if (
       result.position === "Начальник отдела" ||
       result.position === "Заместитель начальника отдела"
     ) {
       keyboard = keyboardForManagement;
-    } else if (
-      result.position === "Диспетчер" ||
-      result.position === "Техник"
-    ) {
-      keyboard = keyboardForDisp;
-    }
-
-    const secondResponse = await fetch(
-      `http://localhost:3001/api/employees/updateOnShift`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ mobilePhone: phoneNumber }),
-      }
-    );
-    if (secondResponse.status === 200) {
       bot1.sendMessage(chatId, `Здравствуйте ${name} ${surname}`, keyboard);
-      isAuth = true;
-    }else{
-      bot1.sendMessage(chatId, "Не удалось изменить статус onShift.");
+    } else if (result.position === "Диспетчер") {
+      keyboard = keyboardForDisp;
+      bot1.sendMessage(chatId, `Здравствуйте ${name} ${surname}`, keyboard);
+    } else if (result.position === "Техник") {
+      keyboard = keyboardForMarket;
+      bot1.sendMessage(
+        chatId,
+        `Здравствуйте ${name} ${surname}. Выберите рынок на котором вы дежурный.`,
+        keyboard
+      );
+
+      // Обработчик текстовых сообщений для выбора рынка
+      bot1.once("text", async (msg) => {
+        const selectedText = msg.text;
+
+        // Добавьте обработку выбранного рынка
+        const selectedMarket = selectedText;
+
+        const secondResponse = await fetch(
+          `http://localhost:3001/api/employees/updateOnShift`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              mobilePhone: phoneNumber,
+              market: selectedMarket,
+            }),
+          }
+        );
+
+        if (secondResponse.status === 200) {
+          isAuth = true;
+          keyboard = keyboardForTech;
+          bot1.sendMessage(
+            chatId,
+            `Вы сегодня дежурный по ${selectedMarket}`,
+            keyboard
+          );
+        } else {
+          bot1.sendMessage(chatId, "Не удалось изменить статус onShift.");
+        }
+      });
     }
   } catch (error) {
     console.log(error);
@@ -170,16 +195,16 @@ bot1.onText(/Загрузить талоны/, async (msg) => {
 bot1.onText(/Выход/, async (msg) => {
   const chatId = msg.chat.id;
   try {
-    console.log(authenticatedUserId);
     if (isAuth) {
       await fetch("http://localhost:3001/api/employees/resetOnShift", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ mobilePhone: authenticatedUserId }),
+        body: JSON.stringify({
+          mobilePhone: authenticatedUserId,
+        }),
       });
-
     }
     // Сбросите статус авторизации
     isAuth = false;

@@ -54,12 +54,12 @@ router.get("/api/employees/onShift", async (req, res) => {
 
 router.post("/api/employees/updateOnShift", async (req, res) => {
   try {
-    const mobilePhone = req.body.mobilePhone; // Переданный номер телефона
+    const { mobilePhone, market } = req.body; // Переданный номер телефона
 
     // Ищем сотрудника по номеру телефона и обновляем статус onShift на true
     const updatedEmployee = await Employee.findOneAndUpdate(
       { mobilePhone: mobilePhone },
-      { $set: { onShift: true } },
+      { $set: { onShift: true, market: market } }, // Добавляем market к обновлению
       { new: true } // Чтобы получить обновленный документ
     );
 
@@ -80,6 +80,7 @@ router.post("/api/employees/updateOnShift", async (req, res) => {
 router.post("/api/employees/resetOnShift", async (req, res) => {
   try {
     const mobilePhone = req.body.mobilePhone;
+    const selectedMarket= req.body.market
 
     const updatedEmployee = await Employee.findOneAndUpdate(
       { mobilePhone: mobilePhone },

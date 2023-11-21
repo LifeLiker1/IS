@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Tech.scss";
 import Header from "../Header/Header";
 import { Progress, Button } from "antd";
-import TableEquipment from "./Table/TableEquipment";
+import TableEquipment from "./Table/MainTable";
 import { CountProvider, useCount } from "./Table/CountContext";
 import { getTickets } from "../Functions/ForTable/SecondaryFunctions";
 import OnShift from "../Functions/ForTable/PrimaryFunctions";

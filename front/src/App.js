@@ -1,5 +1,5 @@
 import './App.css';
-import Hr from "./HR/Components/Pages/hr.jsx"
+import Hr from "./HR/Pages/hr.jsx"
 
 
 function App() {

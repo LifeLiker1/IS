@@ -16,7 +16,8 @@ const employeeSchema = new mongoose.Schema({
   position: { type: String, required: false },
   about: { type: String, required: false },
   hobbies: { type: String, required: false },
-  onShift: { type: Boolean, required: false, default: false }
+  onShift: { type: Boolean, required: false, default: false },
+  market: {type: String, required: false }
 });
 
 module.exports = mongoose.model("employee", employeeSchema);

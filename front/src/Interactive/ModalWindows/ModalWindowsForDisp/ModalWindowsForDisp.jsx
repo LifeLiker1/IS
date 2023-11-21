@@ -29,7 +29,7 @@ const ModalForDisp = ({
             <p>Тип: {selectedEquipment.type}</p>
             <p>Расположение: {selectedEquipment.address}</p>
             <p>Статус: {selectedEquipment.tag}</p>
-            Выписать заявку на:
+            неисправность :
             <Select
               defaultValue=""
               style={{ width: 250 }}
@@ -37,7 +37,7 @@ const ModalForDisp = ({
               onChange={handleRequestChange}
             />
             <br />
-            Поломка:
+            Выписать на техника:
             <Select
               defaultValue=""
               style={{ width: 250 }}

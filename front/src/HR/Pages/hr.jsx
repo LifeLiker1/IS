@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./hr.scss";
-import AppFooter from "../../../Footer/AppFooter";
+import AppFooter from "../../Footer/AppFooter";
+import { fetchDataEmployees } from "../../Functions/ForHR/functionsForHR";
 import {
   Card,
   Form,
@@ -11,8 +12,10 @@ import {
   Empty,
 } from "antd";
 import { Link } from "react-router-dom";
-import Header from "../../../Header/Header";
-import Man from "../../../Images/avataaars.svg";
+import Header from "../../Header/Header";
+import Man from "../../Images/avataaars.svg";
+import { SearchField } from "../../Functions/ForHR/SearchField";
+
 
 const HR = () => {
   const [employees, setEmployees] = useState([]);
@@ -23,22 +26,7 @@ const HR = () => {
   const { Meta } = Card;
 
   useEffect(() => {
-    const fetchData = async () => {
-      document.title = "Страница отдела кадров";
-      try {
-        const response = await fetch("http://localhost:3001/api/employees");
-        if (!response.ok) {
-          throw new Error("Ошибка при получении данных");
-        }
-        const data = await response.json();
-        setEmployees(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-      }
-    };
-
-    fetchData();
+    fetchDataEmployees(setEmployees);
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
@@ -82,23 +70,7 @@ const HR = () => {
         {token ? (
           <>
             <div className="search_field">
-              <Form.Item label="Мне нужны сотрудники" className="dep_sel">
-                <TreeSelect
-                  onChange={(value) => setSelectedDepartment(value)}
-                  treeData={[
-                    { title: "Все", value: 0 },
-                    { title: "IT", value: "IT отдел" },
-                    {
-                      title: "Технического отдела",
-                      value: "Технический отдел",
-                    },
-                    {
-                      title: "Диспетчерского отдела",
-                      value: "Диспетчерский отдел",
-                    },
-                  ]}
-                />
-              </Form.Item>
+              <SearchField setSelectedDepartment={setSelectedDepartment}/>
             </div>
             <div className="employee_card">
               {filteredEmployees && filteredEmployees.length > 0 ? (
@@ -110,12 +82,12 @@ const HR = () => {
                   </Link>
                 ))
               ) : (
-                  <Empty
-                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                    imageStyle={{ height: 160 }}
-                    description= "В выбранном отделе сотрудников нет"
-                    descriptionStyle={{width: 160}}
-                  ></Empty>
+                <Empty
+                  image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                  imageStyle={{ height: 160 }}
+                  description="В выбранном отделе сотрудников нет"
+                  descriptionStyle={{ width: 160 }}
+                ></Empty>
               )}
             </div>
           </>

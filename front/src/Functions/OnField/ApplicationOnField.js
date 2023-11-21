@@ -19,5 +19,9 @@ async function fetchDataOnField() {
       console.log(error)
     }
   }
+//функция для добавления заявки
+  async function AddApplication(){
+    console.log("Hello")
+  }
 
   export {fetchDataOnField}

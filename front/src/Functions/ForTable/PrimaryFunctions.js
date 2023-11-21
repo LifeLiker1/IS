@@ -15,6 +15,7 @@ const OnShift = () => {
         if (response.ok) {
           const data = await response.json();
           setUseData(data);
+          console.log(data)
           setLoading(false);
         } else {
           setError("Ошибка при получении данных");
@@ -31,7 +32,7 @@ const OnShift = () => {
 
   const names = useData ? useData.map(item => (
     <div>
-      {item.surname} {item.name} 
+      {item.surname} {item.name} {item.market}
     </div>
   )) : [];
 
