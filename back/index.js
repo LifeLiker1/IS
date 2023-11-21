@@ -5,6 +5,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
 const bcrypt = require("bcrypt"); 
+const bodyParser = require('body-parser');
 
 require("dotenv").config();
 const app = express();
@@ -23,17 +24,15 @@ const User = require("./Models/User");
 app.use(cors());
 app.use(express.json());
 
-app.use(
-  session({
-    secret: process.env.SECRET_KEY, 
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+app.use(session({
+  secret: process.env.SECRET_KEY, // Замените на свой секретный ключ
+  resave: false,
+  saveUninitialized: true,
+}));
 
 // Инициализируйте Passport
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 passport.use(
   new LocalStrategy(

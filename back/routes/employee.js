@@ -79,12 +79,11 @@ router.post("/api/employees/updateOnShift", async (req, res) => {
 
 router.post("/api/employees/resetOnShift", async (req, res) => {
   try {
-    const mobilePhone = req.body.mobilePhone;
-    const selectedMarket= req.body.market
+    const {mobilePhone, market} = req.body;
 
     const updatedEmployee = await Employee.findOneAndUpdate(
       { mobilePhone: mobilePhone },
-      { $set: { onShift: false } },
+      { $set: { onShift: false, market: " " } },
       { new: true } // Чтобы получить обновленный документ
     );
 

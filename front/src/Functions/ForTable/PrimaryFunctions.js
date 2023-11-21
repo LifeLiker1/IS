@@ -32,7 +32,7 @@ const OnShift = () => {
 
   const names = useData ? useData.map(item => (
     <div>
-      {item.surname} {item.name} {item.market}
+      <b>{item.surname} {item.name} </b>дежурит на рынке <b>{item.market}</b>
     </div>
   )) : [];
 

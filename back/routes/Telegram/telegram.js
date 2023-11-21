@@ -1,4 +1,6 @@
 const { Router } = require("express");
+
+
 const {
   Employee,
   SetTicket,
@@ -8,6 +10,8 @@ const {
   TelegramBot,
   bot,
 } = require("./Data/function");
+
+
 const {
   keyboardForManagement,
   keyboardForAll,
@@ -24,6 +28,8 @@ const userLastInteraction = {};
 
 let isAuth = false;
 let authenticatedUserId = null;
+const userState = {};
+console.log(userState);
 
 bot1.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
@@ -90,6 +96,7 @@ bot1.on("contact", async (msg) => {
       // Обработчик текстовых сообщений для выбора рынка
       bot1.once("text", async (msg) => {
         const selectedText = msg.text;
+        userState[phoneNumber] = { selectedMarket: selectedText }; // Сохраняем выбранный рынок для пользователя
 
         // Добавьте обработку выбранного рынка
         const selectedMarket = selectedText;
@@ -116,6 +123,7 @@ bot1.on("contact", async (msg) => {
             `Вы сегодня дежурный по ${selectedMarket}`,
             keyboard
           );
+          console.log(userState);
         } else {
           bot1.sendMessage(chatId, "Не удалось изменить статус onShift.");
         }
@@ -124,6 +132,49 @@ bot1.on("contact", async (msg) => {
   } catch (error) {
     console.log(error);
     bot1.sendMessage(chatId, "Произошла ошибка при попытке авторизации.");
+  }
+});
+
+bot1.onText(/Все мои заявки/, async (msg) => {
+  const chatId = msg.chat.id;
+
+  if (isAuth) {
+    // Вместо жесткой привязки к рынку, вы можете использовать сохраненное значение рынка
+    // из предыдущего этапа, когда пользователь выбирал рынок.
+
+    // Предполагается, что у вас есть переменная, например, selectedMarket,
+    // которая содержит выбранный рынок.
+
+    try {
+      const userPhoneNumber = authenticatedUserId;
+      const selectedMarket = userState[userPhoneNumber].selectedMarket;
+
+      // Отправляет запрос на сервер для получения заявок по рынку
+      const response = await fetch(
+        `http://localhost:3001/api/applications/byMarket?market=${selectedMarket}`
+      );
+
+      if (response.status === 200) {
+        const applications = await response.json();
+
+        // Отправляет заявки в чат бота
+        bot1.sendMessage(chatId, `Заявки по рынку ${selectedMarket}:`);
+        applications.forEach((application) => {
+          // Пример: отправка текстового сообщения с информацией о заявке
+          bot1.sendMessage(
+            chatId,
+            `Рынок ${application.market} ${application.type} ${application.text} `
+          );
+        });
+      } else {
+        bot1.sendMessage(chatId, "Произошла ошибка при получении заявок.");
+      }
+    } catch (error) {
+      console.error(error);
+      bot1.sendMessage(chatId, "Произошла ошибка при обработке запроса.");
+    }
+  } else {
+    bot1.sendMessage(chatId, "Вы не авторизированы");
   }
 });
 

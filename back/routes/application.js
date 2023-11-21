@@ -1,3 +1,4 @@
+//роуты для заявок
 const { Router } = require("express");
 const Application = require("../Models/application");
 const authMiddleware = require("../Functions/authMiddle.js");
@@ -6,7 +7,7 @@ const conn = mongoose.connection;
 
 const router = Router();
 
-//запрос на все оборудование
+//запрос на все заявки
 router.get("/api/application", async (req, res) => {
   try {
     const application = await Application.find();
@@ -15,6 +16,22 @@ router.get("/api/application", async (req, res) => {
     console.log(error);
   }
 });
+
+// Роут для поиска заявок по рынку
+router.get("/api/applications/byMarket", async (req, res) => {
+  try {
+    const market = req.query.market;
+
+    // Ищем заявки по указанному рынку
+    const applications = await Application.find({ market: market });
+
+    res.status(200).json(applications);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Произошла ошибка при поиске заявок по рынку" });
+  }
+});
+
 
 router.post("/api/application", async (req, res) => {
   try {
