@@ -3,6 +3,7 @@ const Employee = require("../Models/Employee");
 const router = Router();
 const passport = require("passport");
 const authenticate = passport.authenticate("local", { session: false });
+const { uri, dbname, client } = require("./Telegram/Data/variables");
 
 router.get("/api/employees", async (req, res) => {
   try {
@@ -79,7 +80,7 @@ router.post("/api/employees/updateOnShift", async (req, res) => {
 
 router.post("/api/employees/resetOnShift", async (req, res) => {
   try {
-    const {mobilePhone, market} = req.body;
+    const { mobilePhone } = req.body;
 
     const updatedEmployee = await Employee.findOneAndUpdate(
       { mobilePhone: mobilePhone },
@@ -89,6 +90,18 @@ router.post("/api/employees/resetOnShift", async (req, res) => {
 
     if (!updatedEmployee) {
       return res.status(404).json({ error: "Сотрудник не найден" });
+    }
+
+    // Теперь удалим сессию пользователя
+    const sessionCollection = client.db(dbname).collection("userSessions");
+    const deleteResult = await sessionCollection.deleteOne({
+      userId: mobilePhone,
+    });
+
+    if (deleteResult.deletedCount === 1) {
+      console.log("Сессия пользователя успешно удалена");
+    } else {
+      console.log("Сессия пользователя не найдена");
     }
 
     res.status(200).json({ message: "Поле onShift обновлено" });

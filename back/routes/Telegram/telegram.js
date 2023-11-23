@@ -1,54 +1,21 @@
 const { Router } = require("express");
-const { MongoClient } = require("mongodb");
 require("dotenv").config();
+const fetch = require("node-fetch");
+
+const router = Router();
 
 const {
   Employee,
   SetTicket,
   Application,
-  checkAuthentication,
   onShift,
+  connectToMongo,
   TelegramBot,
   bot,
+  Unauthorized,
+  allMyApplications,
 } = require("./Data/function");
-const uri = process.env.uri;
-const dbname = process.env.dbName;
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-async function connectToMongo() {
-  try {
-    await client.connect();
-    console.log("Connected to MongoDB");
-
-    const sessionCollection = client.db(dbname).collection("userSessions");
-    await sessionCollection.createIndex({ userId: 1 }, { unique: true });
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-  }
-}
-
-function typeOFkeyboards(result) {
-  if (
-    result.position === "Начальник отдела" ||
-    result.position === "Заместитель начальника отдела"
-  ) {
-    keyboard = keyboardForManagement;
-    bot1.sendMessage(chatId, `Здравствуйте ${name} ${surname}`, keyboard);
-  } else if (result.position === "Диспетчер") {
-    keyboard = keyboardForDisp;
-    bot1.sendMessage(chatId, `Здравствуйте ${name} ${surname}`, keyboard);
-  } else if (result.position === "Техник") {
-    keyboard = keyboardForMarket;
-    bot1.sendMessage(
-      chatId,
-      `Здравствуйте ${name} ${surname}. Выберите рынок на котором вы дежурный.`,
-      keyboard
-    );
-  }
-}
+const bot1 = bot;
 
 const {
   keyboardForManagement,
@@ -56,13 +23,11 @@ const {
   keyboardForDisp,
   keyboardForTech,
   keyboardForMarket,
+  dbname,
+  client,
 } = require("./Data/variables");
-const fetch = require("node-fetch");
-require("dotenv").config();
 
-const router = Router();
-const bot1 = bot;
-const userLastInteraction = {};
+// const userLastInteraction = {};
 
 let isAuth = false;
 let authenticatedUserId = null;
@@ -80,8 +45,6 @@ bot1.onText(/\/start/, async (msg) => {
         "Здравствуйте. Для авторизации нажмите кнопку 'Авторизация'.",
         keyboard
       );
-    } else {
-      typeOFkeyboards(result);
     }
   } catch (error) {
     console.error(error);
@@ -188,54 +151,17 @@ bot1.on("contact", async (msg) => {
 
 bot1.onText(/Все мои заявки/, async (msg) => {
   const chatId = msg.chat.id;
-
   if (isAuth) {
-    try {
-      await connectToMongo();
-
-      const userPhoneNumber = authenticatedUserId;
-      const collection = client.db(dbname).collection("userSessions");
-      const userSession = await collection.findOne({
-        userId: authenticatedUserId,
-      });
-      const selectedMarket = userSession ? userSession.selectedMarket : null;
-
-      // Отправляет запрос на сервер для получения заявок по рынку
-      const response = await fetch(
-        `http://localhost:3001/api/applications/byMarket?market=${selectedMarket}`
-      );
-
-      if (response.status === 200) {
-        const applications = await response.json();
-
-        // Отправляет заявки в чат бота
-        bot1.sendMessage(chatId, `Заявки по рынку ${selectedMarket}:`);
-        applications.forEach((application) => {
-          // Пример: отправка текстового сообщения с информацией о заявке
-          bot1.sendMessage(
-            chatId,
-            `Рынок ${application.market} ${application.type} ${application.text} `
-          );
-        });
-      } else {
-        bot1.sendMessage(chatId, "Произошла ошибка при получении заявок.");
-      }
-    } catch (error) {
-      console.error(error);
-      bot1.sendMessage(chatId, "Произошла ошибка при обработке запроса.");
-    } finally {
-      await client.close();
+    allMyApplications()
+  }else {
+      bot.sendMessage(chatId, "Вы не авторизированы");
     }
-  } else {
-    bot1.sendMessage(chatId, "Вы не авторизированы");
-  }
 });
 
 bot1.onText(/Техники на смене/, async (msg) => {
   const chatId = msg.chat.id;
   if (isAuth) {
     try {
-      await connectToMongo();
       await onShift(chatId, isAuth, bot1);
     } catch (error) {
       bot1.sendMessage(
@@ -255,7 +181,6 @@ bot1.onText(/Все сотрудники/, async (msg) => {
   const chatId = msg.chat.id;
   if (isAuth) {
     try {
-      await connectToMongo();
       await Employee(chatId, isAuth, bot1);
     } catch (error) {
       bot1.sendMessage(
@@ -275,7 +200,6 @@ bot1.onText(/Все заявки/, async (msg) => {
   const chatId = msg.chat.id;
   if (isAuth) {
     try {
-      await connectToMongo();
       await Application(chatId, isAuth, bot1);
     } catch (error) {
       bot1.sendMessage(
@@ -295,7 +219,6 @@ bot1.onText(/Загрузить талоны/, async (msg) => {
   const chatId = msg.chat.id;
   if (isAuth) {
     try {
-      await connectToMongo();
       await SetTicket(chatId, isAuth, bot1);
     } catch (error) {
       bot1.sendMessage(chatId, "Произошла ошибка при получении данных");
@@ -311,32 +234,9 @@ bot1.onText(/Загрузить талоны/, async (msg) => {
 bot1.onText(/Выход/, async (msg) => {
   const chatId = msg.chat.id;
   try {
-    await connectToMongo();
-
-    if (isAuth) {
-      const response = await fetch(
-        "http://localhost:3001/api/employees/resetOnShift",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            mobilePhone: authenticatedUserId,
-          }),
-        }
-      );
-      if (response.status === 200) {
-        isAuth = false;
-        authenticatedUserId = null;
-        bot1.sendMessage(chatId, "Вы успешно разлогинились.", keyboardForAll);
-      }
-    }
+    Unauthorized(chatId, isAuth, bot1, authenticatedUserId, keyboardForAll);
   } catch (error) {
-    console.log(error);
-    bot1.sendMessage(chatId, "Произошла ошибка при разлогировании.");
-  } finally {
-    await client.close();
+    console.error("Произошла ошибка:", error);
   }
 });
 

@@ -1,3 +1,7 @@
+require("dotenv").config();
+const { MongoClient } = require("mongodb");
+
+
 const start = {
   reply_markup: {
     keyboard: [
@@ -140,11 +144,21 @@ const keyboardForDisp = {
   },
 };
 
+const uri = process.env.uri;
+const dbname = process.env.dbName;
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
 module.exports = {
   keyboardForDisp,
   keyboardForManagement,
   keyboardForAll,
   keyboardForTech,
   keyboardForMarket,
+  uri,
+  dbname,
+  client,
   start,
 };
