@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Spin } from 'antd';
-
+import { Spin } from "antd";
 
 //отслеживание сотрудников на смене
 const OnShift = () => {
@@ -11,11 +10,13 @@ const OnShift = () => {
   useEffect(() => {
     async function employeesOnShift() {
       try {
-        const response = await fetch("http://localhost:3001/api/employees/onShift");
+        const response = await fetch(
+          "http://localhost:3001/api/employees/onShift"
+        );
         if (response.ok) {
           const data = await response.json();
           setUseData(data);
-          console.log(data)
+          console.log(data);
           setLoading(false);
         } else {
           setError("Ошибка при получении данных");
@@ -30,11 +31,19 @@ const OnShift = () => {
     employeesOnShift();
   }, []);
 
-  const names = useData ? useData.map(item => (
-    <div>
-      <b>{item.surname} {item.name} </b>дежурит на рынке <b>{item.market}</b>
-    </div>
-  )) : [];
+  const names =
+    useData && useData.length > 0 ? (
+      useData.map((item) => (
+        <div key={item.id}>
+          <b>
+            {item.surname} {item.name}
+          </b>{" "}
+          дежурит на рынке <b>{item.market}</b>
+        </div>
+      ))
+    ) : (
+      <b>Пока все отдыхают</b>
+    );
 
   return (
     <div>
