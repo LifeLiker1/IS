@@ -85,7 +85,7 @@ bot1.on("contact", async (msg) => {
     const name = result.name || "Unknown";
     const surname = result.surname || "Unknown";
     authenticatedUserId = phoneNumber;
-    console.log(authenticatedUserId)
+    console.log(authenticatedUserId);
 
     let keyboard;
 
@@ -162,10 +162,41 @@ bot1.on("contact", async (msg) => {
 
 bot1.onText(/Все мои заявки/, async (msg) => {
   const chatId = msg.chat.id;
-  if (isAuth) {
-    allMyApplications(chatId, isAuth, bot1);
-  } else {
-    bot.sendMessage(chatId, "Вы не авторизированы");
+  try {
+    await connectToMongo();
+
+    const userPhoneNumber = authenticatedUserId;
+    const collection = client.db(dbname).collection("userSessions");
+    const userSession = await collection.findOne({
+      userId: userPhoneNumber,
+    });
+    const selectedMarket = userSession ? userSession.selectedMarket : null;
+
+    // Отправляет запрос на сервер для получения заявок по рынку
+    const response = await fetch(
+      `http://localhost:3001/api/applications/byMarket?market=${selectedMarket}`
+    );
+
+    if (response.status === 200) {
+      const applications = await response.json();
+
+      // Отправляет заявки в чат бота
+      bot.sendMessage(chatId, `Заявки по рынку ${selectedMarket}:`);
+      applications.forEach((application) => {
+        // Пример: отправка текстового сообщения с информацией о заявке
+        bot.sendMessage(
+          chatId,
+          `Рынок ${application.market} ${application.type} ${application.text} `
+        );
+      });
+    } else {
+      bot.sendMessage(chatId, "Произошла ошибка при получении заявок.");
+    }
+  } catch (error) {
+    console.error(error);
+    bot.sendMessage(chatId, "Произошла ошибка при обработке запроса.");
+  } finally {
+    await client.close();
   }
 });
 
@@ -244,11 +275,38 @@ bot1.onText(/Загрузить талоны/, async (msg) => {
 
 bot1.onText(/Выход/, async (msg) => {
   const chatId = msg.chat.id;
-  if (!isAuth) {
+  if (isAuth) {
+    console.log(authenticatedUserId);
     try {
-      Unauthorized(chatId, isAuth, bot1, authenticatedUserId, keyboardForAll);
+      await connectToMongo();
+
+      const response = await fetch(
+        "http://localhost:3001/api/employees/resetOnShift",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            mobilePhone: authenticatedUserId,
+          }),
+        }
+      );
+      const result = await response.json();
+      console.log(result);
+
+      const sessionCollection = client.db(dbname).collection("userSessions");
+      await sessionCollection.deleteOne({ userId: authenticatedUserId });
+      console.log("success");
+
+      isAuth = false;
+      authenticatedUserId = null;
+      bot.sendMessage(chatId, "Вы успешно разлогинились.", keyboardForAll);
     } catch (error) {
-      console.error("Произошла ошибка:", error);
+      console.log(error);
+      bot.sendMessage(chatId, "Произошла ошибка при разлогировании.");
+    } finally {
+      await client.close();
     }
   }
 });

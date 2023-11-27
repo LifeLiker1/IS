@@ -7,7 +7,6 @@ async function connectToMongo() {
   try {
     await client.connect();
     console.log("Connected to MongoDB");
-
     const sessionCollection = client.db(dbname).collection("userSessions");
     await sessionCollection.createIndex({ userId: 1 }, { unique: true });
   } catch (error) {
@@ -20,20 +19,20 @@ async function Unauthorized(chatId, authenticatedUserId, keyboardForAll) {
   try {
     await connectToMongo();
 
-    // const response = await fetch(
-    //   "http://localhost:3001/api/employees/resetOnShift",
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       mobilePhone: authenticatedUserId,
-    //     }),
-    //   }
-    // );
-    // const result = await response.json()
-    // console.log(result)
+    const response = await fetch(
+      "http://localhost:3001/api/employees/resetOnShift",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mobilePhone: authenticatedUserId,
+        }),
+      }
+    );
+    const result = await response.json()
+    console.log(result)
 
     const sessionCollection = client.db(dbname).collection("userSessions");
     await sessionCollection.deleteOne({ userId: authenticatedUserId });
@@ -174,7 +173,7 @@ async function allMyApplications(chatId, authenticatedUserId) {
     const userPhoneNumber = authenticatedUserId;
     const collection = client.db(dbname).collection("userSessions");
     const userSession = await collection.findOne({
-      userId: authenticatedUserId,
+      userId: userPhoneNumber,
     });
     const selectedMarket = userSession ? userSession.selectedMarket : null;
 
