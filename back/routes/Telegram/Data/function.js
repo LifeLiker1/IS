@@ -4,7 +4,6 @@ const bot = new TelegramBot(process.env.BOT_API, { polling: true });
 require("dotenv").config();
 
 async function connectToMongo() {
-  await connectToMongo();
   try {
     await client.connect();
     console.log("Connected to MongoDB");
@@ -13,7 +12,40 @@ async function connectToMongo() {
     await sessionCollection.createIndex({ userId: 1 }, { unique: true });
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
-  }finally {
+  }
+}
+
+async function Unauthorized(chatId, authenticatedUserId, keyboardForAll) {
+  console.log(authenticatedUserId)
+  try {
+    await connectToMongo();
+
+    // const response = await fetch(
+    //   "http://localhost:3001/api/employees/resetOnShift",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       mobilePhone: authenticatedUserId,
+    //     }),
+    //   }
+    // );
+    // const result = await response.json()
+    // console.log(result)
+
+    const sessionCollection = client.db(dbname).collection("userSessions");
+    await sessionCollection.deleteOne({ userId: authenticatedUserId });
+    console.log("success");
+
+    isAuth = false;
+    authenticatedUserId = null;
+    bot.sendMessage(chatId, "Вы успешно разлогинились.", keyboardForAll);
+  } catch (error) {
+    console.log(error);
+    bot.sendMessage(chatId, "Произошла ошибка при разлогировании.");
+  } finally {
     await client.close();
   }
 }
@@ -44,7 +76,7 @@ async function Employee(chatId, isAuth) {
       chatId,
       "Произошла ошибка при получении данных о сотрудниках."
     );
-  }finally {
+  } finally {
     await client.close();
   }
 }
@@ -75,7 +107,7 @@ async function onShift(chatId, isAuth) {
       chatId,
       "Произошла ошибка при получении должности сотрудника."
     );
-  }finally {
+  } finally {
     await client.close();
   }
 }
@@ -95,7 +127,7 @@ async function SetTicket(chatId, isAuth) {
   } catch (error) {
     console.error("Произошла ошибка:", error);
     bot.sendMessage(chatId, "Произошла ошибка при отправке данных");
-  }finally {
+  } finally {
     await client.close();
   }
 }
@@ -128,44 +160,14 @@ async function Application(chatId, isAuth) {
       chatId,
       "Произошла ошибка при получении данных о сотрудниках."
     );
-  }finally {
-    await client.close();
-  }
-}
-
-//функция разлогинивания пользователя
-async function Unauthorized(chatId, authenticatedUserId, keyboardForAll) {
-  await connectToMongo();
-  try {
-    const response = await fetch(
-      "http://localhost:3001/api/employees/resetOnShift",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          mobilePhone: authenticatedUserId,
-        }),
-      }
-    );
-
-    const sessionCollection = client.db(dbname).collection("userSessions");
-    await sessionCollection.deleteOne({ userId: authenticatedUserId });
-    console.log("success");
-
-    isAuth = false;
-    authenticatedUserId = null;
-    bot.sendMessage(chatId, "Вы успешно разлогинились.", keyboardForAll);
-  } catch (error) {
-    console.log(error);
-    bot.sendMessage(chatId, "Произошла ошибка при разлогировании.");
   } finally {
     await client.close();
   }
 }
 
-async function allMyApplications(){
+//функция разлогинивания пользователя
+
+async function allMyApplications(chatId, authenticatedUserId) {
   try {
     await connectToMongo();
 
@@ -202,7 +204,6 @@ async function allMyApplications(){
   } finally {
     await client.close();
   }
-
 }
 module.exports = {
   Employee,

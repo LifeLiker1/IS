@@ -19,7 +19,7 @@ const Cards = () => {
   return (
     <div className="mainBlock">
       {loading ? (
-       <Spin spinning={loading} delay={500}/>
+       <Spin spinning={loading}/>
       ) : (
         <div className="cards-container">
           <Link to={"equipmentOnField"}>

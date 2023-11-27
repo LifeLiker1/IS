@@ -28,11 +28,13 @@ router.get("/api/applications/byMarket", async (req, res) => {
     res.status(200).json(applications);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Произошла ошибка при поиске заявок по рынку" });
+    res
+      .status(500)
+      .json({ error: "Произошла ошибка при поиске заявок по рынку" });
   }
 });
 
-
+//новая заявка
 router.post("/api/application", async (req, res) => {
   try {
     const newApplication = new Application(req.body);
@@ -43,17 +45,18 @@ router.post("/api/application", async (req, res) => {
   }
 });
 
+// удаление заявки
 router.delete("/api/application", async (req, res) => {
   try {
-    const application = Application.find()
-    if(!application){
-      return res.status(404).json("Оборудование не найдено")
+    const application = Application.find();
+    if (!application) {
+      return res.status(404).json("Оборудование не найдено");
     }
-    await application.deleteMany()
-    res.status(200).json("Оборудование удалено")
+    await application.deleteMany();
+    res.status(200).json("Оборудование удалено");
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-})
+});
 
 module.exports = router;

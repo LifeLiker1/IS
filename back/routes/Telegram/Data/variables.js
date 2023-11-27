@@ -151,6 +151,11 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
 });
 
+const now = new Date();
+const midnight = new Date(now);
+
+
+
 module.exports = {
   keyboardForDisp,
   keyboardForManagement,
@@ -161,4 +166,6 @@ module.exports = {
   dbname,
   client,
   start,
+  now,
+  midnight,
 };

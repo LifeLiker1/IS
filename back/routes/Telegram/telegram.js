@@ -25,7 +25,13 @@ const {
   keyboardForMarket,
   dbname,
   client,
+  midnight,
+  now,
 } = require("./Data/variables");
+
+midnight.setHours(24, 0, 0, 0); // Устанавливаем часы, минуты, секунды и миллисекунды для полуночи
+const secondsUntilMidnight = Math.floor((midnight - now) / 1000);
+console.log(secondsUntilMidnight);
 
 // const userLastInteraction = {};
 
@@ -34,7 +40,6 @@ let authenticatedUserId = null;
 
 bot1.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
-  const userId = msg.chat.id;
   try {
     await connectToMongo();
 
@@ -80,6 +85,7 @@ bot1.on("contact", async (msg) => {
     const name = result.name || "Unknown";
     const surname = result.surname || "Unknown";
     authenticatedUserId = phoneNumber;
+    console.log(authenticatedUserId)
 
     let keyboard;
 
@@ -102,12 +108,17 @@ bot1.on("contact", async (msg) => {
 
       // Обработчик текстовых сообщений для выбора рынка
       bot1.once("text", async (msg) => {
-        await connectToMongo();
+        await client.connect();
         const selectedText = msg.text;
         const collection = client.db(dbname).collection("userSessions");
         await collection.updateOne(
           { userId: authenticatedUserId },
-          { $set: { selectedMarket: selectedText } },
+          {
+            $set: {
+              selectedMarket: selectedText,
+              expireAt: midnight,
+            },
+          },
           { upsert: true }
         );
 
@@ -152,10 +163,10 @@ bot1.on("contact", async (msg) => {
 bot1.onText(/Все мои заявки/, async (msg) => {
   const chatId = msg.chat.id;
   if (isAuth) {
-    allMyApplications()
-  }else {
-      bot.sendMessage(chatId, "Вы не авторизированы");
-    }
+    allMyApplications(chatId, isAuth, bot1);
+  } else {
+    bot.sendMessage(chatId, "Вы не авторизированы");
+  }
 });
 
 bot1.onText(/Техники на смене/, async (msg) => {
@@ -233,10 +244,12 @@ bot1.onText(/Загрузить талоны/, async (msg) => {
 
 bot1.onText(/Выход/, async (msg) => {
   const chatId = msg.chat.id;
-  try {
-    Unauthorized(chatId, isAuth, bot1, authenticatedUserId, keyboardForAll);
-  } catch (error) {
-    console.error("Произошла ошибка:", error);
+  if (!isAuth) {
+    try {
+      Unauthorized(chatId, isAuth, bot1, authenticatedUserId, keyboardForAll);
+    } catch (error) {
+      console.error("Произошла ошибка:", error);
+    }
   }
 });
 

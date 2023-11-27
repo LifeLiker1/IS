@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Tabs, Table} from "antd";
+import { Tabs, Table } from "antd";
 // import { useCount } from "./CountContext";
 import { fetchDataOnField } from "../../Functions/OnField/ApplicationOnField";
 import {
@@ -9,7 +9,7 @@ import {
   optionsForPOFs,
 } from "../../Functions/ForTable/ItemsForTable";
 
-import { ColumnsForTable } from "../../Functions/ForTable/TableComponents";
+import { ColumnsForTable } from "../../Functions/ForTable/TableColumns";
 import { ModalForIT } from "../../Interactive/ModalWindows/ModalWindowsForIT/ModalWindowsForIT";
 import { ModalForDisp } from "../../Interactive/ModalWindows/ModalWindowsForDisp/ModalWindowsForDisp";
 
@@ -79,7 +79,6 @@ const TableEquipment = () => {
     ) {
       setModalParameters(optionsForBarriers);
     }
-
     setModalVisible(true);
   };
 
@@ -146,7 +145,6 @@ const TableEquipment = () => {
         columns={ColumnsForTable(handleOpenModal)}
         dataSource={filteredData}
       />
-      
     </div>
   );
 };

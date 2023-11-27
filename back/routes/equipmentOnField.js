@@ -26,16 +26,19 @@ router.post("/api/equipmentOnField", async (req, res) => {
   }
 });
 
-router.delete("/api/equipmentOnField", async (req, res) => {
+router.delete("/api/equipmentOnField/:id", async (req, res) => {
   try {
-    const equipment = Equipment.find();
-    if (!equipment) {
+    const { id } = req.params;
+    const deletedEquipment = await Equipment.findByIdAndDelete(id);
+
+    if (!deletedEquipment) {
       return res.status(404).json("Оборудование не найдено");
     }
-    await Equipment.deleteMany();
+
     res.status(200).json("Оборудование удалено");
   } catch (error) {
     console.log(error);
+    res.status(500).json("Произошла ошибка при удалении оборудования");
   }
 });
 

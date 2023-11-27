@@ -32,9 +32,11 @@ const TechContent = () => {
           0
         );
         setCountData(totalCount);
-        setDataLoaded(true);
+        
       } catch (error) {
         console.error("Ошибка при получении данных", error);
+      }finally{
+        setDataLoaded(true);
       }
     }
 
