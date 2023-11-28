@@ -1,4 +1,10 @@
-const { uri, dbname, client } = require("./variables");
+const {
+  uri,
+  dbname,
+  client,
+  keyboardForAll,
+  keyboardForTech,
+} = require("./variables");
 const TelegramBot = require("node-telegram-bot-api");
 const bot = new TelegramBot(process.env.BOT_API, { polling: true });
 require("dotenv").config();
@@ -14,8 +20,42 @@ async function connectToMongo() {
   }
 }
 
+async function authStatus(
+  chatId,
+  authenticatedUserId,
+  keyboardForAll,
+  keyboardForTech
+) {
+  try {
+    await client.connect();
+    const sessionCollection = client.db(dbname).collection("userSessions");
+    const userSession = await sessionCollection.findOne({
+      userId: authenticatedUserId,
+    });
+
+    if (userSession) {
+      // Документ о сессии пользователя найден
+      console.log(authenticatedUserId);
+      console.log(sessionCollection);
+      bot.sendMessage(chatId, "Вы авторизованы.", keyboardForTech);
+    } else {
+      // Документ о сессии пользователя не найден
+      bot.sendMessage(chatId, "Вы не авторизованы.", keyboardForAll);
+    }
+  } catch (error) {
+    console.error(error);
+    // Обработка ошибок при подключении к базе данных
+    bot.sendMessage(
+      chatId,
+      "Произошла ошибка при проверке статуса авторизации."
+    );
+  } finally {
+    await client.close();
+  }
+}
+
 async function Unauthorized(chatId, authenticatedUserId, keyboardForAll) {
-  console.log(authenticatedUserId)
+  console.log(authenticatedUserId);
   try {
     await connectToMongo();
 
@@ -31,15 +71,13 @@ async function Unauthorized(chatId, authenticatedUserId, keyboardForAll) {
         }),
       }
     );
-    const result = await response.json()
-    console.log(result)
+    const result = await response.json();
+    console.log(result);
 
     const sessionCollection = client.db(dbname).collection("userSessions");
     await sessionCollection.deleteOne({ userId: authenticatedUserId });
     console.log("success");
 
-    isAuth = false;
-    authenticatedUserId = null;
     bot.sendMessage(chatId, "Вы успешно разлогинились.", keyboardForAll);
   } catch (error) {
     console.log(error);
@@ -212,6 +250,9 @@ module.exports = {
   connectToMongo,
   Unauthorized,
   allMyApplications,
+  authStatus,
   TelegramBot,
   bot,
+  getAuthenticatedUserId: () => authenticatedUserId,
+  setAuthenticatedUserId: (userId) => (authenticatedUserId = userId),
 };

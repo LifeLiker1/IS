@@ -12,8 +12,6 @@ const {
   connectToMongo,
   TelegramBot,
   bot,
-  Unauthorized,
-  allMyApplications,
 } = require("./Data/function");
 const bot1 = bot;
 
@@ -35,22 +33,44 @@ console.log(secondsUntilMidnight);
 
 // const userLastInteraction = {};
 
-let isAuth = false;
-let authenticatedUserId = null;
+let isAuth;
+let authenticatedUserId;
+
+async function getKeyboardByUserId(authenticatedUserId) {
+  try {
+
+    const sessionCollection = client.db(dbname).collection("userSessions");
+    const userSession = await sessionCollection.findOne({
+      userId: authenticatedUserId,
+    });
+
+    if (userSession) {
+      const selectedMarket = userSession.selectedMarket;
+      let keyboard;
+
+      return keyboard;
+    } else {
+      return keyboardForAll; // Если документ не найден, возвращаем клавиатуру по умолчанию
+    }
+  } catch (error) {
+    console.error("Произошла ошибка:", error);
+    return keyboardForAll; // В случае ошибки также возвращаем клавиатуру по умолчанию
+  } finally {
+    await client.close();
+  }
+}
 
 bot1.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
   try {
     await connectToMongo();
-
-    if (!isAuth) {
-      let keyboard = keyboardForAll;
-      bot1.sendMessage(
-        chatId,
-        "Здравствуйте. Для авторизации нажмите кнопку 'Авторизация'.",
-        keyboard
-      );
-    }
+    
+    let keyboard = keyboardForAll;
+    bot1.sendMessage(
+      chatId,
+      "Здравствуйте. Для авторизации нажмите кнопку 'Авторизация'.",
+      keyboard
+    );
   } catch (error) {
     console.error(error);
     bot.sendMessage(chatId, "Произошла ошибка при подключении к базе данных.");
@@ -62,7 +82,7 @@ bot1.onText(/\/start/, async (msg) => {
 bot1.on("contact", async (msg) => {
   const chatId = msg.chat.id;
   const phoneNumber = msg.contact.phone_number;
-
+  console.log(phoneNumber);
   try {
     await connectToMongo();
 
@@ -110,20 +130,15 @@ bot1.on("contact", async (msg) => {
       bot1.once("text", async (msg) => {
         await client.connect();
         const selectedText = msg.text;
+        const selectedMarket = selectedText;
         const collection = client.db(dbname).collection("userSessions");
-        await collection.updateOne(
-          { userId: authenticatedUserId },
-          {
-            $set: {
-              selectedMarket: selectedText,
-              expireAt: midnight,
-            },
-          },
-          { upsert: true }
-        );
+        await collection.insertOne({
+          userId: authenticatedUserId,
+          selectedMarket: selectedText,
+          expireAt: midnight,
+        });
 
         // Добавьте обработку выбранного рынка
-        const selectedMarket = selectedText;
 
         const secondResponse = await fetch(
           `http://localhost:3001/api/employees/updateOnShift`,
@@ -140,7 +155,6 @@ bot1.on("contact", async (msg) => {
         );
 
         if (secondResponse.status === 200) {
-          isAuth = true;
           keyboard = keyboardForTech;
           bot1.sendMessage(
             chatId,
@@ -202,112 +216,92 @@ bot1.onText(/Все мои заявки/, async (msg) => {
 
 bot1.onText(/Техники на смене/, async (msg) => {
   const chatId = msg.chat.id;
-  if (isAuth) {
-    try {
-      await onShift(chatId, isAuth, bot1);
-    } catch (error) {
-      bot1.sendMessage(
-        chatId,
-        "Произошла ошибка при получении данных о сотрудниках."
-      );
-      console.error("Произошла ошибка:", error);
-    } finally {
-      await client.close();
-    }
-  } else {
-    bot1.sendMessage(chatId, "Вы не авторизированы");
+  try {
+    await onShift(chatId, isAuth, bot1);
+  } catch (error) {
+    bot1.sendMessage(
+      chatId,
+      "Произошла ошибка при получении данных о сотрудниках."
+    );
+    console.error("Произошла ошибка:", error);
+  } finally {
+    await client.close();
   }
 });
 
 bot1.onText(/Все сотрудники/, async (msg) => {
   const chatId = msg.chat.id;
-  if (isAuth) {
-    try {
-      await Employee(chatId, isAuth, bot1);
-    } catch (error) {
-      bot1.sendMessage(
-        chatId,
-        "Произошла ошибка при получении данных о сотрудниках."
-      );
-      console.error("Произошла ошибка:", error);
-    } finally {
-      await client.close();
-    }
-  } else {
-    bot1.sendMessage(chatId, "Вы не авторизированы");
+  try {
+    await Employee(chatId, isAuth, bot1);
+  } catch (error) {
+    bot1.sendMessage(
+      chatId,
+      "Произошла ошибка при получении данных о сотрудниках."
+    );
+    console.error("Произошла ошибка:", error);
+  } finally {
+    await client.close();
   }
 });
 
 bot1.onText(/Все заявки/, async (msg) => {
   const chatId = msg.chat.id;
-  if (isAuth) {
-    try {
-      await Application(chatId, isAuth, bot1);
-    } catch (error) {
-      bot1.sendMessage(
-        chatId,
-        "Произошла ошибка при получении данных о заявках."
-      );
-      console.error("Произошла ошибка:", error);
-    } finally {
-      await client.close();
-    }
-  } else {
-    bot1.sendMessage(chatId, "Вы не авторизированы");
+  try {
+    await Application(chatId, isAuth, bot1);
+  } catch (error) {
+    bot1.sendMessage(
+      chatId,
+      "Произошла ошибка при получении данных о заявках."
+    );
+    console.error("Произошла ошибка:", error);
+  } finally {
+    await client.close();
   }
 });
 
 bot1.onText(/Загрузить талоны/, async (msg) => {
   const chatId = msg.chat.id;
-  if (isAuth) {
-    try {
-      await SetTicket(chatId, isAuth, bot1);
-    } catch (error) {
-      bot1.sendMessage(chatId, "Произошла ошибка при получении данных");
-      console.error("Произошла ошибка:", error);
-    } finally {
-      await client.close();
-    }
-  } else {
-    bot1.sendMessage(chatId, "Вы не авторизированы");
+  try {
+    await SetTicket(chatId, isAuth, bot1);
+  } catch (error) {
+    bot1.sendMessage(chatId, "Произошла ошибка при получении данных");
+    console.error("Произошла ошибка:", error);
+  } finally {
+    await client.close();
   }
 });
 
 bot1.onText(/Выход/, async (msg) => {
   const chatId = msg.chat.id;
-  if (isAuth) {
-    console.log(authenticatedUserId);
-    try {
-      await connectToMongo();
+  console.log(authenticatedUserId);
+  try {
+    await connectToMongo();
 
-      const response = await fetch(
-        "http://localhost:3001/api/employees/resetOnShift",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            mobilePhone: authenticatedUserId,
-          }),
-        }
-      );
-      const result = await response.json();
-      console.log(result);
+    const response = await fetch(
+      "http://localhost:3001/api/employees/resetOnShift",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mobilePhone: authenticatedUserId,
+        }),
+      }
+    );
+    const result = await response.json();
+    console.log(result);
 
-      const sessionCollection = client.db(dbname).collection("userSessions");
-      await sessionCollection.deleteOne({ userId: authenticatedUserId });
-      console.log("success");
+    const sessionCollection = client.db(dbname).collection("userSessions");
+    await sessionCollection.deleteOne({ userId: authenticatedUserId });
+    console.log("success");
 
-      isAuth = false;
-      authenticatedUserId = null;
-      bot.sendMessage(chatId, "Вы успешно разлогинились.", keyboardForAll);
-    } catch (error) {
-      console.log(error);
-      bot.sendMessage(chatId, "Произошла ошибка при разлогировании.");
-    } finally {
-      await client.close();
-    }
+    bot.sendMessage(chatId, "Вы успешно разлогинились.", keyboardForAll);
+  } catch (error) {
+    console.log(error);
+    bot.sendMessage(chatId, "Произошла ошибка при разлогировании.");
+  } finally {
+    await client.close();
   }
 });
 
