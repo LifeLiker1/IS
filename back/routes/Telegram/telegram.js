@@ -36,35 +36,12 @@ console.log(secondsUntilMidnight);
 let isAuth;
 let authenticatedUserId;
 
-async function getKeyboardByUserId(authenticatedUserId) {
-  try {
 
-    const sessionCollection = client.db(dbname).collection("userSessions");
-    const userSession = await sessionCollection.findOne({
-      userId: authenticatedUserId,
-    });
-
-    if (userSession) {
-      const selectedMarket = userSession.selectedMarket;
-      let keyboard;
-
-      return keyboard;
-    } else {
-      return keyboardForAll; // Если документ не найден, возвращаем клавиатуру по умолчанию
-    }
-  } catch (error) {
-    console.error("Произошла ошибка:", error);
-    return keyboardForAll; // В случае ошибки также возвращаем клавиатуру по умолчанию
-  } finally {
-    await client.close();
-  }
-}
 
 bot1.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
   try {
     await connectToMongo();
-    
     let keyboard = keyboardForAll;
     bot1.sendMessage(
       chatId,
@@ -83,6 +60,7 @@ bot1.on("contact", async (msg) => {
   const chatId = msg.chat.id;
   const phoneNumber = msg.contact.phone_number;
   console.log(phoneNumber);
+
   try {
     await connectToMongo();
 
@@ -120,51 +98,71 @@ bot1.on("contact", async (msg) => {
       bot1.sendMessage(chatId, `Здравствуйте ${name} ${surname}`, keyboard);
     } else if (result.position === "Техник") {
       keyboard = keyboardForMarket;
-      bot1.sendMessage(
-        chatId,
-        `Здравствуйте ${name} ${surname}. Выберите рынок на котором вы дежурный.`,
-        keyboard
-      );
 
-      // Обработчик текстовых сообщений для выбора рынка
-      bot1.once("text", async (msg) => {
-        await client.connect();
-        const selectedText = msg.text;
-        const selectedMarket = selectedText;
-        const collection = client.db(dbname).collection("userSessions");
-        await collection.insertOne({
-          userId: authenticatedUserId,
-          selectedMarket: selectedText,
-          expireAt: midnight,
-        });
+      // Проверяем наличие документа о сессии для данного пользователя
+      const collection = client.db(dbname).collection("userSessions");
+      const existingSession = await collection.findOne({
+        userId: authenticatedUserId,
+      });
+
+      if (existingSession) {
+        // Используем данные из существующего документа
+        const selectedMarket = existingSession.selectedMarket;
 
         // Добавьте обработку выбранного рынка
 
-        const secondResponse = await fetch(
-          `http://localhost:3001/api/employees/updateOnShift`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              mobilePhone: phoneNumber,
-              market: selectedMarket,
-            }),
-          }
+        bot1.sendMessage(
+          chatId,
+          `Вы сегодня дежурный по ${selectedMarket}`,
+          keyboardForTech
+        );
+      } else {
+        bot1.sendMessage(
+          chatId,
+          `Здравствуйте ${name} ${surname}. Выберите рынок на котором вы дежурный.`,
+          keyboard
         );
 
-        if (secondResponse.status === 200) {
-          keyboard = keyboardForTech;
-          bot1.sendMessage(
-            chatId,
-            `Вы сегодня дежурный по ${selectedMarket}`,
-            keyboard
+        // Обработчик текстовых сообщений для выбора рынка
+        bot1.once("text", async (msg) => {
+          await client.connect();
+          const selectedText = msg.text;
+          const selectedMarket = selectedText;
+
+          // Вставляем новый документ о сессии
+          await collection.insertOne({
+            userId: authenticatedUserId,
+            selectedMarket: selectedText,
+            expireAt: midnight,
+          });
+
+          // Добавьте обработку выбранного рынка
+
+          const secondResponse = await fetch(
+            `http://localhost:3001/api/employees/updateOnShift`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                mobilePhone: phoneNumber,
+                market: selectedMarket,
+              }),
+            }
           );
-        } else {
-          bot1.sendMessage(chatId, "Не удалось изменить статус onShift.");
-        }
-      });
+
+          if (secondResponse.status === 200) {
+            bot1.sendMessage(
+              chatId,
+              `Вы сегодня дежурный по ${selectedMarket}`,
+              keyboardForTech
+            );
+          } else {
+            bot1.sendMessage(chatId, "Не удалось изменить статус onShift.");
+          }
+        });
+      }
     }
   } catch (error) {
     console.log(error);
@@ -173,6 +171,7 @@ bot1.on("contact", async (msg) => {
     await client.close();
   }
 });
+
 
 bot1.onText(/Все мои заявки/, async (msg) => {
   const chatId = msg.chat.id;
@@ -186,10 +185,11 @@ bot1.onText(/Все мои заявки/, async (msg) => {
     });
     const selectedMarket = userSession ? userSession.selectedMarket : null;
 
+
     // Отправляет запрос на сервер для получения заявок по рынку
-    const response = await fetch(
-      `http://localhost:3001/api/applications/byMarket?market=${selectedMarket}`
-    );
+  const response = await fetch(
+  `http://localhost:3001/api/applications/byMarket?market=${selectedMarket}`
+);
 
     if (response.status === 200) {
       const applications = await response.json();
