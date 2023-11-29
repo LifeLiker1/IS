@@ -29,12 +29,13 @@ const {
 
 midnight.setHours(24, 0, 0, 0); // Устанавливаем часы, минуты, секунды и миллисекунды для полуночи
 const secondsUntilMidnight = Math.floor((midnight - now) / 1000);
-console.log(secondsUntilMidnight);
+
 
 // const userLastInteraction = {};
 
 let isAuth;
-let authenticatedUserId;
+const authenticatedUserIds = {};
+console.log(authenticatedUserIds)
 
 
 
@@ -59,7 +60,7 @@ bot1.onText(/\/start/, async (msg) => {
 bot1.on("contact", async (msg) => {
   const chatId = msg.chat.id;
   const phoneNumber = msg.contact.phone_number;
-  console.log(phoneNumber);
+
 
   try {
     await connectToMongo();
@@ -82,8 +83,8 @@ bot1.on("contact", async (msg) => {
     const result = await response.json();
     const name = result.name || "Unknown";
     const surname = result.surname || "Unknown";
-    authenticatedUserId = phoneNumber;
-    console.log(authenticatedUserId);
+    authenticatedUserIds[chatId] = phoneNumber;
+
 
     let keyboard;
 
@@ -102,12 +103,13 @@ bot1.on("contact", async (msg) => {
       // Проверяем наличие документа о сессии для данного пользователя
       const collection = client.db(dbname).collection("userSessions");
       const existingSession = await collection.findOne({
-        userId: authenticatedUserId,
+        userId: authenticatedUserIds[chatId],
       });
 
       if (existingSession) {
         // Используем данные из существующего документа
         const selectedMarket = existingSession.selectedMarket;
+
 
         // Добавьте обработку выбранного рынка
 
@@ -129,9 +131,10 @@ bot1.on("contact", async (msg) => {
           const selectedText = msg.text;
           const selectedMarket = selectedText;
 
+
           // Вставляем новый документ о сессии
           await collection.insertOne({
-            userId: authenticatedUserId,
+            userId: authenticatedUserIds[chatId],
             selectedMarket: selectedText,
             expireAt: midnight,
           });
@@ -174,16 +177,22 @@ bot1.on("contact", async (msg) => {
 
 
 bot1.onText(/Все мои заявки/, async (msg) => {
+  console.log(authenticatedUserIds)
   const chatId = msg.chat.id;
   try {
     await connectToMongo();
 
-    const userPhoneNumber = authenticatedUserId;
+    const userPhoneNumber = authenticatedUserIds[chatId];
+    if (!userPhoneNumber) {
+      bot.sendMessage(chatId, "Пользователь не авторизован.");
+      return;
+    }
     const collection = client.db(dbname).collection("userSessions");
     const userSession = await collection.findOne({
       userId: userPhoneNumber,
     });
     const selectedMarket = userSession ? userSession.selectedMarket : null;
+
 
 
     // Отправляет запрос на сервер для получения заявок по рынку
@@ -273,7 +282,7 @@ bot1.onText(/Загрузить талоны/, async (msg) => {
 
 bot1.onText(/Выход/, async (msg) => {
   const chatId = msg.chat.id;
-  console.log(authenticatedUserId);
+
   try {
     await connectToMongo();
 
@@ -285,16 +294,16 @@ bot1.onText(/Выход/, async (msg) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          mobilePhone: authenticatedUserId,
+          mobilePhone: authenticatedUserIds[chatId],
         }),
       }
     );
     const result = await response.json();
-    console.log(result);
+
 
     const sessionCollection = client.db(dbname).collection("userSessions");
-    await sessionCollection.deleteOne({ userId: authenticatedUserId });
-    console.log("success");
+    await sessionCollection.deleteOne({ userId: authenticatedUserIds[chatId] });
+
 
     bot.sendMessage(chatId, "Вы успешно разлогинились.", keyboardForAll);
   } catch (error) {

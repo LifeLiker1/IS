@@ -88,7 +88,6 @@ const OnField = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    openNotification()
     setFormData({
       ...formData,
       [name]: value,
