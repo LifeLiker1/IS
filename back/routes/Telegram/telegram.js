@@ -12,6 +12,9 @@ const {
   connectToMongo,
   TelegramBot,
   bot,
+  allMyApplications,
+  Unauthorized,
+  repairEquipment,
 } = require("./Data/function");
 const bot1 = bot;
 
@@ -30,14 +33,11 @@ const {
 midnight.setHours(24, 0, 0, 0); // Устанавливаем часы, минуты, секунды и миллисекунды для полуночи
 const secondsUntilMidnight = Math.floor((midnight - now) / 1000);
 
-
 // const userLastInteraction = {};
 
 let isAuth;
 const authenticatedUserIds = {};
-console.log(authenticatedUserIds)
-
-
+const sharedData = { selectedMarket: null }; 
 
 bot1.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
@@ -60,7 +60,6 @@ bot1.onText(/\/start/, async (msg) => {
 bot1.on("contact", async (msg) => {
   const chatId = msg.chat.id;
   const phoneNumber = msg.contact.phone_number;
-
 
   try {
     await connectToMongo();
@@ -85,7 +84,6 @@ bot1.on("contact", async (msg) => {
     const surname = result.surname || "Unknown";
     authenticatedUserIds[chatId] = phoneNumber;
 
-
     let keyboard;
 
     if (
@@ -109,6 +107,7 @@ bot1.on("contact", async (msg) => {
       if (existingSession) {
         // Используем данные из существующего документа
         const selectedMarket = existingSession.selectedMarket;
+        sharedData.selectedMarket = selectedMarket;
 
 
         // Добавьте обработку выбранного рынка
@@ -131,13 +130,16 @@ bot1.on("contact", async (msg) => {
           const selectedText = msg.text;
           const selectedMarket = selectedText;
 
-
           // Вставляем новый документ о сессии
           await collection.insertOne({
             userId: authenticatedUserIds[chatId],
             selectedMarket: selectedText,
             expireAt: midnight,
+            expireAfterSeconds: 0,
           });
+
+          sharedData.selectedMarket = selectedMarket;
+
 
           // Добавьте обработку выбранного рынка
 
@@ -175,58 +177,21 @@ bot1.on("contact", async (msg) => {
   }
 });
 
-
 bot1.onText(/Все мои заявки/, async (msg) => {
-  console.log(authenticatedUserIds)
   const chatId = msg.chat.id;
   try {
-    await connectToMongo();
-
-    const userPhoneNumber = authenticatedUserIds[chatId];
-    if (!userPhoneNumber) {
-      bot.sendMessage(chatId, "Пользователь не авторизован.");
-      return;
-    }
-    const collection = client.db(dbname).collection("userSessions");
-    const userSession = await collection.findOne({
-      userId: userPhoneNumber,
-    });
-    const selectedMarket = userSession ? userSession.selectedMarket : null;
-
-
-
-    // Отправляет запрос на сервер для получения заявок по рынку
-  const response = await fetch(
-  `http://localhost:3001/api/applications/byMarket?market=${selectedMarket}`
-);
-
-    if (response.status === 200) {
-      const applications = await response.json();
-
-      // Отправляет заявки в чат бота
-      bot.sendMessage(chatId, `Заявки по рынку ${selectedMarket}:`);
-      applications.forEach((application) => {
-        // Пример: отправка текстового сообщения с информацией о заявке
-        bot.sendMessage(
-          chatId,
-          `Рынок ${application.market} ${application.type} ${application.text} `
-        );
-      });
-    } else {
-      bot.sendMessage(chatId, "Произошла ошибка при получении заявок.");
-    }
+    allMyApplications(chatId, authenticatedUserIds);
   } catch (error) {
-    console.error(error);
-    bot.sendMessage(chatId, "Произошла ошибка при обработке запроса.");
+    console.log("Произошла ошибка", error);
   } finally {
-    await client.close();
+    client.close();
   }
 });
 
 bot1.onText(/Техники на смене/, async (msg) => {
   const chatId = msg.chat.id;
   try {
-    await onShift(chatId, isAuth, bot1);
+    await onShift(chatId, authenticatedUserIds);
   } catch (error) {
     bot1.sendMessage(
       chatId,
@@ -241,7 +206,7 @@ bot1.onText(/Техники на смене/, async (msg) => {
 bot1.onText(/Все сотрудники/, async (msg) => {
   const chatId = msg.chat.id;
   try {
-    await Employee(chatId, isAuth, bot1);
+    await Employee(chatId, authenticatedUserIds);
   } catch (error) {
     bot1.sendMessage(
       chatId,
@@ -256,7 +221,7 @@ bot1.onText(/Все сотрудники/, async (msg) => {
 bot1.onText(/Все заявки/, async (msg) => {
   const chatId = msg.chat.id;
   try {
-    await Application(chatId, isAuth, bot1);
+    await Application(chatId, authenticatedUserIds);
   } catch (error) {
     bot1.sendMessage(
       chatId,
@@ -268,10 +233,10 @@ bot1.onText(/Все заявки/, async (msg) => {
   }
 });
 
-bot1.onText(/Загрузить талоны/, async (msg) => {
+bot1.onText(/Загрузил талоны/, async (msg) => {
   const chatId = msg.chat.id;
   try {
-    await SetTicket(chatId, isAuth, bot1);
+    await SetTicket(chatId, authenticatedUserIds);
   } catch (error) {
     bot1.sendMessage(chatId, "Произошла ошибка при получении данных");
     console.error("Произошла ошибка:", error);
@@ -280,38 +245,24 @@ bot1.onText(/Загрузить талоны/, async (msg) => {
   }
 });
 
-bot1.onText(/Выход/, async (msg) => {
+bot1.onText(/Устранил неисправность/, async (msg) => {
   const chatId = msg.chat.id;
-
   try {
-    await connectToMongo();
-
-    const response = await fetch(
-      "http://localhost:3001/api/employees/resetOnShift",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          mobilePhone: authenticatedUserIds[chatId],
-        }),
-      }
-    );
-    const result = await response.json();
-
-
-    const sessionCollection = client.db(dbname).collection("userSessions");
-    await sessionCollection.deleteOne({ userId: authenticatedUserIds[chatId] });
-
-
-    bot.sendMessage(chatId, "Вы успешно разлогинились.", keyboardForAll);
+    bot1.sendMessage(chatId, "Выбрите оборудование которое починили", sharedData)
+    await repairEquipment(chatId, sharedData);
+    bot1.sendMessage(chatId, "123 ", sharedData)
   } catch (error) {
-    console.log(error);
-    bot.sendMessage(chatId, "Произошла ошибка при разлогировании.");
+    bot1.sendMessage(chatId, "Произошла ошибка при получении данных");
+    console.log(error)
   } finally {
     await client.close();
   }
+});
+
+bot1.onText(/Выход/, async (msg) => {
+  const chatId = msg.chat.id;
+
+  Unauthorized(chatId, authenticatedUserIds, keyboardForAll);
 });
 
 module.exports = router;

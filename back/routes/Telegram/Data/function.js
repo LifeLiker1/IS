@@ -5,6 +5,7 @@ const {
   keyboardForAll,
   keyboardForTech,
 } = require("./variables");
+const { authenticatedUserIds } = require("../telegram");
 const TelegramBot = require("node-telegram-bot-api");
 const bot = new TelegramBot(process.env.BOT_API, { polling: true });
 require("dotenv").config();
@@ -17,40 +18,6 @@ async function connectToMongo() {
     await sessionCollection.createIndex({ userId: 1 }, { unique: true });
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
-  }
-}
-
-
-async function Unauthorized(chatId, authenticatedUserId, keyboardForAll) {
-  console.log(authenticatedUserId);
-  try {
-    await connectToMongo();
-
-    const response = await fetch(
-      "http://localhost:3001/api/employees/resetOnShift",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          mobilePhone: authenticatedUserId,
-        }),
-      }
-    );
-    const result = await response.json();
-    console.log(result);
-
-    const sessionCollection = client.db(dbname).collection("userSessions");
-    await sessionCollection.deleteOne({ userId: authenticatedUserId });
-    console.log("success");
-
-    bot.sendMessage(chatId, "Вы успешно разлогинились.", keyboardForAll);
-  } catch (error) {
-    console.log(error);
-    bot.sendMessage(chatId, "Произошла ошибка при разлогировании.");
-  } finally {
-    await client.close();
   }
 }
 
@@ -169,13 +136,37 @@ async function Application(chatId) {
   }
 }
 
-//функция разлогинивания пользователя
+async function repairEquipment(chatId, sharedData) {
+  await connectToMongo();
+  console.log(sharedData)
+  try {
+    const response = await fetch("http://localhost:3001/api/equipmentOnField");
+    if (!response.ok) {
+      throw new Error("Ошибка при выполнении запроса");
+    }
+    const application = await response.json();
+    const sessionCollection = client.db(dbname).collection("equipmentonfields");
+    const filter = { market: sharedData };
+    console.log(filter)
+    const filteredDocuments = await sessionCollection.find(filter).toArray();
+    bot.sendMessage(chatId, "Список оборудования", keyboardForTech);
+  } catch (error) {
+    console.log(error);
+  } finally{
+    await client.close()
+  }
+}
 
-async function allMyApplications(chatId, authenticatedUserId) {
+//функция разлогинивания пользователя
+async function allMyApplications(chatId, authenticatedUserIds) {
   try {
     await connectToMongo();
 
-    const userPhoneNumber = authenticatedUserId;
+    const userPhoneNumber = authenticatedUserIds[chatId];
+    if (!userPhoneNumber) {
+      bot.sendMessage(chatId, "Пользователь не авторизован.");
+      return;
+    }
     const collection = client.db(dbname).collection("userSessions");
     const userSession = await collection.findOne({
       userId: userPhoneNumber,
@@ -209,6 +200,37 @@ async function allMyApplications(chatId, authenticatedUserId) {
     await client.close();
   }
 }
+
+async function Unauthorized(chatId, authenticatedUserIds, keyboardForAll) {
+  console.log(authenticatedUserIds);
+  try {
+    await connectToMongo();
+
+    const response = await fetch(
+      "http://localhost:3001/api/employees/resetOnShift",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mobilePhone: authenticatedUserIds[chatId],
+        }),
+      }
+    );
+    const result = await response.json();
+
+    const sessionCollection = client.db(dbname).collection("userSessions");
+    await sessionCollection.deleteOne({ userId: authenticatedUserIds[chatId] });
+
+    bot.sendMessage(chatId, "Вы успешно разлогинились.", keyboardForAll);
+  } catch (error) {
+    console.log(error);
+    bot.sendMessage(chatId, "Произошла ошибка при разлогировании.");
+  } finally {
+    await client.close();
+  }
+}
 module.exports = {
   Employee,
   SetTicket,
@@ -217,6 +239,7 @@ module.exports = {
   connectToMongo,
   Unauthorized,
   allMyApplications,
+  repairEquipment,
   TelegramBot,
   bot,
 };

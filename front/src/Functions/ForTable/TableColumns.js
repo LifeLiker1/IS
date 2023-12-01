@@ -1,11 +1,7 @@
+import React from "react";
 import { Tag, Space } from "antd";
 
 const ColumnsForTable = (handleOpenModal, pageType) => [
-  {
-    title: "id",
-    dataIndex: "id",
-    key: "id",
-  },
   {
     title: "Модель",
     dataIndex: "model",

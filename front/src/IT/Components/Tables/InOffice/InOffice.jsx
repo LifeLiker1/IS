@@ -3,6 +3,7 @@ import { Collapse, Spin } from "antd";
 import { fetchDataInOffice } from "../../../../Functions/InOffice/ApplicationInOffice";
 import Header from "../../../../Header/Header";
 import AppFooter from "../../../../Footer/AppFooter";
+import Loader from "../../../../Interactive/Loader/Loader";
 
 const InOffice = () => {
   const [equipment, setEquipment] = useState([]);
@@ -54,7 +55,7 @@ const InOffice = () => {
     <div>
       <Header />
       {loading ? (
-        <Spin size="large" />
+        <Loader/>
       ) : error ? (
         <div>{error}</div>
       ) : (

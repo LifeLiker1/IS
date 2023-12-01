@@ -1,3 +1,4 @@
+import React from "react";
 import './App.css';
 import Hr from "./HR/Pages/hr.jsx"
 

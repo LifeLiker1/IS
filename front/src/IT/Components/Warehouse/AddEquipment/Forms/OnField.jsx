@@ -9,7 +9,7 @@ import {
 import "./Parameters/Forms.scss";
 const close = () => {
   console.log(
-    'Notification was closed. Either the close button was clicked or duration time elapsed.',
+    "Notification was closed. Either the close button was clicked or duration time elapsed."
   );
 };
 
@@ -24,15 +24,20 @@ const OnField = () => {
         <Button type="link" size="Large" onClick={() => api.destroy()}>
           Добавить
         </Button>
-        <Button type="primary" size="large" onClick={() => api.destroy(key)} href="/it/equipmentOnField">
+        <Button
+          type="primary"
+          size="large"
+          onClick={() => api.destroy(key)}
+          href="/it/equipmentOnField"
+        >
           Уйти
         </Button>
       </Space>
     );
     api.open({
-      message: 'Оборудование добавлено',
+      message: "Оборудование добавлено",
       description:
-        'Оборудование успешно добавлено. Хотите добавить еще оборудование или перейти на главную страницу?',
+        "Оборудование успешно добавлено. Хотите добавить еще оборудование или перейти на главную страницу?",
       btn,
       key,
       onClose: close,
@@ -67,20 +72,20 @@ const OnField = () => {
           },
           body: JSON.stringify(formData),
         }
-        );
-        console.log(formData)
-        if (!response.ok) {
-          throw new Error("Ошибка при добавлении оборудования");
-        }
-        
-        // Если запрос успешен, вы можете добавить логику обработки успешного добавления
-        console.log("Оборудование успешно добавлено в базу данных");
-      } catch (error) {
+      );
+      console.log(formData);
+      if (!response.ok) {
+        throw new Error("Ошибка при добавлении оборудования");
+      }
+
+      // Если запрос успешен, вы можете добавить логику обработки успешного добавления
+      console.log("Оборудование успешно добавлено в базу данных");
+    } catch (error) {
       // Обработка ошибок
       console.error("Ошибка при добавлении оборудования:", error);
     } finally {
       setLoading(false);
-      
+
       // formData.resetFields();
       console.log(formData);
     }
@@ -97,7 +102,7 @@ const OnField = () => {
 
   return (
     <>
-    {contextHolder}
+      {contextHolder}
       <div className="main-form">
         <Form onFinish={onFinish}>
           <Form.Item className="form-item" label="Производитель">
@@ -109,7 +114,11 @@ const OnField = () => {
               onChange={handleChange}
             />
           </Form.Item>
-          <Form.Item className="form-item" name="model" label="Модель">
+          <Form.Item
+            className="form-item"
+            name="model"
+            label="Модель оборудования"
+          >
             <Input
               style={fieldsStyle}
               type="text"
@@ -118,17 +127,13 @@ const OnField = () => {
               onChange={handleChange}
             />
           </Form.Item>
-          <Form.Item className="form-item" name="adress" label="Адрес">
-            <TreeSelect
-              treeData={marketSelect}
+          <Form.Item className="form-item" label="Серийный номер">
+            <Input
               style={fieldsStyle}
-              value={formData.adress}
-              onChange={(value) => {
-                setFormData({
-                  ...formData,
-                  adress: value,
-                });
-              }}
+              type="text"
+              name="serialNumber"
+              value={formData.serialNumber}
+              onChange={handleChange}
             />
           </Form.Item>
           <Form.Item className="form-item" name="market" label="Рынок">
@@ -140,6 +145,19 @@ const OnField = () => {
                 setFormData({
                   ...formData,
                   market: value,
+                });
+              }}
+            />
+          </Form.Item>
+          <Form.Item className="form-item" name="adress" label="Адрес">
+            <TreeSelect
+              treeData={marketSelect}
+              style={fieldsStyle}
+              value={formData.adress}
+              onChange={(value) => {
+                setFormData({
+                  ...formData,
+                  adress: value,
                 });
               }}
             />
@@ -166,15 +184,7 @@ const OnField = () => {
               onChange={handleChange}
             />
           </Form.Item>
-          <Form.Item className="form-item" label="Серийный номер">
-            <Input
-              style={fieldsStyle}
-              type="text"
-              name="serialNumber"
-              value={formData.serialNumber}
-              onChange={handleChange}
-            />
-          </Form.Item>
+
           <Form.Item className="form-item" label="Инвертарный номер">
             <Input
               style={fieldsStyle}

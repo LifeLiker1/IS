@@ -3,6 +3,7 @@ import "./Cards.scss";
 import { cardForField, cardForWarehouse, cardForOffice } from "./CardStyle";
 import { Card, Spin } from "antd";
 import { Link } from "react-router-dom";
+import Loader from "../../../Interactive/Loader/Loader";
 const { Meta } = Card;
 
 const Cards = () => {
@@ -19,7 +20,8 @@ const Cards = () => {
   return (
     <div className="mainBlock">
       {loading ? (
-       <Spin spinning={loading}/>
+      //  <Spin spinning={loading}/>
+      <Loader/>
       ) : (
         <div className="cards-container">
           <Link to={"equipmentOnField"}>

@@ -5,6 +5,7 @@ import * as EmployeeDetailsFunctions from "./Functions/EmployeeDetailsFunctions"
 import EmployeeRedactionForm from "./Functions/EmployeeRedactionForm";
 import { CancelButton } from "../New Employee/NewEmployee";
 import { Button, Empty } from "antd";
+import Loader from "../../../Interactive/Loader/Loader";
 
 const EmployeeDetails = () => {
   const { employeeId } = useParams();
@@ -38,7 +39,7 @@ const EmployeeDetails = () => {
   };
 
   if (!employee) {
-    return <div>Loading...</div>;
+    return <div><Loader/></div>;
   }
 
   return (

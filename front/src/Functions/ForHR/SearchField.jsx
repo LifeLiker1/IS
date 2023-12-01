@@ -1,3 +1,4 @@
+import React from "react";
 import { Form, TreeSelect } from "antd";
 
 const SearchField = ({ setSelectedDepartment }) => (// передали setSelectedDepartament через props

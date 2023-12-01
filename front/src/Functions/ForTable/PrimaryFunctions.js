@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Spin } from "antd";
+import Loader from "../../Interactive/Loader/Loader";
 
 //отслеживание сотрудников на смене
 const OnShift = () => {
@@ -48,7 +49,7 @@ const OnShift = () => {
   return (
     <div>
       {loading ? (
-        <Spin size="large" />
+        <Loader/>
       ) : error ? (
         <div>{error}</div>
       ) : (
