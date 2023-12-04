@@ -3,13 +3,14 @@ const fieldsStyle = { width: "90%" };
 const statusSelect = [
   {
     title: "В работе",
-    value: "В работе",
+    value: true,
   },
   {
     title: "Неисправно",
-    value: "Неисправно",
+    value: false,
   },
 ];
+
 
 const marketSelect = [
   { title: "ADEM", value: "ADEM" },
@@ -28,4 +29,20 @@ const equipmentType = [
   { title: "Платежный терминал", value: "Платежный терминал" },
 ];
 
-export { statusSelect, marketSelect, equipmentType, fieldsStyle };
+const equipmentOptions = [
+  {
+    name: "Болт мотора шлагбаума",
+    value: "Болт мотора шлагбаума",
+    standFor: "Шлагбаум",
+    description: "Крепит мотор шлагбаума",
+  },
+  {
+    name: "Пластиковый болт шлагбаума",
+    value: "Пластиковый болт шлагбаума",
+    standFor: "Шлагбаум",
+    description: "Крепит стрелу шлагбаума",
+  },
+];
+
+
+export { statusSelect, marketSelect, equipmentType, fieldsStyle, equipmentOptions };

@@ -5,7 +5,7 @@ import {
   marketSelect,
   equipmentType,
   fieldsStyle,
-} from "./Parameters/DataSelect";
+} from "./Parameters/Variables";
 import "./Parameters/Forms.scss";
 const close = () => {
   console.log(
