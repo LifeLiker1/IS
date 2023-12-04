@@ -1,9 +1,10 @@
 // AddEquipmentForm.jsx
 import React, { useState } from "react";
-import { Form, Input, Button, Select } from "antd";
+import { Form, Select } from "antd";
 import Header from "../../../../Header/Header";
 import OnField from "./Forms/OnField";
 import InOffice from "./Forms/InOffice";
+import OnWarehouse from "./Forms/OnWarehouse"
 import "./addEquipment.scss";
 
 // const { Option } = Select;
@@ -39,11 +40,13 @@ const AddEquipmentForm = () => {
           <Select onChange={handleLocationChange} value={location}>
             <Select.Option value="В поле">В поле</Select.Option>
             <Select.Option value="В офисе">В офисе</Select.Option>
+            <Select.Option value="На склад">На склад</Select.Option>
           </Select>
         </Form.Item>
         <Form form={form} onFinish={onFinish} layout="horizontal">
           {location === "В поле" && <OnField form={form} />}
           {location === "В офисе" && <InOffice form={form} />}
+          {location === "На склад" && <OnWarehouse form={form} />}
         </Form>
       </div>
     </div>

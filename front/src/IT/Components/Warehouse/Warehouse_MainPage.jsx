@@ -1,24 +1,22 @@
-import React from 'react'
-import "./sklad.scss"
-import Working_Parts from './Working_Parts/Working_Parts'
-import Faulty_Parts from "./Faulty_Parts/Faulty_Parts"
-import Header from '../../../Header/Header'
+import React from "react";
+import "./Warehouse_MainPage.scss";
+import Header from "../../../Header/Header";
+import { Tabs } from "antd";
+import { items } from "./MainPage_Variables";
 
 const sklad = () => {
-  document.title="Склад"
+  const onChange = (key) => {
+    console.log(key);
+  };
+  document.title = "Склад";
   return (
     <div>
-      <Header/>
-      <div className="sklad_body">
-        <div className='left_column'>
-          <Working_Parts/>
-        </div>
-        <div className='right_column'>
-          <Faulty_Parts/>
-        </div>
+      <Header />
+      <div className="warehouse_body">
+        <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default sklad
+export default sklad;

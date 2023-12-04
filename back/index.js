@@ -18,6 +18,8 @@ const authRoutes = require("./Functions/auth");
 const telegaRoutes = require("./routes/Telegram/telegram");
 const applicationRoutes = require("./routes/application");
 const ticketRoutes = require("./routes/tickets")
+const warehouseRoutes = require("./routes/warehouse")
+
 
 const User = require("./Models/User");
 
@@ -75,6 +77,7 @@ app.use("/", equipmentOnFieldRoutes);
 app.use("/", telegaRoutes);
 app.use("/", applicationRoutes);
 app.use("/", ticketRoutes)
+app.use("/", warehouseRoutes)
 
 const PORT = process.env.PORT;
 const uri = process.env.uri;

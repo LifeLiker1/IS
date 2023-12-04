@@ -7,7 +7,7 @@ import {
   locationMap,
   optionsForBarriers,
   optionsForPOFs,
-} from "../../Functions/ForTable/ItemsForTable";
+} from "../../Functions/ForTable/VariablesForTable";
 
 import { ColumnsForTable } from "../../Functions/ForTable/TableColumns";
 import { ModalForIT } from "../../Interactive/ModalWindows/ModalWindowsForIT/ModalWindowsForIT";
@@ -50,15 +50,15 @@ const TableEquipment = () => {
     tag: item.tag,
   }));
 
-  useEffect(() => {
-    const count = equipment.reduce((count, item) => {
-      if (item.tag && item.tag.toLowerCase() === "неисправно") {
-        return count + 1;
-      }
-      return count;
-    }, 0);
-    // setCountNotWorking(count); // Исправлено здесь
-  }, [equipment]);
+  // useEffect(() => {
+  //   const count = equipment.reduce((count, item) => {
+  //     if (item.tag && item.tag.toLowerCase() === "неисправно") {
+  //       return count + 1;
+  //     }
+  //     return count;
+  //   }, 0);
+  //   // setCountNotWorking(count); // Исправлено здесь
+  // }, [equipment]);
 
   const handleTabChange = (key) => {
     setActiveTabKey(key);
