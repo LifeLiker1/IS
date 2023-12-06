@@ -20,6 +20,7 @@ const Working_Parts = () => {
         const nameB = b.name.toLowerCase();
         return nameA.localeCompare(nameB);
       });
+      console.log(sortedData)
       setDataSource(sortedData);
     } catch (error) {
       console.log(error);

@@ -25,7 +25,6 @@ router.get("/api/warehouse", async (req, res) => {
 });
 
 //фильтр оборудования по стаутусу
-
 router.post("/api/warehouse", async (req, res) => {
   try {
     const newWarehouse = new Warehouse(req.body);
@@ -35,6 +34,29 @@ router.post("/api/warehouse", async (req, res) => {
     console.log(error);
   }
 });
+
+// Роут для поиска документа в коллекции по имени и статусу
+router.post("/api/warehouse/search", async (req, res) => {
+  try {
+    const { name, status } = req.body;
+
+    // Поиск документа по имени и статусу
+    const existingWarehouse = await Warehouse.findOne({ name, status });
+
+    if (existingWarehouse) {
+      // Если документ найден, возвращаем его
+      res.status(200).json([existingWarehouse]);
+    } else {
+      // Если документ не найден, возвращаем пустой массив
+      res.status(200).json([]);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json("Произошла ошибка при поиске оборудования");
+  }
+});
+
+
 
 router.delete("/api/warehouse/:id", async (req, res) => {
   try {
@@ -56,7 +78,6 @@ router.delete("/api/warehouse/:id", async (req, res) => {
 router.put("/api/warehouse/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, standFor, description } = req.body;
 
     // Проверяем, существует ли оборудование с указанным ID
     const existingWarehouse = await Warehouse.findById(id);
@@ -64,10 +85,8 @@ router.put("/api/warehouse/:id", async (req, res) => {
       return res.status(404).json("Оборудование не найдено");
     }
 
-    // Обновляем поля tag и text
-    existingWarehouse.name = name;
-    existingWarehouse.standFor = standFor;
-    existingWarehouse.description = description;
+    // Увеличиваем счетчик count на 1
+    existingWarehouse.count += 1;
 
     // Сохраняем обновленные данные
     const updatedWarehouse = await existingWarehouse.save();

@@ -30,29 +30,75 @@ const OnWarehouse = () => {
         standFor: selectedEquipment.standFor,
         description: selectedEquipment.description,
       });
-      console.log(selectedEquipment)
+      console.log(selectedEquipment);
     }
   };
 
   const onFinish = async (values) => {
     try {
-      // Отправка данных на сервер с использованием fetch
-      const response = await fetch("http://localhost:3001/api/warehouse", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      console.log(formData);
-      if (!response.ok) {
-        throw new Error("Ошибка при добавлении оборудования");
+      // Поиск документа в коллекции по имени и статусу
+      const searchResponse = await fetch(
+        "http://localhost:3001/api/warehouse/search",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            status: formData.status,
+          }),
+        }
+      );
+
+      if (!searchResponse.ok) {
+        throw new Error("Ошибка при поиске оборудования");
       }
 
-      // Если запрос успешен, вы можете добавить логику обработки успешного добавления
-      console.log("Оборудование успешно добавлено в базу данных");
+      const searchData = await searchResponse.json();
+
+      // Если документ найден, обновляем его
+      if (searchData.length > 0) {
+        const existingDoc = searchData[0];
+        const updateResponse = await fetch(
+          `http://localhost:3001/api/warehouse/${existingDoc._id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              $inc: { count: 1 }, // Используем оператор $inc для увеличения значения поля count на 1
+            }),
+          }
+        );
+
+        if (!updateResponse.ok) {
+          throw new Error("Ошибка при обновлении существующего оборудования");
+        }
+
+        console.log("Существующее оборудование успешно обновлено");
+      } else {
+        // Если документ не найден, создаем новый
+        const createResponse = await fetch(
+          "http://localhost:3001/api/warehouse",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
+
+        if (!createResponse.ok) {
+          throw new Error("Ошибка при добавлении нового оборудования");
+        }
+
+        console.log("Новое оборудование успешно добавлено в базу данных");
+      }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -106,7 +152,6 @@ const OnWarehouse = () => {
             name="description"
             value={formData.description}
             onChange={handleChange}
-            
           />
         </Form.Item>
         <Form.Item>

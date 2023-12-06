@@ -7,7 +7,7 @@ const warehouseSchema = new mongoose.Schema({
   serialNumber: { type: String, required: false },
   invertNumber: { type: String, required: false },
   status: { type: Boolean, required: false },
-  count: { type: Number, required: false }, //кол-во оборудования
+  count: { type: Number, required: false, default: 1 }, //кол-во оборудования
 });
 
 module.exports = mongoose.model("Warehouse", warehouseSchema);

@@ -38,6 +38,7 @@ async function getWorkingData() {
       standFor: item.standFor,
       description: item.description,
       status: item.status,
+      count: item.count,
     }));
   } catch (error) {
     console.log(error);
@@ -61,6 +62,7 @@ async function getFaultyData() {
       standFor: item.standFor,
       address: item.address,
       description: item.description,
+      count: item.count,
     }));
   } catch (error) {
     console.log(error);
