@@ -66,6 +66,13 @@ const ModalForWarehouse = ({ visible, onCancel, onSave, equipment }) => {
         >
           <Input />
         </Form.Item>
+        <Form.Item
+          label="Количество"
+          name="count"
+          rules={[{ required: true, message: "Количество" }]}
+        >
+          <Input />
+        </Form.Item>
         {/* Добавьте другие поля формы по аналогии */}
       </Form>
     </Modal>

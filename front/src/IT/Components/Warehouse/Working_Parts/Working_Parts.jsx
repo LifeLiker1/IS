@@ -91,9 +91,6 @@ const Working_Parts = () => {
         <Loader />
       ) : (
         <>
-          <Button type="primary" onClick={handleAdd}>
-            Добавить оборудование
-          </Button>
           <Table
             columns={[
               ...columns,

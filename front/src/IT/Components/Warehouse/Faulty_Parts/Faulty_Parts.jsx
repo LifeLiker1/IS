@@ -83,18 +83,12 @@ const Faulty_Parts = () => {
     setModalVisible(false);
   };
 
-  const handleAdd = () => {
-    // Реализуйте логику добавления нового оборудования
-  };
   return (
     <div>
       {loading ? (
         <Loader />
       ) : (
         <>
-          <Button type="primary" onClick={handleAdd}>
-            Добавить оборудование
-          </Button>
           <Table
             columns={[
               ...columns,
