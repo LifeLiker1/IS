@@ -45,6 +45,7 @@ const Working_Parts = () => {
         name: values.name,
         standFor: values.standFor,
         description: values.description,
+        count: values.count,
       };
 
       try {
@@ -87,26 +88,26 @@ const Working_Parts = () => {
 
   return (
     <div>
+      <Table
+        columns={[
+          ...columns,
+          {
+            title: "Действие",
+            dataIndex: "action",
+            key: "action",
+            render: (text, record) => (
+              <Button type="link" onClick={() => handleEdit(record)}>
+                Редактировать
+              </Button>
+            ),
+          },
+        ]}
+        dataSource={dataSource}
+      />
       {loading ? (
         <Loader />
       ) : (
         <>
-          <Table
-            columns={[
-              ...columns,
-              {
-                title: "Действие",
-                dataIndex: "action",
-                key: "action",
-                render: (text, record) => (
-                  <Button type="link" onClick={() => handleEdit(record)}>
-                    Редактировать
-                  </Button>
-                ),
-              },
-            ]}
-            dataSource={dataSource}
-          />
           {selectedEquipment && (
             <ModalForWarehouse
               visible={modalVisible}

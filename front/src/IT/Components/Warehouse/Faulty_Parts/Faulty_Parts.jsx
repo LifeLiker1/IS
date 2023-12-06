@@ -85,26 +85,26 @@ const Faulty_Parts = () => {
 
   return (
     <div>
+      <Table
+        columns={[
+          ...columns,
+          {
+            title: "Действие",
+            dataIndex: "action",
+            key: "action",
+            render: (text, record) => (
+              <Button type="link" onClick={() => handleEdit(record)}>
+                Редактировать
+              </Button>
+            ),
+          },
+        ]}
+        dataSource={dataSource}
+      />
       {loading ? (
         <Loader />
       ) : (
         <>
-          <Table
-            columns={[
-              ...columns,
-              {
-                title: "Действие",
-                dataIndex: "action",
-                key: "action",
-                render: (text, record) => (
-                  <Button type="link" onClick={() => handleEdit(record)}>
-                    Редактировать
-                  </Button>
-                ),
-              },
-            ]}
-            dataSource={dataSource}
-          />
           {selectedEquipment && (
             <ModalForWarehouse
               visible={modalVisible}

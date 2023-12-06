@@ -132,6 +132,12 @@ const equipmentOptions = [
     standFor: "Платежный терминал",
     description: "Служит для хранения купюр",
   },
+  {
+    name: "Другое",
+    value: "Другое",
+    standFor: "",
+    description: "",
+  },
   
 ];
 
