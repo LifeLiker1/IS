@@ -141,18 +141,5 @@ const equipmentOptions = [
   
 ];
 
-//   
-
-// {
-//   name: "",
-//   value: "",
-//   standFor: "",
-//   description: "",
-// },
-
-// Стойка въезда
-// Стойка выезда
-// Платежный терминал
-
 
 export { statusSelect, marketSelect, equipmentType, fieldsStyle, equipmentOptions };

@@ -144,6 +144,22 @@ const keyboardForDisp = {
   },
 };
 
+const optionsForBarriers = [
+  { value: "Застревание талона", label: "Застревание талона" },
+  { value: "Застревание монет", label: "Застревание монет" },
+  { value: "Не работает шлагбаум", label: "Не работает шлагбаум" },
+  { value: "Не открывает шлабгаум", label: "Не открывает шлабгаум" },
+  { value: "Другое", label: "Другое" },
+];
+
+const optionsForPOFs = [
+  { value: "Застревание талона", label: "Застревание талона" },
+  { value: "Замятие купюры", label: "Замятие купюры" },
+  { value: "Застревание монет", label: "Застревание монет" },
+  { value: "Не работает камера", label: "Не работает камера" },
+  { value: "Другое", label: "Другое" },
+];
+
 const uri = process.env.uri;
 const dbname = process.env.dbName;
 const client = new MongoClient(uri, {
@@ -162,6 +178,8 @@ module.exports = {
   keyboardForAll,
   keyboardForTech,
   keyboardForMarket,
+  optionsForBarriers,
+  optionsForPOFs,
   uri,
   dbname,
   client,

@@ -47,6 +47,7 @@ const TableEquipment = () => {
     id: item._id,
     name: item.model,
     type: item.type,
+    equipmentNumber: item.equipmentNumber,
     address: item.adress,
     market: item.market,
     tag: item.tag,
@@ -98,6 +99,7 @@ const TableEquipment = () => {
       equipmentId: selectedEquipment.id,
       market: selectedEquipment.market,
       type: selectedEquipment.type,
+      equipmentData: selectedEquipment.equipmentData,
       text: selectedIssue,
       requestType: selectedRequest,
     };

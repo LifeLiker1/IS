@@ -3,6 +3,7 @@ const { Router } = require("express");
 const Application = require("../Models/application");
 const authMiddleware = require("../Functions/authMiddle.js");
 const mongoose = require("mongoose");
+const { sendTelegramNotification } = require("./Telegram/Data/function.js");
 const conn = mongoose.connection;
 
 const router = Router();
@@ -40,6 +41,7 @@ router.post("/api/application", async (req, res) => {
     const newApplication = new Application(req.body);
     await newApplication.save();
     res.status(200).json(newApplication);
+    sendTelegramNotification()
   } catch (error) {
     console.log(error);
   }

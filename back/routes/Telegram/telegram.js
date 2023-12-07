@@ -15,6 +15,7 @@ const {
   allMyApplications,
   Unauthorized,
   repairEquipment,
+  closeApplication,
 } = require("./Data/function");
 const bot1 = bot;
 
@@ -37,7 +38,7 @@ const secondsUntilMidnight = Math.floor((midnight - now) / 1000);
 
 let isAuth;
 const authenticatedUserIds = {};
-const sharedData = { selectedMarket: null }; 
+const sharedData = { selectedMarket: null };
 
 bot1.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
@@ -109,7 +110,6 @@ bot1.on("contact", async (msg) => {
         const selectedMarket = existingSession.selectedMarket;
         sharedData.selectedMarket = selectedMarket;
 
-
         // Добавьте обработку выбранного рынка
 
         bot1.sendMessage(
@@ -139,7 +139,6 @@ bot1.on("contact", async (msg) => {
           });
 
           sharedData.selectedMarket = selectedMarket;
-
 
           // Добавьте обработку выбранного рынка
 
@@ -174,17 +173,6 @@ bot1.on("contact", async (msg) => {
     bot1.sendMessage(chatId, "Произошла ошибка при попытке авторизации.");
   } finally {
     await client.close();
-  }
-});
-
-bot1.onText(/Все мои заявки/, async (msg) => {
-  const chatId = msg.chat.id;
-  try {
-    allMyApplications(chatId, authenticatedUserIds);
-  } catch (error) {
-    console.log("Произошла ошибка", error);
-  } finally {
-    client.close();
   }
 });
 
@@ -233,6 +221,28 @@ bot1.onText(/Все заявки/, async (msg) => {
   }
 });
 
+bot1.onText(/Все мои заявки/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    allMyApplications(chatId, authenticatedUserIds);
+  } catch (error) {
+    console.log("Произошла ошибка", error);
+  } finally {
+    client.close();
+  }
+});
+
+bot1.onText(/Закрыть заявку/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    closeApplication(chatId, authenticatedUserIds)
+  } catch (error) {
+    console.log("Произошла ошибка", error);
+  } finally {
+    client.close();
+  }
+});
+
 bot1.onText(/Загрузил талоны/, async (msg) => {
   const chatId = msg.chat.id;
   try {
@@ -248,12 +258,10 @@ bot1.onText(/Загрузил талоны/, async (msg) => {
 bot1.onText(/Устранил неисправность/, async (msg) => {
   const chatId = msg.chat.id;
   try {
-    bot1.sendMessage(chatId, "Выбрите оборудование которое починили", sharedData)
-    await repairEquipment(chatId, sharedData);
-    bot1.sendMessage(chatId, "123 ", sharedData)
+    await repairEquipment(chatId, sharedData.selectedMarket);
   } catch (error) {
     bot1.sendMessage(chatId, "Произошла ошибка при получении данных");
-    console.log(error)
+    console.log(error);
   } finally {
     await client.close();
   }

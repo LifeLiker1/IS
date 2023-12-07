@@ -3,16 +3,10 @@ import { Tag, Space } from "antd";
 
 const ColumnsForTable = (handleOpenModal, pageType) => [
   {
-    title: "Модель",
-    dataIndex: "model",
-    key: "model",
-    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-    render: (text) => <a>{text}</a>,
-  },
-  {
     title: "Тип",
-    dataIndex: "type",
-    key: "type",
+    dataIndex: "typeAndNumber",
+    key: "typeAndNumber",
+    render: (text, record) => `${record.type} № ${record.equipmentNumber}`,
   },
   {
     title: "Статус",
@@ -20,17 +14,23 @@ const ColumnsForTable = (handleOpenModal, pageType) => [
     key: "tag",
     render: (type) => {
       let color;
-      switch (type.toLowerCase()) {
-        case "неисправно":
+      let title;
+  
+      switch (type) {
+        case false:
+          title = "Неисправно";
           color = "error";
           break;
         case "заявка":
+          title = "Заявка";
           color = "warning";
           break;
-        case "в работе":
+        case true:
+          title = "В работе";
           color = "success";
           break;
         default:
+          title = "Другой статус";
           color = "geekblue";
       }
       return (
