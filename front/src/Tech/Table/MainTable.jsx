@@ -86,8 +86,8 @@ const TableEquipment = () => {
   };
 
   const handleIssueChange = (value) => {
-    setSelectedIssue(value)
-  }
+    setSelectedIssue(value);
+  };
 
   const handleRequestChange = (value) => {
     setSelectedRequest(value);
@@ -136,6 +136,7 @@ const TableEquipment = () => {
           selectedEquipment={selectedEquipment}
           modalParameters={modalParameters}
           handleRequestChange={handleRequestChange}
+          handleIssueChange={handleIssueChange}
         />
       ) : (
         <ModalForIT

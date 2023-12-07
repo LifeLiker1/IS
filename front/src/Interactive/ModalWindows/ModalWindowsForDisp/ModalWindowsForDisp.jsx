@@ -8,6 +8,7 @@ const ModalForDisp = ({
   selectedEquipment,
   modalParameters,
   handleRequestChange,
+  handleIssueChange
 }) => {
   const [techList, setTechList] = useState([]);
   useEffect(() => {
@@ -53,7 +54,7 @@ const ModalForDisp = ({
             defaultValue=""
             style={{ width: 250 }}
             options={modalParameters}
-            onChange={handleRequestChange}
+            onChange={handleIssueChange}
           />
           <br />
           Выписать на техника:
