@@ -50,22 +50,30 @@ router.put("/api/equipmentOnField/:id", async (req, res) => {
 
     // Проверяем, существует ли оборудование с указанным ID
     const existingEquipment = await Equipment.findById(id);
+    
     if (!existingEquipment) {
-      return res.status(404).json("Оборудование не найдено");
+      // Если оборудование не найдено, создаем новый документ
+      const newEquipment = await Equipment.create({
+        tag: tag,
+        text: text,
+      });
+
+      res.status(200).json(newEquipment);
+    } else {
+      // Если оборудование найдено, обновляем поля tag и text
+      existingEquipment.tag = tag;
+      existingEquipment.text = text;
+
+      // Сохраняем обновленные данные
+      const updatedEquipment = await existingEquipment.save();
+
+      res.status(200).json(updatedEquipment);
     }
-
-    // Обновляем поля tag и text
-    existingEquipment.tag = tag;
-    existingEquipment.text = text;
-
-    // Сохраняем обновленные данные
-    const updatedEquipment = await existingEquipment.save();
-
-    res.status(200).json(updatedEquipment);
   } catch (error) {
     console.log(error);
     res.status(500).json("Произошла ошибка при обновлении оборудования");
   }
 });
+
 
 module.exports = router;

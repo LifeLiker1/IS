@@ -4,6 +4,8 @@ import {
   PlusCircleOutlined,
   HomeTwoTone,
   AppstoreTwoTone,
+  CarTwoTone,
+  HddTwoTone,
 } from "@ant-design/icons";
 import { Button, Dropdown } from "antd";
 import { useLocation } from "react-router-dom";
@@ -68,10 +70,7 @@ const HeaderButton = () => {
         },
         ...commonButtons,
       ];
-    } else if (
-      location.pathname === "/it/warehouse" ||
-      location.pathname === "/it/equipmentOnField"
-    ) {
+    } else if (location.pathname === "/it/warehouse") {
       return [
         {
           icon: <HomeTwoTone />,
@@ -92,6 +91,35 @@ const HeaderButton = () => {
         },
         ...commonButtons,
       ];
+    } else if (
+      location.pathname === "/it/equipmentOnField" ||
+      location.pathname === "/it/equipmentInOffice"
+    ) {
+      return [
+        {
+          icon: <HomeTwoTone />,
+          key: "2",
+          label: <a href="/it">На главную</a>,
+        },
+        {
+          icon: <PlusCircleOutlined />,
+          key: "4",
+          label: <a href="/it/addEquipment">Добавить оборудование</a>,
+        },
+        {
+          icon: <AppstoreTwoTone />,
+          key: "3",
+          label: <a href="/it/warehouse">На склад</a>,
+        },
+        {
+          icon: <StopTwoTone />,
+          key: "5",
+          onClick: handleLogout,
+          danger: true,
+          label: <a>Выход</a>,
+        },
+        ...commonButtons,
+      ];
     } else if (location.pathname === "/it/addEquipment") {
       return [
         {
@@ -100,9 +128,18 @@ const HeaderButton = () => {
           label: <a href="/it">На главную</a>,
         },
         {
-          icon: <HomeTwoTone />,
+          icon: <CarTwoTone />,
           key: "3",
-          label: <a href="/it/equipmentOnField">К списку оборудования</a>,
+          label: (
+            <a href="/it/equipmentOnField">К списку оборудования в поле</a>
+          ),
+        },
+        {
+          icon: <HddTwoTone />,
+          key: "4",
+          label: (
+            <a href="/it/equipmentOnField">К списку оборудования в офисе</a>
+          ),
         },
         {
           icon: <StopTwoTone />,

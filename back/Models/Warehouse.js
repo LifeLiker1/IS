@@ -6,6 +6,8 @@ const warehouseSchema = new mongoose.Schema({
   description: { type: String, required: false }, // описание
   serialNumber: { type: String, required: false },
   invertNumber: { type: String, required: false },
+  MACadress: { type: String, required: false },
+  IPadress: { type: String, required: false },
   status: { type: Boolean, required: false },
   count: { type: Number, required: false, default: 1 }, //кол-во оборудования
 });

@@ -21,6 +21,7 @@ const TableEquipment = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [selectedIssue, setSelectedIssue] = useState(null);
   const [modalParameters, setModalParameters] = useState(null);
 
   useEffect(() => {
@@ -43,12 +44,14 @@ const TableEquipment = () => {
 
   const data = equipment.map((item, index) => ({
     key: index.toString(),
+    id: item._id,
     name: item.model,
     type: item.type,
     address: item.adress,
     market: item.market,
     tag: item.tag,
   }));
+  console.log(data);
 
   // useEffect(() => {
   //   const count = equipment.reduce((count, item) => {
@@ -82,6 +85,10 @@ const TableEquipment = () => {
     setModalVisible(true);
   };
 
+  const handleIssueChange = (value) => {
+    setSelectedIssue(value)
+  }
+
   const handleRequestChange = (value) => {
     setSelectedRequest(value);
   };
@@ -89,20 +96,21 @@ const TableEquipment = () => {
   const sendRequest = async () => {
     const requestData = {
       equipmentId: selectedEquipment.id,
+      market: selectedEquipment.market,
+      type: selectedEquipment.type,
+      text: selectedIssue,
       requestType: selectedRequest,
     };
+    console.log(requestData);
 
     try {
-      const response = await fetch(
-        `http://localhost:3001/api/equipmentOnField/${selectedEquipment.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestData),
-        }
-      );
+      const response = await fetch(`http://localhost:3001/api/application`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
 
       if (response.ok) {
         console.log("Заявка отправлена успешно.");
