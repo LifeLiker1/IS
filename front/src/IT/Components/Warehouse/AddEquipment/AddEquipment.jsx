@@ -5,10 +5,8 @@ import Header from "../../../../Header/Header";
 import OnField from "./Forms/OnField";
 import InOffice from "./Forms/InOffice";
 import OnWarehouse from "./Forms/OnWarehouse"
-import Loader from "../../../../Interactive/Loader/Loader";
 import "./addEquipment.scss";
 
-// const { Option } = Select;
 
 const AddEquipmentForm = () => {
   const [form] = Form.useForm();

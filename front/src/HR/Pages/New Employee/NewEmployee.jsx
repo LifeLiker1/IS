@@ -8,7 +8,6 @@ import {
   Input,
   TreeSelect,
   notification,
-  DatePicker,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {
@@ -57,14 +56,6 @@ function MyComponent() {
     hobbies: "",
     image: null,
   });
-
-  const handleImageUpload = async (imageFile) => {
-    console.log(imageFile);
-    setFormData({
-      ...formData,
-      image: imageFile,
-    });
-  };
 
   const [districts, setDistricts] = useState([]);
 

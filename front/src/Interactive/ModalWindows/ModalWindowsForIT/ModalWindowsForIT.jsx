@@ -25,11 +25,11 @@ const ModalForIT = ({
     >
       {selectedEquipment && (
         <div>
-          <p>Модqwefqwefq3ель: {selectedEquipment.name}</p>
-          <p>Тиhqergqergп: {selectedEquipment.type}</p>
-          <p>Распqergerоложение: {selectedEquipment.address}</p>
-          <p>Стberbwerbwerbwerbатус: {selectedEquipment.tag}</p>
-          Выписать зqerbqerbаяqererbqerbbqвку на:
+          <p>Модель: {selectedEquipment.name}</p>
+          <p>Тип: {selectedEquipment.type}</p>
+          <p>Расположение: {selectedEquipment.address}</p>
+          <p>Статус: {selectedEquipment.tag}</p>
+          Выписать заявку на:
           <Select
             defaultValue=""
             style={{ width: 250 }}
