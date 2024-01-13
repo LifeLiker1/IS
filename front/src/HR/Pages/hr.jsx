@@ -19,7 +19,7 @@ const HR = () => {
   const [employees, setEmployees] = useState([]);
   const [selectedDepartament, setSelectedDepartment] = useState(null);
   const [token, setToken] = useState(null);
-  const [showAuthNotification, setShowAuthNotification] = useState(false); // Новое состояние для уведомления
+  const [showAuthNotification, setShowAuthNotification] = useState(false); 
 
   const { Meta } = Card;
 
@@ -29,18 +29,16 @@ const HR = () => {
     if (storedToken) {
       setToken(storedToken);
     } else {
-      setShowAuthNotification(true); // Показать уведомление об отсутствии авторизации
+      setShowAuthNotification(true); 
     }
   }, []);
 
-  // Функция для фильтрации сотрудников по отделу
   const filteredEmployees = selectedDepartament
     ? employees.filter(
         (employee) => employee.departament === selectedDepartament
       )
     : employees;
 
-  // Отображение уведомления при изменении selectedDepartment
   useEffect(() => {
     if (filteredEmployees.length === 0 && selectedDepartament !== null) {
       notification.open({
@@ -51,7 +49,6 @@ const HR = () => {
     }
   }, [selectedDepartament, filteredEmployees]);
 
-  // Отображение уведомления об отсутствии авторизации
   useEffect(() => {
     if (showAuthNotification) {
       notification.open({

@@ -18,20 +18,20 @@ router.get("/api/employees", async (req, res) => {
 router.get("/api/employees/params", async (req, res) => {
   try {
     const { mobilePhone, position } = req.query;
-    let query = {}; // По умолчанию, без фильтра
+    let query = {}; 
 
     if (mobilePhone) {
-      query.mobilePhone = mobilePhone; // Добавьте фильтр по номеру телефона
+      query.mobilePhone = mobilePhone; 
     }
 
     if (position) {
-      query.position = position; // Добавьте фильтр по должности
+      query.position = position; 
     }
 
     const employees = await Employee.find(query);
 
     if (employees.length > 0) {
-      res.status(200).json(employees[0]); // Возвращаем первого найденного сотрудника
+      res.status(200).json(employees[0]); 
     } else {
       res.status(404).json({ message: "Сотрудник не найден" });
     }
@@ -55,17 +55,15 @@ router.get("/api/employees/onShift", async (req, res) => {
 
 router.post("/api/employees/updateOnShift", async (req, res) => {
   try {
-    const { mobilePhone, market } = req.body; // Переданный номер телефона
+    const { mobilePhone, market } = req.body;
 
-    // Ищем сотрудника по номеру телефона и обновляем статус onShift на true
     const updatedEmployee = await Employee.findOneAndUpdate(
       { mobilePhone: mobilePhone },
-      { $set: { onShift: true, market: market } }, // Добавляем market к обновлению
-      { new: true } // Чтобы получить обновленный документ
+      { $set: { onShift: true, market: market } }, 
+      { new: true } 
     );
 
     if (!updatedEmployee) {
-      // Если сотрудник с указанным номером телефона не найден
       return res.status(404).json({ error: "Сотрудник не найден" });
     }
 

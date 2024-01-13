@@ -27,14 +27,10 @@ app.use(cors());
 app.use(express.json());
 
 app.use(session({
-  secret: process.env.SECRET_KEY, // Замените на свой секретный ключ
+  secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: true,
 }));
-
-// Инициализируйте Passport
-// app.use(passport.initialize());
-// app.use(passport.session());
 
 passport.use(
   new LocalStrategy(
