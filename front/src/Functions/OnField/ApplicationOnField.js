@@ -20,6 +20,7 @@ async function fetchDataOnField() {
     }
   }
 //функция для добавления заявки
+// eslint-disable-next-line no-unused-vars
   async function AddApplication(){
     console.log("Hello")
   }

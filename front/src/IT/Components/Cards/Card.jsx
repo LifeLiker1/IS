@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Cards.scss";
 import { cardForField, cardForWarehouse, cardForOffice } from "./CardStyle";
-import { Card, Spin } from "antd";
+import { Card } from "antd";
 import { Link } from "react-router-dom";
 import Loader from "../../../Interactive/Loader/Loader";
 const { Meta } = Card;

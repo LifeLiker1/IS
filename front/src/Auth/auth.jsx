@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./auth.scss";
 import { notification, Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
-import Header from "../Header/Header"
+import Header from "../Header/Header.jsx"
 // import { authFailed, authSucces } from "../Interactive/Notification/Notification";
 
 const Auth = () => {

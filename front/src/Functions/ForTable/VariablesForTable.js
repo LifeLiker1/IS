@@ -45,6 +45,7 @@ const locationMap = {
 };
 
 function ticketRemaining() {
+  // eslint-disable-next-line no-unused-vars
   const remaining = 10000;
 }
 

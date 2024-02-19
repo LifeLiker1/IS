@@ -10,6 +10,7 @@ import "./addEquipment.scss";
 
 const AddEquipmentForm = () => {
   const [form] = Form.useForm();
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState("В поле"); // Изначальное значение
 
