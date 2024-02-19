@@ -10,7 +10,7 @@ import Working_Parts from "./Working_Parts/Working_Parts.jsx";
     },
     {
       key: '2',
-      label: 'Несиправные Запчасти',
+      label: 'Неисправные Запчасти',
       children: <FaultyParts/>,
     },
 

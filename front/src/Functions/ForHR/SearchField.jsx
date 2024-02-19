@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, TreeSelect } from "antd";
 
-const SearchField = ({ setSelectedDepartment }) => (// передали setSelectedDepartament через props
+const SearchField = ({ setSelectedDepartment }) => (
   <Form.Item label="Мне нужны сотрудники" className="dep_sel">
     <TreeSelect
       onChange={(value) => setSelectedDepartment(value)}

@@ -62,11 +62,11 @@ const HR = () => {
     <div>
       <Header />
       <div className="employee_block">
-        {token ? (
-          <>
             <div className="search_field">
               <SearchField setSelectedDepartment={setSelectedDepartment}/>
             </div>
+        {token ? (
+          <>
             <div className="employee_card">
               {filteredEmployees && filteredEmployees.length > 0 ? (
                 filteredEmployees.map((employee) => (

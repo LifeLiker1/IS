@@ -34,7 +34,6 @@ const Working_Parts = () => {
   }, []);
 
   const handleEdit = (equipment) => {
-    console.log(equipment);
     setSelectedEquipment(equipment);
     setModalVisible(true);
   };
@@ -83,7 +82,6 @@ const Working_Parts = () => {
   };
 
   const handleAdd = () => {
-    // Реализуйте логику добавления нового оборудования
   };
 
   return (
